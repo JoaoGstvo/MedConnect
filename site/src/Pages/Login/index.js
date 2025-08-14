@@ -10,14 +10,19 @@ function Login() {
                 </div>
 
                 <div className='form'>
-                    <label>
-                        <span>Email</span>
-                        <input type="text" placeholder='Digite seu usuário' />
-                    </label>
-                    <label>
-                        <span>Senha</span>
-                        <input type="password" placeholder='Digite sua senha' />
-                    </label>
+                        <label>
+                            <span>Email</span>
+                            <input type="text" placeholder='seu@email.com' />
+                        </label>
+                        <label>
+                            <span>Senha</span>
+                            <input type="password" placeholder='Digite sua senha' />
+                        </label>
+
+                    <a href="/">
+                        <button>Entrar</button>
+                    </a>
+
                 </div>
             </section>
         </main>
