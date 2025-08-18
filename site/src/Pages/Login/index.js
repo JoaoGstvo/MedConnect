@@ -6,23 +6,33 @@ function Login() {
             <section className='form-container'>
                 <div className='header'>
                     <img src="/Images/Logo.png" alt="" />
-                    <p>Conectando Profissionais da Saúde.</p>
                 </div>
 
+                <div className='divider'></div>
+
                 <div className='form'>
-                        <label>
-                            <span>Email</span>
-                            <input type="text" placeholder='seu@email.com' />
-                        </label>
-                        <label>
-                            <span>Senha</span>
-                            <input type="password" placeholder='Digite sua senha' />
-                        </label>
+                    <h2>Fazer Login</h2>
+                    <p className='form-description'>Digite suas credenciais para acessar sua conta</p>
 
-                    <a href="/">
-                        <button>Entrar</button>
-                    </a>
+                    <label className='input-field'>
+                        <span>E-mail</span>
+                        <input type="email" placeholder='seu@email.com' />
+                    </label>
 
+                    <label className='input-field'>
+                        <span>Senha</span>
+                        <input type="password" placeholder='Sua senha' />
+                    </label>
+
+                    <div className='remember-me'>
+                        <label>
+                            <input type="checkbox" />
+                            <span>Lembrar de mim</span>
+                        </label>
+                        <a href="/" className='forgot-password'>Esqueceu a senha?</a>
+                    </div>
+
+                    <button className='login-button'>Entrar</button>
                 </div>
             </section>
         </main>
