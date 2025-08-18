@@ -33,6 +33,10 @@ function Login() {
                     </div>
 
                     <button className='login-button'>Entrar</button>
+
+                    <div className="signup-redirect">
+                        Não tem uma conta? <a href="/">Cadastre-se</a>
+                    </div>
                 </div>
             </section>
         </main>
