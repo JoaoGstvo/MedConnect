@@ -1,4 +1,5 @@
 import './index.scss';
+// import BiometricLogin from '../../Components/Biometria';
 
 function Login() {
     return (
@@ -7,7 +8,7 @@ function Login() {
                 <div className='header'>
                     <img src="/Images/Logo.png" alt="" />
                 </div>
-
+                {/* <BiometricLogin /> */}
                 <div className='divider'></div>
 
                 <div className='form'>
