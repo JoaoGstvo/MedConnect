@@ -1,7 +1,7 @@
 import './index.scss';
 import Header from "../../Components/Header/index.js";
 import Footer from "../../Components/Footer/index.js";
-import CardVaga from '../../Components/CardProfissional/index.js';
+import CardVaga from '../../Components/CardVaga/index.js';
 import CardEmpresa from '../../Components/CardEmpresa/index.js';
 
 function LandingPage() {
@@ -24,9 +24,38 @@ function LandingPage() {
                 </div>
             </section>
 
-            {/* <div className='divider'></div> */}
-            <CardVaga />
-            <CardEmpresa />
+            <section className='jobs-section'>
+                <div className='title'>
+                    <h1>Vagas em Destaque</h1>
+                </div>
+                <div className='cards-container'>
+                    <div className='cards-wrapper'>
+                        <CardVaga />
+                        <CardVaga />
+                        <CardVaga />
+                        <CardVaga />
+                        <CardVaga />
+                        <CardVaga />
+                    </div>
+                </div>
+            </section>
+
+            <section className='companies-section'>
+                <div className='title'>
+                    <h1>Empresas em Destaque</h1>
+                </div>
+                <div className='companies-container'>
+                    <div className='companies-wrapper'>
+                        <CardEmpresa />
+                        <CardEmpresa />
+                        <CardEmpresa />
+                        <CardEmpresa />
+                        <CardEmpresa />
+                        <CardEmpresa />
+                    </div>
+                </div>
+            </section>
+
             <Footer />
         </main>
     );

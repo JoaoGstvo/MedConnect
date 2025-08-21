@@ -1,27 +1,36 @@
 .landingpage {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 
     .principal-container {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         width: 100%;
-        // border: 1px solid #ccc;
         height: 45vh;
         background: linear-gradient(to bottom, #4a90e2, #ffffff);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
+        padding: 20px;
+        box-sizing: border-box;
 
         .title {
             width: 55%;
             text-align: center;
-            margin: 35px 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+
+            h1 {
+                margin-bottom: 10px;
+                color: #fff;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            }
 
             p {
                 font-size: 0.9rem;
                 color: #323232;
-                line-height: 0.5rem;
+                line-height: 1.4;
             }
         }
 
@@ -29,10 +38,13 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            margin-top: 30px;
+            gap: 20px;
+
+            a {
+                text-decoration: none;
+            }
 
             button {
-                margin: 0 20px;
                 padding: 15px 25px;
                 background-color: #2181ee;
                 color: white;
@@ -40,6 +52,7 @@
                 border-radius: 5px;
                 cursor: pointer;
                 font-size: 0.9rem;
+                transition: background-color 0.3s;
 
                 &:hover {
                     background-color: #1174de;
@@ -47,10 +60,83 @@
             }
         }
     }
-    // .divider {
-    //     height: 1px;
-    //     background-color: #e0e0e0;
-    //     margin: 10px 0;
-    //     width: 80%;
-    // }
+
+    .jobs-section, .companies-section {
+        padding: 40px 20px;
+        box-sizing: border-box;
+        
+        .title {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            color: #323232;
+            
+            h1 {
+                margin: 0;
+            }
+        }
+
+        .cards-container, .companies-container {
+            display: flex;
+            justify-content: center;
+            
+            .cards-wrapper, .companies-wrapper {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start; // Nova linha começa no início
+                gap: 20px;
+                max-width: 1200px;
+                
+                // Estilo para os cards individuais
+                & > * {
+                    flex: 0 0 calc(33.333% - 20px); // 3 cards por linha com gap
+                    min-width: 300px; // Largura mínima para cada card
+                    box-sizing: border-box;
+                    
+                    @media (max-width: 1024px) {
+                        flex: 0 0 calc(50% - 20px); // 2 cards por linha em tablets
+                    }
+                    
+                    @media (max-width: 768px) {
+                        flex: 0 0 100%; // 1 card por linha em mobile
+                    }
+                }
+            }
+        }
+    }
+
+    .companies-section {
+        background-color: #f8f9fa;
+        padding: 40px 20px;
+    }
+}
+
+// Ajustes responsivos adicionais
+@media (max-width: 768px) {
+    .landingpage {
+        .principal-container {
+            height: auto;
+            padding: 40px 20px;
+            
+            .title {
+                width: 90%;
+                font-size: 1.2rem;
+                
+                p {
+                    line-height: 1.5;
+                }
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+                
+                button {
+                    margin: 10px 0;
+                    width: 200px;
+                }
+            }
+        }
+    }
 }
