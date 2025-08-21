@@ -6,8 +6,25 @@ import CardEmpresa from '../../Components/CardEmpresa/index.js';
 
 function LandingPage() {
     return (
-        <main>
+        <main className='landingpage'>
             <Header />
+
+            <section className='principal-container'>
+                <div className='title'>
+                    <h1>Conectando Profissionais da Saúde com as Melhores Oportunidades</h1>
+                    <p>A plataforma especializada em conexões entre empresas e Profissionais da área da Saúde.</p>
+                </div>
+                <div className='buttons'>
+                    <a href="/">
+                        <button>Ver Empresas</button>
+                    </a>
+                    <a href="/">
+                        <button>Ver Profissionais</button>
+                    </a>
+                </div>
+            </section>
+
+            {/* <div className='divider'></div> */}
             <CardVaga />
             <CardEmpresa />
             <Footer />
