@@ -3,6 +3,7 @@ import Header from "../../Components/Header/index.js";
 import Footer from "../../Components/Footer/index.js";
 import CardVaga from '../../Components/CardVaga/index.js';
 import CardEmpresa from '../../Components/CardEmpresa/index.js';
+import CardProfissional from '../../Components/CardProfissional/index.js';
 
 function LandingPage() {
     return (
@@ -24,12 +25,12 @@ function LandingPage() {
                 </div>
             </section>
 
-            <section className='jobs-section'>
+            <section className='section'>
                 <div className='title'>
                     <h1>Vagas em Destaque</h1>
                 </div>
-                <div className='cards-container'>
-                    <div className='cards-wrapper'>
+                <div className='container'>
+                    <div className='wrapper'>
                         <CardVaga />
                         <CardVaga />
                         <CardVaga />
@@ -40,18 +41,33 @@ function LandingPage() {
                 </div>
             </section>
 
-            <section className='companies-section'>
+            <section className='section'>
                 <div className='title'>
                     <h1>Empresas em Destaque</h1>
                 </div>
-                <div className='companies-container'>
-                    <div className='companies-wrapper'>
+                <div className='container'>
+                    <div className='wrapper'>
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
+                    </div>
+                </div>
+            </section>
+            <section className='section'>
+                <div className='title'>
+                    <h1>Profissionais em Destaque</h1>
+                </div>
+                <div className='container'>
+                    <div className='wrapper'>
+                        <CardProfissional />
+                        <CardProfissional />
+                        <CardProfissional />
+                        <CardProfissional />
+                        <CardProfissional />
+                        <CardProfissional />
                     </div>
                 </div>
             </section>

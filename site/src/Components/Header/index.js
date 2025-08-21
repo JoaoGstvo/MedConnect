@@ -25,7 +25,7 @@ function Header() {
                     </div>
 
                     <div className='nav-links-group profile'>
-                        <a href="/" className='nav-link'>
+                        <a href="/" className='nav-link a-profile'>
                             <span>Perfil</span>
                         </a>
                     </div>
