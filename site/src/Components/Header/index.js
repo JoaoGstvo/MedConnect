@@ -1,5 +1,4 @@
 import './index.scss';
-import { Link } from 'react-router-dom';
 
 function Header() {
     return (
@@ -26,9 +25,9 @@ function Header() {
                     </div>
 
                     <div className='nav-links-group profile'>
-                        <link to="/perfilprofissional" className='nav-link a-profile'>
+                        <a href="/perfilprofissional" className='nav-link a-profile'>
                             <span>Perfil</span>
-                        </link>
+                        </a>
                     </div>
                 </div>
             </div>
