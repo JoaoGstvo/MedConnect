@@ -1,0 +1,41 @@
+
+# Documentação de Endpoints - Sistema de Distribuição de Médicos
+
+## Autenticação
+- POST /auth/register/medico → cadastro de médico
+- POST /auth/register/empresa → cadastro de empresa
+- POST /auth/login → login (retorna token de sessão/JWT)
+- POST /auth/logout → logout
+
+## Médicos
+- GET /medicos → listar médicos (exibir na landing page)
+- GET /medicos/:id → ver perfil de um médico específico
+- PUT /medicos/:id → atualizar perfil do médico
+- DELETE /medicos/:id → excluir conta de médico
+
+## Empresas
+- GET /empresas → listar empresas (exibir na landing page)
+- GET /empresas/:id → ver perfil de uma empresa específica
+- PUT /empresas/:id → atualizar perfil da empresa
+- DELETE /empresas/:id → excluir conta de empresa
+
+## Vagas
+- GET /vagas → listar todas as vagas
+- GET /vagas/:id → ver detalhes de uma vaga
+- POST /vagas → criar vaga (empresa)
+- PUT /vagas/:id → editar vaga (empresa)
+- DELETE /vagas/:id → deletar vaga (empresa)
+
+## Candidaturas
+- POST /candidaturas → médico se candidata a uma vaga
+    { "id_vaga": 1, "id_medico": 42 }
+- GET /candidaturas/medico/:id → listar candidaturas feitas por um médico
+- GET /candidaturas/empresa/:id → listar candidaturas recebidas pela empresa
+- DELETE /candidaturas/:id → retirar candidatura (opcional)
+
+## Artigos
+- GET /artigos → listar todos os artigos (feed estilo LinkedIn)
+- GET /artigos/:id → ver artigo específico
+- POST /artigos → criar artigo (médico ou empresa)
+- PUT /artigos/:id → editar artigo (autor)
+- DELETE /artigos/:id → deletar artigo (autor ou admin)
