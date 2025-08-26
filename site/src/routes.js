@@ -12,11 +12,10 @@ export default function Index() {
             <Routes>
                 <Route path="/" element={<LandingPage/>} />
                 <Route path="/perfilempresa" element={<BusnessProfile/>} />
-                <Route path="/perfilprofissional" element={<LandingPage/>} />
                 <Route path="/login" element={<Login/>} />
                 <Route path="/cadastro" element={<Signup/>} />
                 <Route path="/perfilprofissional" element={<ProfissionalProfile/>} />
-                
+
             </Routes>
         </BrowserRouter>
     )

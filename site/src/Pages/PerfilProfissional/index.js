@@ -131,4 +131,4 @@ function ProfissionalProfile() {
     );
 }
 
-export default ProfissionalProfile
+export default ProfissionalProfile;
