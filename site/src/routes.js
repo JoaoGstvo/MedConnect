@@ -15,7 +15,6 @@ export default function Index() {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/cadastro" element={<Signup/>} />
                 <Route path="/perfilprofissional" element={<ProfissionalProfile/>} />
-
             </Routes>
         </BrowserRouter>
     )
