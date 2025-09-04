@@ -1,0 +1,121 @@
+.criar-artigo-page {
+    background-color: #f7f9fc;
+
+    .formulario {
+        max-width: 800px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+        h1 {
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .grupo {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    font-weight: 600;
+                    margin-bottom: 6px;
+                    color: #444;
+                }
+
+                input,
+                select,
+                textarea {
+                    padding: 12px 14px;
+                    font-size: 1rem;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    transition: border-color 0.3s, box-shadow 0.3s;
+
+                    &:focus {
+                        border-color: #1976d2;
+                        box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+                        outline: none;
+                    }
+                }
+            }
+
+            .grupo-row {
+                display: flex;
+                gap: 20px;
+
+                .grupo {
+                    flex: 1;
+                }
+            }
+
+            .botoes {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 10px;
+
+                button {
+                    padding: 12px 28px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background 0.3s ease;
+                    border: none;
+                }
+
+                .publicar {
+                    background-color: #1976d2;
+                    color: white;
+
+                    &:hover {
+                        background-color: #125aa0;
+                    }
+                }
+
+                .limpar {
+                    background-color: #ccc;
+                    color: #333;
+
+                    &:hover {
+                        background-color: #b0b0b0;
+                    }
+                }
+            }
+
+            .mensagem-sucesso {
+                text-align: center;
+                color: green;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .formulario {
+            padding: 30px 20px;
+
+            .grupo-row {
+                flex-direction: column;
+            }
+
+            .botoes {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
