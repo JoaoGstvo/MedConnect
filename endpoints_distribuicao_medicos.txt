@@ -2,10 +2,10 @@
 # Documentação de Endpoints - Sistema de Distribuição de Médicos
 
 ## Autenticação
-- POST /auth/register/medico → cadastro de médico
-- POST /auth/register/empresa → cadastro de empresa
-- POST /auth/login → login (retorna token de sessão/JWT)
-- POST /auth/logout → logout
+- POST /medico → cadastro de médico
+- POST empresa → cadastro de empresa
+- POST /login → login
+- POST /logout → logout
 
 ## Médicos
 - GET /medicos → listar médicos (exibir na landing page)
@@ -15,7 +15,6 @@
 
 ## Empresas
 - GET /empresas → listar empresas (exibir na landing page)
-- GET /empresas/:id → ver perfil de uma empresa específica
 - PUT /empresas/:id → atualizar perfil da empresa
 - DELETE /empresas/:id → excluir conta de empresa
 
@@ -35,7 +34,8 @@
 
 ## Artigos
 - GET /artigos → listar todos os artigos (feed estilo LinkedIn)
-- GET /artigos/:id → ver artigo específico
 - POST /artigos → criar artigo (médico ou empresa)
 - PUT /artigos/:id → editar artigo (autor)
 - DELETE /artigos/:id → deletar artigo (autor ou admin)
+
+

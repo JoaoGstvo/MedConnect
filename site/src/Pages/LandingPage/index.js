@@ -34,9 +34,6 @@ function LandingPage() {
                         <CardVaga />
                         <CardVaga />
                         <CardVaga />
-                        <CardVaga />
-                        <CardVaga />
-                        <CardVaga />
                     </div>
                 </div>
             </section>
@@ -50,9 +47,7 @@ function LandingPage() {
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
-                        <CardEmpresa />
-                        <CardEmpresa />
-                        <CardEmpresa />
+
                     </div>
                 </div>
             </section>
@@ -62,9 +57,6 @@ function LandingPage() {
                 </div>
                 <div className='container'>
                     <div className='wrapper'>
-                        <CardProfissional />
-                        <CardProfissional />
-                        <CardProfissional />
                         <CardProfissional />
                         <CardProfissional />
                         <CardProfissional />

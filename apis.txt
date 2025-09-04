@@ -1,0 +1,143 @@
+// GET simples
+app.get("/exemplo", (req, res) => {
+  res.json({ message: "GET simples" });
+});
+
+// GET com query (?nome=Joao&idade=25)
+app.get("/exemplo-query", (req, res) => {
+  const { nome, idade } = req.query;
+  res.json({ message: "GET com query", nome, idade });
+});
+
+// GET com params (/exemplo/123)
+app.get("/exemplo/:id", (req, res) => {
+  const { id } = req.params;
+  res.json({ message: "GET com params", id });
+});
+
+// GET com params + query (/exemplo/123?ativo=true)
+app.get("/exemplo/:id/detalhes", (req, res) => {
+  const { id } = req.params;
+  const { ativo } = req.query;
+  res.json({ message: "GET params + query", id, ativo });
+});
+
+
+------------------------------------------------------------------------
+
+// POST simples (body JSON)
+app.post("/exemplo", (req, res) => {
+  const dados = req.body;
+  res.json({ message: "POST simples", dados });
+});
+
+// POST com params (/exemplo/123)
+app.post("/exemplo/:id", (req, res) => {
+  const { id } = req.params;
+  const dados = req.body;
+  res.json({ message: "POST com params", id, dados });
+});
+
+// POST com query (/exemplo?tipo=novo)
+app.post("/exemplo-query", (req, res) => {
+  const { tipo } = req.query;
+  const dados = req.body;
+  res.json({ message: "POST com query", tipo, dados });
+});
+
+// POST com params + query + body (/exemplo/123?ativo=true)
+app.post("/exemplo/:id/detalhes", (req, res) => {
+  const { id } = req.params;
+  const { ativo } = req.query;
+  const dados = req.body;
+  res.json({ message: "POST completo", id, ativo, dados });
+});
+
+
+------------------------------------------------------------------------
+
+// PUT simples (atualiza com body)
+app.put("/exemplo", (req, res) => {
+  const dados = req.body;
+  res.json({ message: "PUT simples", dados });
+});
+
+// PUT com params (/exemplo/123)
+app.put("/exemplo/:id", (req, res) => {
+  const { id } = req.params;
+  const dados = req.body;
+  res.json({ message: "PUT com params", id, dados });
+});
+
+// PUT com query (/exemplo?forcar=true)
+app.put("/exemplo-query", (req, res) => {
+  const { forcar } = req.query;
+  const dados = req.body;
+  res.json({ message: "PUT com query", forcar, dados });
+});
+
+// PUT com params + query + body
+app.put("/exemplo/:id/detalhes", (req, res) => {
+  const { id } = req.params;
+  const { forcar } = req.query;
+  const dados = req.body;
+  res.json({ message: "PUT completo", id, forcar, dados });
+});
+
+
+------------------------------------------------------------------------
+
+// PATCH simples (atualização parcial)
+app.patch("/exemplo", (req, res) => {
+  const dados = req.body;
+  res.json({ message: "PATCH simples", dados });
+});
+
+// PATCH com params (/exemplo/123)
+app.patch("/exemplo/:id", (req, res) => {
+  const { id } = req.params;
+  const dados = req.body;
+  res.json({ message: "PATCH com params", id, dados });
+});
+
+// PATCH com query
+app.patch("/exemplo-query", (req, res) => {
+  const { campo } = req.query;
+  const dados = req.body;
+  res.json({ message: "PATCH com query", campo, dados });
+});
+
+// PATCH completo (params + query + body)
+app.patch("/exemplo/:id/detalhes", (req, res) => {
+  const { id } = req.params;
+  const { campo } = req.query;
+  const dados = req.body;
+  res.json({ message: "PATCH completo", id, campo, dados });
+});
+
+
+------------------------------------------------------------------------
+
+// DELETE simples
+app.delete("/exemplo", (req, res) => {
+  res.json({ message: "DELETE simples" });
+});
+
+// DELETE com params (/exemplo/123)
+app.delete("/exemplo/:id", (req, res) => {
+  const { id } = req.params;
+  res.json({ message: "DELETE com params", id });
+});
+
+// DELETE com query (/exemplo?forcar=true)
+app.delete("/exemplo-query", (req, res) => {
+  const { forcar } = req.query;
+  res.json({ message: "DELETE com query", forcar });
+});
+
+// DELETE completo (params + query)
+app.delete("/exemplo/:id/detalhes", (req, res) => {
+  const { id } = req.params;
+  const { forcar } = req.query;
+  res.json({ message: "DELETE completo", id, forcar });
+});
