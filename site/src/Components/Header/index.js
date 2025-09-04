@@ -19,7 +19,7 @@ function Header() {
                         <a href="/" className='nav-link'>
                             <span>Vagas</span>
                         </a>
-                        <a href="/" className='nav-link'>
+                        <a href="/artigos" className='nav-link'>
                             <span>Artigos</span>
                         </a>
                     </div>
