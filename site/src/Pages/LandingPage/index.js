@@ -37,7 +37,7 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
-            {/* Teste */}
+
             <section className='section'>
                 <div className='title'>
                     <h1>Empresas em Destaque</h1>
