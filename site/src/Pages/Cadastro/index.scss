@@ -61,9 +61,15 @@
                     transition: all 0.3s;
                     text-align: center;
 
+                    &:hover {
+                        border-color: #c0c0c0;
+                        background-color: #f9f9f9;
+                    }
+
                     &.selected {
                         border-color: #4a90e2;
                         background-color: #f5f9ff;
+                        box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
                     }
 
                     h3 {
