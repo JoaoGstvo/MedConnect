@@ -6,6 +6,7 @@ import Signup from './Pages/Cadastro/index.js';
 import BusnessProfile from './Pages/PerfilEmpresa/index.js';
 import ProfissionalProfile from './Pages/PerfilProfissional/index.js';
 import Artigos from './Pages/Artigos/index.js';
+import NovoArtigoPage from './Pages/NovoArtigo/index.js';
 
 
 export default function Index() {
@@ -18,6 +19,7 @@ export default function Index() {
                 <Route path="/cadastro" element={<Signup/>} />
                 <Route path="/perfilprofissional" element={<ProfissionalProfile/>} />
                 <Route path="/artigos" element={<Artigos/>} />
+                <Route path="/novoartigo" element={<NovoArtigoPage/>} />
             </Routes>
         </BrowserRouter>
     )

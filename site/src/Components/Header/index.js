@@ -5,7 +5,9 @@ function Header() {
         <main className="header-page">
             <div className='navigation-container'>
                 <div className='logo-section'>
+                    <a href="/">
                     <img src="/Images/Logo.png" alt="" />
+                    </a>
                 </div>
 
                 <div className='nav-links'>

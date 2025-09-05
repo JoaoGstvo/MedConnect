@@ -23,6 +23,7 @@ function ArtigosPage() {
                         <a href="#">Meus Artigos</a>
                         <a href="#">Minhas Conexões</a>
                         <a href="#">Favoritos</a>
+                        <a href="/novoartigo"> Crie um Artigo</a>
                     </div>
                 </aside>
 
