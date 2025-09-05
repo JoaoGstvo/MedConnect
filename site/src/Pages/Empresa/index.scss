@@ -1,0 +1,188 @@
+.empresa-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f3f2ef;
+
+    /* Header da empresa */
+    .empresa-header {
+        background: linear-gradient(90deg, #0073b1, #00a0dc);
+        color: #fff;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+        .empresa-info {
+            max-width: 900px;
+            margin: 0 auto;
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+
+            .acoes {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+
+                button {
+                    background-color: #fff;
+                    color: #0073b1;
+                    padding: 10px 20px;
+                    border-radius: 20px;
+                    border: none;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: background 0.3s;
+
+                    &:hover {
+                        background-color: #e6f2fb;
+                    }
+                }
+            }
+        }
+    }
+
+    /* Sobre a empresa */
+    .empresa-sobre {
+        padding: 40px 20px;
+        text-align: center;
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #0073b1;
+        }
+
+        .sobre-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+            p {
+                margin-bottom: 15px;
+                color: #333;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    margin-bottom: 10px;
+                    color: #555;
+
+                    strong {
+                        color: #0073b1;
+                    }
+                }
+            }
+        }
+    }
+
+    /* Vagas e profissionais */
+    .empresa-vagas,
+    .empresa-profissionais {
+        padding: 40px 20px;
+
+        h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #0073b1;
+            margin-bottom: 20px;
+        }
+
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+
+            select {
+                padding: 8px 12px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                min-width: 150px;
+            }
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+
+            & > * {
+                flex: 0 0 300px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border-radius: 8px;
+                background: #fff;
+                transition: transform 0.3s, box-shadow 0.3s;
+
+                &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+                }
+            }
+        }
+    }
+
+    /* Contato */
+    .empresa-contato {
+        padding: 40px 20px;
+        text-align: center;
+
+        h2 {
+            font-size: 1.8rem;
+            color: #0073b1;
+            margin-bottom: 20px;
+        }
+
+        .contato-info {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+            p {
+                margin-bottom: 10px;
+                color: #555;
+
+                strong {
+                    color: #0073b1;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .empresa-header .empresa-info h1 {
+            font-size: 1.5rem;
+        }
+
+        .empresa-header .empresa-info p {
+            font-size: 1rem;
+        }
+
+        .cards-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .filtros {
+            flex-direction: column;
+        }
+    }
+}

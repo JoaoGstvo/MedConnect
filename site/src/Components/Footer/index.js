@@ -16,16 +16,7 @@ function Footer() {
                     <ul className="link-list">
                         <li><a href="/">Buscar Vagas</a></li>
                         <li><a href="/">Buscar Empresas</a></li>
-                        <li><a href="/">Ver Artigos</a></li>
-                    </ul>
-                </div>
-
-                <div className="link-column">
-                    <h2 className="title">Para Empresas</h2>
-                    <ul className="link-list">
-                        <li><a href="/">Postar Vagas</a></li>
-                        <li><a href="/">Ver Profissionais</a></li>
-                        <li><a href="/">Artigos da Empresa</a></li>
+                        <li><a href="/artigos">Ver Artigos</a></li>
                     </ul>
                 </div>
 

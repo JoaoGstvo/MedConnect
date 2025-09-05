@@ -1,0 +1,117 @@
+.vagaspage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f5f7;
+
+    .principal-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 60px 20px;
+        background: linear-gradient(to bottom, #4a90e2, #ffffff);
+        color: #fff;
+
+        .title {
+            width: 60%;
+            text-align: center;
+            margin-bottom: 20px;
+
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 1rem;
+                color: #f0f0f0;
+            }
+        }
+    }
+
+    .section {
+        padding: 40px 20px;
+        box-sizing: border-box;
+
+        .title {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+
+            input, select {
+                padding: 12px 18px;
+                border-radius: 10px;
+                border: none;
+                background: rgba(255,255,255,0.7);
+                backdrop-filter: blur(10px);
+                font-size: 0.95rem;
+                width: 220px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+                &:focus {
+                    outline: 2px solid #4a90e2;
+                    backdrop-filter: blur(15px);
+                }
+            }
+
+            button {
+                padding: 12px 25px;
+                border-radius: 10px;
+                border: none;
+                background-color: #4a90e2;
+                color: white;
+                cursor: pointer;
+                font-weight: 600;
+                transition: background-color 0.3s, transform 0.2s;
+
+                &:hover {
+                    background-color: #1174de;
+                    transform: translateY(-2px);
+                }
+            }
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+
+            .wrapper {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                gap: 25px;
+                max-width: 1200px;
+
+                & > * {
+                    flex: 0 0 calc(33.333% - 25px);
+                    box-sizing: border-box;
+                    background: rgba(255,255,255,0.6);
+                    backdrop-filter: blur(15px);
+                    border-radius: 15px;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+                    transition: transform 0.3s, box-shadow 0.3s;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+                    }
+                }
+            }
+        }
+    }
+}

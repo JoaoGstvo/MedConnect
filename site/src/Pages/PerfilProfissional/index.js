@@ -122,7 +122,7 @@ function ProfissionalProfile() {
                     </div>
 
                     <div className="buttons">
-                        <button type="button" className="cancel-button">Cancelar</button>
+                        <button type="button" className="cancel-button" >Cancelar</button>
                         <button type="submit" className="save-button">Salvar</button>
                     </div>
                 </div>

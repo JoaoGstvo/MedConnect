@@ -15,10 +15,10 @@ function Header() {
                         <a href="/" className='nav-link'>
                             <span>Inicio</span>
                         </a>
-                        <a href="/" className='nav-link'>
+                        <a href="/empresas" className='nav-link'>
                             <span>Empresas</span>
                         </a>
-                        <a href="/" className='nav-link'>
+                        <a href="/vagas" className='nav-link'>
                             <span>Vagas</span>
                         </a>
                         <a href="/artigos" className='nav-link'>
