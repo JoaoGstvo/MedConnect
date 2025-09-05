@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import "dotenv/config";
-// import pool from './src/Repository/connection.js';
+import pool from "./Repository/connection.js";
 
 
 // To criando o servidor Express
@@ -13,7 +13,10 @@ server.use(express.json());
 
 
 
-
+server.get("/teste", async (req, res) => {
+  const result = await pool.query("SELECT NOW()");
+  res.json(result.rows);
+});
 
 
 
