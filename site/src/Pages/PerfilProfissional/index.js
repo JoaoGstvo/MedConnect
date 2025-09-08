@@ -124,6 +124,9 @@ function ProfissionalProfile() {
                     <div className="buttons">
                         <button type="button" className="cancel-button" >Cancelar</button>
                         <button type="submit" className="save-button">Salvar</button>
+                        <a href="/">
+                        <button type="submit" className="voltar-button">Voltar</button>
+                        </a>
                     </div>
                 </div>
             </section>
