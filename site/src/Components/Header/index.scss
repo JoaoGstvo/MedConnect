@@ -16,6 +16,7 @@
     padding: 0 24px;
   }
 
+  /* LOGO */
   .logo-section {
     img {
       width: 7rem;
@@ -28,6 +29,47 @@
     }
   }
 
+  /* PESQUISA ESTILO LINKEDIN */
+  .search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin: 0 24px;
+    max-width: 500px;
+    background: #f3f6f8;
+    border-radius: 16px;
+    padding: 6px 10px;
+    transition: box-shadow 0.2s;
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .search-btn {
+      border: none;
+      background: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #555;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #4a90e2;
+      }
+    }
+
+    &:focus-within {
+      box-shadow: 0 0 0 2px #4a90e2;
+      background: #fff;
+    }
+  }
+
+  /* LINKS DE NAVEGAÇÃO */
   .nav-links {
     display: flex;
     align-items: center;
@@ -50,7 +92,7 @@
           transition: color 0.3s ease;
         }
 
-        /* Efeito underline animado */
+        /* underline animado */
         &::after {
           content: "";
           position: absolute;
@@ -117,7 +159,7 @@
     }
   }
 
-  /* Responsividade */
+  /* RESPONSIVIDADE */
   @media (max-width: 1024px) {
     .nav-links {
       gap: 16px;
@@ -125,6 +167,10 @@
   }
 
   @media (max-width: 768px) {
+    .search-bar {
+      display: none; // 🔎 esconde no mobile por enquanto
+    }
+
     .nav-links {
       display: none;
       position: absolute;
