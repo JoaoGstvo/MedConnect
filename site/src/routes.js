@@ -9,6 +9,9 @@ import Artigos from './Pages/Artigos/index.js';
 import NovoArtigoPage from './Pages/NovoArtigo/index.js';
 import EmpresaPage from './Pages/Empresa/index.js';
 import VagasPage from './Pages/Vagas/index.js';
+import MinhasVagas from './Pages/Minhas Vagas/index.js';
+
+
 
 export default function Index() {
     return (
@@ -23,6 +26,7 @@ export default function Index() {
                 <Route path="/novoartigo" element={<NovoArtigoPage/>} />
                 <Route path="/empresas" element={<EmpresaPage/>} />
                 <Route path="/vagas" element={<VagasPage/>} />
+                <Route path="/minhasvagas" element={<MinhasVagas/>} />
             </Routes>
         </BrowserRouter>
     )
