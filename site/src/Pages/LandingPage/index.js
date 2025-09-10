@@ -10,21 +10,27 @@ function LandingPage() {
         <main className='landingpage'>
             <Header />
 
+            {/* Hero Section */}
             <section className='principal-container'>
                 <div className='title'>
-                    <h1>Conectando Profissionais da Saúde com as Melhores Oportunidades</h1>
-                    <p>A plataforma especializada em conexões entre empresas e Profissionais da área da Saúde.</p>
+                    <h1>Conectando Profissionais da Saúde às Melhores Oportunidades</h1>
+                    <p>
+                        Nossa plataforma é especializada em aproximar empresas, clínicas e hospitais
+                        de profissionais da área da saúde. Aqui você encontra as vagas, talentos e
+                        empresas que fazem a diferença.
+                    </p>
                 </div>
                 <div className='buttons'>
-                    <a href="/">
+                    <a href="/empresas">
                         <button>Ver Empresas</button>
                     </a>
-                    <a href="/">
-                        <button>Ver Profissionais</button>
+                    <a href="/vagas">
+                        <button>Ver Vagas</button>
                     </a>
                 </div>
             </section>
 
+            {/* Vagas em Destaque */}
             <section className='section'>
                 <div className='title'>
                     <h1>Vagas em Destaque</h1>
@@ -38,6 +44,7 @@ function LandingPage() {
                 </div>
             </section>
 
+            {/* Empresas em Destaque */}
             <section className='section'>
                 <div className='title'>
                     <h1>Empresas em Destaque</h1>
@@ -47,10 +54,11 @@ function LandingPage() {
                         <CardEmpresa />
                         <CardEmpresa />
                         <CardEmpresa />
-
                     </div>
                 </div>
             </section>
+
+            {/* Profissionais em Destaque */}
             <section className='section'>
                 <div className='title'>
                     <h1>Profissionais em Destaque</h1>
@@ -69,4 +77,4 @@ function LandingPage() {
     );
 }
 
-export default LandingPage; 
+export default LandingPage;

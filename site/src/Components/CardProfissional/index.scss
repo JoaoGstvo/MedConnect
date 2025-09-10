@@ -1,0 +1,132 @@
+.professional-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  .professional-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #2181ee;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+
+      .professional-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 5px;
+      }
+
+      .professional-role {
+        font-size: 1rem;
+        color: #2181ee;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .location {
+        font-size: 0.9rem;
+        color: #555;
+      }
+    }
+  }
+
+  .divider {
+    margin: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .experience {
+    margin-bottom: 15px;
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+  }
+
+  .skills {
+    margin-bottom: 15px;
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      li {
+        background: #e8f2fd;
+        color: #2181ee;
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .professional-footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+
+    .contact-button {
+      padding: 12px 26px;
+      background: #2181ee;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #0f66c2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      }
+    }
+  }
+}

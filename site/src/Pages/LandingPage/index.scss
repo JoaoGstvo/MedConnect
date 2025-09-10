@@ -4,6 +4,7 @@
   min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #222;
+  background-color: #fafafa;
 
   .principal-container {
     display: flex;
@@ -11,28 +12,28 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 60vh;
-    background: linear-gradient(to bottom, #4a90e2, #ffffff);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    padding: 30px 20px;
-    box-sizing: border-box;
+    min-height: 70vh;
+    background: linear-gradient(135deg, #4a90e2, #56c3f4);
+    color: #fff;
     text-align: center;
+    padding: 60px 20px;
+    box-shadow: inset 0 -4px 20px rgba(0, 0, 0, 0.15);
 
     .title {
-      max-width: 700px;
-      margin-bottom: 25px;
+      max-width: 800px;
+      margin-bottom: 30px;
 
       h1 {
-        margin-bottom: 10px;
-        font-size: 2rem;
-        font-weight: 600;
-        color: #0d0d0d;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
       }
 
       p {
-        font-size: 1rem;
-        color: #444;
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: #f0f0f0;
         line-height: 1.6;
       }
     }
@@ -41,46 +42,59 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 15px;
-
-      a {
-        text-decoration: none;
-      }
+      gap: 20px;
 
       button {
-        padding: 14px 28px;
-        background-color: #2181ee;
-        color: white;
+        padding: 14px 34px;
         border: none;
-        border-radius: 8px;
-        cursor: pointer;
+        border-radius: 50px;
+        background: #ffffff;
+        color: #2181ee;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
+        cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 
         &:hover {
-          background-color: #0f66c2;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          background: #2181ee;
+          color: #fff;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
         }
       }
     }
   }
 
   .section {
-    padding: 60px 20px;
+    padding: 80px 20px;
     box-sizing: border-box;
+    background-color: #fff;
+
+    &:nth-child(even) {
+      background-color: #f5f7fa;
+    }
 
     .title {
-      width: 100%;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
 
       h1 {
-        margin: 0;
-        font-size: 2rem;
-        font-weight: 600;
+        font-size: 2.2rem;
+        font-weight: 700;
         color: #222;
+        position: relative;
+        display: inline-block;
+
+        &::after {
+          content: "";
+          display: block;
+          width: 60px;
+          height: 4px;
+          margin: 12px auto 0;
+          background: #2181ee;
+          border-radius: 2px;
+        }
       }
     }
 
@@ -92,13 +106,18 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 25px;
+        gap: 30px;
         max-width: 1200px;
 
         & > * {
           flex: 0 0 calc(33.333% - 20px);
           min-width: 280px;
-          box-sizing: border-box;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+          &:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+          }
         }
       }
     }
@@ -107,19 +126,10 @@
   /* Responsividade */
   @media (max-width: 1024px) {
     .principal-container {
-      height: auto;
-      padding: 50px 20px;
-
-      .title {
-        h1 {
-          font-size: 1.8rem;
-        }
-        p {
-          font-size: 0.95rem;
-        }
+      .title h1 {
+        font-size: 2.2rem;
       }
     }
-
     .section .container .wrapper > * {
       flex: 0 0 calc(50% - 20px);
     }
@@ -127,18 +137,9 @@
 
   @media (max-width: 768px) {
     .principal-container {
-      .title {
-        h1 {
-          font-size: 1.6rem;
-        }
-        p {
-          font-size: 0.9rem;
-        }
-      }
-
-      .buttons button {
-        width: 100%;
-        max-width: 300px;
+      padding: 50px 20px;
+      .title h1 {
+        font-size: 1.8rem;
       }
     }
 
@@ -149,23 +150,20 @@
 
   @media (max-width: 480px) {
     .principal-container {
-      padding: 30px 15px;
+      padding: 40px 15px;
 
-      .title {
-        h1 {
-          font-size: 1.4rem;
-        }
-        p {
-          font-size: 0.85rem;
-        }
+      .title h1 {
+        font-size: 1.6rem;
+      }
+      .title p {
+        font-size: 0.9rem;
       }
     }
 
     .section {
-      padding: 40px 15px;
-
+      padding: 50px 15px;
       .title h1 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
       }
     }
   }
