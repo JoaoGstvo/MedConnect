@@ -11,6 +11,7 @@ import EmpresaPage from './Pages/Empresa/index.js';
 import VagasPage from './Pages/Vagas/index.js';
 import MinhasVagas from './Pages/Minhas Vagas/index.js';
 import PostarVaga from './Pages/Postarvaga/index.js';
+import LandingPage1 from './Pages/LandingPage1/index.js';
 
 
 
@@ -29,6 +30,7 @@ export default function Index() {
                 <Route path="/vagas" element={<VagasPage/>} />
                 <Route path="/minhasvagas" element={<MinhasVagas/>} />
                 <Route path="/postarvaga" element={<PostarVaga/>} />
+                <Route path="/inicial" element={<LandingPage1/>} />
             </Routes>
         </BrowserRouter>
     )
