@@ -29,7 +29,7 @@ function Header() {
                     </div>
 
                     <div className='nav-links-group profile'>
-                        <a href="/perfilprofissional" className='nav-link a-profile'>
+                        <a href="/meucurriculo" className='nav-link a-profile'>
                             <span>Perfil</span>
                         </a>
                     </div>

@@ -14,7 +14,7 @@ import PostarVaga from './Pages/Postarvaga/index.js';
 import LandingPage1 from './Pages/LandingPage1/index.js';
 import DashboardEmpresaPage from './Pages/Dashboard Empresa/index.js';
 import DashboardCandidatoPage from './Pages/Dashboard Candidato/index.js';
-
+import MeuCurriculo from './Pages/Curriculo/index.js';
 
 
 export default function Index() {
@@ -35,6 +35,7 @@ export default function Index() {
                 <Route path="/inicial" element={<LandingPage1/>} />
                 <Route path="/dashempresa" element={<DashboardEmpresaPage/>} />
                 <Route path="/dashcandidato" element={<DashboardCandidatoPage/>} />
+                <Route path="/meucurriculo" element={<MeuCurriculo/>} />
             </Routes>
         </BrowserRouter>
     )

@@ -1,0 +1,72 @@
+.job-card {
+    flex: 1 1 300px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: #fff;
+
+    .company-logo {
+        width: 50px;
+        height: auto;
+        margin-bottom: 0.5rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .details {
+        font-size: 0.85rem;
+        color: #444;
+    }
+
+    .progress {
+        margin-top: 0.8rem;
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #4a90e2;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+
+        p {
+            font-size: 0.85rem;
+            color: #444;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+
+        .btn-access {
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-block {
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 0.6rem;
+            cursor: pointer;
+        }
+    }
+}
