@@ -1,0 +1,85 @@
+.contato-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f3f2ef;
+
+    .contato-header {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(90deg, #0073b1, #00a0dc);
+        color: #fff;
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1rem;
+        }
+    }
+
+    .contato-formulario {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    margin-bottom: 5px;
+                    font-weight: 600;
+                    color: #0073b1;
+                }
+
+                input, textarea {
+                    padding: 10px 12px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    font-size: 1rem;
+                    resize: vertical;
+
+                    &:focus {
+                        outline: none;
+                        border-color: #0073b1;
+                        box-shadow: 0 0 0 2px rgba(0,115,177,0.2);
+                    }
+                }
+            }
+
+            button {
+                background-color: #0073b1;
+                color: #fff;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 5px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.3s;
+
+                &:hover {
+                    background-color: #005f8d;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contato-formulario {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+}

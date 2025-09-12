@@ -1,25 +1,18 @@
 import './index.scss';
 
-function JobCard({ companyLogo, title, subtitle, type, location, progress }) {
+function JobCard({ companyLogo, title, subtitle, type, location, status }) {
     return (
-        <div className="job-card">
-            <img src={companyLogo} alt="Logo da empresa" className="company-logo" />
-            <h3>{title}</h3>
-            <p className="subtitle">{subtitle}</p>
-            <p className="details">
-                <span>{type}</span> • <span>{location}</span>
-            </p>
-            <div className="progress">
-                <strong></strong>
-                <div className="progress-bar"></div>
-                <p>{progress}</p>
+        <div className={`job-card status-${status.toLowerCase().replace(/\s/g, '-')}`}>
+            <img src={companyLogo} alt={title} className="company-logo" />
+            <div className="job-info">
+                <h3>{title}</h3>
+                <p className="subtitle">{subtitle}</p>
+                <p className="details">{type} • {location}</p>
             </div>
-            <div className="actions">
-                <button className="btn-access">Acessar vaga</button>
-                <button className="btn-block">🚫</button>
-            </div>
+            <span className="status-badge">{status}</span>
         </div>
     );
 }
 
 export default JobCard;
+
