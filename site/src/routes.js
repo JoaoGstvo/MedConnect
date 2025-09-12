@@ -15,6 +15,8 @@ import LandingPage1 from './Pages/LandingPage1/index.js';
 import DashboardEmpresaPage from './Pages/Dashboard Empresa/index.js';
 import DashboardCandidatoPage from './Pages/Dashboard Candidato/index.js';
 import MeuCurriculo from './Pages/Curriculo/index.js';
+import MaisInformacoesPage from './Pages/maisinformações/index.js';
+import InscricaoPage from './Pages/inscrição/index.js';
 
 
 export default function Index() {
@@ -36,6 +38,8 @@ export default function Index() {
                 <Route path="/dashempresa" element={<DashboardEmpresaPage/>} />
                 <Route path="/dashcandidato" element={<DashboardCandidatoPage/>} />
                 <Route path="/meucurriculo" element={<MeuCurriculo/>} />
+                <Route path="/informacoes" element={<MaisInformacoesPage/>} />
+                <Route path="/inscricao" element={<InscricaoPage/>} />
             </Routes>
         </BrowserRouter>
     )

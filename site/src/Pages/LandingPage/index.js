@@ -52,8 +52,8 @@ function LandingPage() {
                 <div className='container'>
                     <div className='wrapper'>
                         <CardEmpresa />
-                        <CardEmpresa />
-                        <CardEmpresa />
+                        
+                        
                     </div>
                 </div>
             </section>

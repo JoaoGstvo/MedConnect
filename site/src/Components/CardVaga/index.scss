@@ -4,37 +4,17 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 20px 0;
-    max-width:400px;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    max-height: 300px;
     position: relative;
 
+    /* Ajuste do scroll da descrição/conteúdo */
     .job-content {
         overflow-y: auto;
         margin-bottom: 15px;
-        flex: 1;
-        padding-right: 20px;
-
-        &::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin: 5px 0;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 10px;
-            border: 2px solid #f8f9fa;
-
-            &:hover {
-                background: #9ca3af;
-            }
-        }
+        padding-right: 10px; // espaço para scrollbar sem quebrar layout
+        max-height: 400px;   // limite máximo de altura para não estourar o card
     }
 
     .job-header {
@@ -63,7 +43,6 @@
         margin-bottom: 15px;
 
         .detail-item {
-            
             .detail-text {
                 color: #666;
                 font-size: 13px;
@@ -137,7 +116,6 @@
         margin-top: auto;
 
         .job-meta {
-
             .publish-date {
                 color: #666;
                 font-size: 12px;
@@ -163,6 +141,27 @@
                     background-color: #3a7bc8;
                 }
             }
+        }
+    }
+
+    /* Scrollbar estilizada */
+    .job-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .job-content::-webkit-scrollbar-track {
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin: 5px 0;
+    }
+
+    .job-content::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 10px;
+        border: 2px solid #f8f9fa;
+
+        &:hover {
+            background: #9ca3af;
         }
     }
 }

@@ -1,0 +1,118 @@
+.inscricaopage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f5f7;
+
+    .principal-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 60px 20px;
+        background: linear-gradient(to bottom, #4a90e2, #ffffff);
+        color: #fff;
+
+        .title {
+            width: 70%;
+            text-align: center;
+            margin-bottom: 20px;
+
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 1rem;
+                color: #f0f0f0;
+            }
+        }
+    }
+
+    .section {
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                label {
+                    font-weight: 600;
+                    color: #333;
+                }
+
+                input, textarea {
+                    padding: 12px 15px;
+                    border-radius: 10px;
+                    border: 1px solid #ccc;
+                    font-size: 1rem;
+                    transition: all 0.3s;
+
+                    &:focus {
+                        outline: none;
+                        border-color: #4a90e2;
+                        box-shadow: 0 0 6px rgba(74,144,226,0.3);
+                    }
+                }
+            }
+
+            .actions {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+
+                .btn-submit {
+                    padding: 12px 25px;
+                    border-radius: 10px;
+                    border: none;
+                    background-color: #4a90e2;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: background-color 0.3s, transform 0.2s;
+
+                    &:hover {
+                        background-color: #1174de;
+                        transform: translateY(-2px);
+                    }
+                }
+
+                .btn-back {
+                    padding: 12px 25px;
+                    border-radius: 10px;
+                    border: 2px solid #4a90e2;
+                    background-color: transparent;
+                    color: #4a90e2;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+
+                    &:hover {
+                        background-color: #4a90e2;
+                        color: #fff;
+                        transform: translateY(-2px);
+                    }
+                }
+            }
+        }
+    }
+}
