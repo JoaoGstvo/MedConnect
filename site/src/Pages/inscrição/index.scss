@@ -2,8 +2,10 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #f4f5f7;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f3f2ef;
 
+    /* Header da inscrição */
     .principal-container {
         display: flex;
         flex-direction: column;
@@ -11,37 +13,37 @@
         justify-content: center;
         width: 100%;
         padding: 60px 20px;
-        background: linear-gradient(to bottom, #4a90e2, #ffffff);
+        background: linear-gradient(90deg, #0073b1, #00a0dc);
         color: #fff;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 
         .title {
-            width: 70%;
-            text-align: center;
-            margin-bottom: 20px;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
 
             h1 {
                 font-size: 2rem;
                 font-weight: 700;
-                text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
                 margin-bottom: 10px;
             }
 
             p {
-                font-size: 1rem;
-                color: #f0f0f0;
+                font-size: 1.1rem;
+                opacity: 0.9;
             }
         }
     }
 
+    /* Seção do formulário */
     .section {
         display: flex;
         justify-content: center;
         padding: 40px 20px;
 
         .form-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            background: #fff;
+            border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
             padding: 40px;
             max-width: 600px;
@@ -49,6 +51,12 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            transition: transform 0.3s;
+
+            &:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+            }
 
             .form-group {
                 display: flex;
@@ -62,52 +70,58 @@
 
                 input, textarea {
                     padding: 12px 15px;
-                    border-radius: 10px;
+                    border-radius: 8px;
                     border: 1px solid #ccc;
                     font-size: 1rem;
                     transition: all 0.3s;
+                    background: #fafafa;
 
                     &:focus {
                         outline: none;
-                        border-color: #4a90e2;
-                        box-shadow: 0 0 6px rgba(74,144,226,0.3);
+                        border-color: #0073b1;
+                        box-shadow: 0 0 6px rgba(0,115,177,0.3);
+                        background: #fff;
                     }
                 }
             }
 
+            /* Botões */
             .actions {
                 display: flex;
                 justify-content: space-between;
                 margin-top: 15px;
+                gap: 15px;
 
                 .btn-submit {
-                    padding: 12px 25px;
-                    border-radius: 10px;
+                    flex: 1;
+                    padding: 12px 20px;
+                    border-radius: 8px;
                     border: none;
-                    background-color: #4a90e2;
+                    background-color: #0073b1;
                     color: white;
                     cursor: pointer;
                     font-weight: 600;
                     transition: background-color 0.3s, transform 0.2s;
 
                     &:hover {
-                        background-color: #1174de;
+                        background-color: #005f8d;
                         transform: translateY(-2px);
                     }
                 }
 
                 .btn-back {
-                    padding: 12px 25px;
-                    border-radius: 10px;
-                    border: 2px solid #4a90e2;
+                    flex: 1;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    border: 2px solid #0073b1;
                     background-color: transparent;
-                    color: #4a90e2;
+                    color: #0073b1;
                     cursor: pointer;
                     font-weight: 600;
                     transition: background-color 0.3s, color 0.3s, transform 0.2s;
 
                     &:hover {
-                        background-color: #4a90e2;
+                        background-color: #0073b1;
                         color: #fff;
                         transform: translateY(-2px);
                     }
@@ -115,4 +129,25 @@
             }
         }
     }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .principal-container .title h1 {
+            font-size: 1.5rem;
+        }
+
+        .form-container {
+            padding: 25px;
+        }
+
+        .actions {
+            flex-direction: column;
+
+            .btn-submit,
+            .btn-back {
+                width: 100%;
+            }
+        }
+    }
 }
+

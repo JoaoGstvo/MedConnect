@@ -3,13 +3,13 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #222;
+  color: var(--color-text);
 
   .principal-container {
     text-align: center;
     padding: 40px 20px;
-    background: linear-gradient(to bottom, #2181ee, #ffffff);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-surface));
+    box-shadow: var(--shadow-soft);
 
     .title {
       max-width: 700px;
@@ -18,12 +18,11 @@
       h1 {
         font-size: 2rem;
         font-weight: 600;
-        margin-bottom: 10px;
       }
 
       p {
         font-size: 1rem;
-        color: #444;
+        color: var(--color-text-light);
       }
     }
   }
@@ -34,10 +33,10 @@
     padding: 40px 20px;
 
     .vaga-form {
-      background: #fff;
+      background: var(--color-surface);
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
       width: 100%;
       max-width: 700px;
       display: flex;
@@ -52,19 +51,22 @@
         label {
           font-size: 0.95rem;
           font-weight: 600;
-          color: #333;
+          color: var(--color-text);
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
           padding: 12px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius);
           font-size: 0.95rem;
           outline: none;
           transition: border 0.2s;
 
           &:focus {
-            border-color: #2181ee;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 4px rgba(74, 144, 226, 0.3);
           }
         }
 
@@ -91,18 +93,18 @@
         text-align: right;
 
         button {
-          background: #2181ee;
-          color: #fff;
+          background: var(--color-primary);
+          color: var(--color-surface);
           padding: 12px 20px;
           border: none;
-          border-radius: 8px;
+          border-radius: var(--radius);
           cursor: pointer;
           font-size: 1rem;
           font-weight: 500;
           transition: 0.3s;
 
           &:hover {
-            background: #0f66c2;
+            background: var(--color-primary-dark);
           }
         }
       }

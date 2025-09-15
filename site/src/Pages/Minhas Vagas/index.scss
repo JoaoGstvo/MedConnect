@@ -3,13 +3,13 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #222;
+  color: var(--color-text);
 
   .principal-container {
     text-align: center;
     padding: 40px 20px;
-    background: linear-gradient(to bottom, #0044ff, #ffffff);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-surface));
+    box-shadow: var(--shadow-soft);
 
     .title {
       max-width: 700px;
@@ -19,12 +19,12 @@
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 10px;
-        color: #0d0d0d;
+        color: var(--color-text);
       }
 
       p {
         font-size: 1rem;
-        color: #444;
+        color: var(--color-text-light);
       }
     }
   }
@@ -46,10 +46,10 @@
     }
 
     .vaga-card {
-      background: #fff;
-      border-radius: 12px;
+      background: var(--color-surface);
+      border-radius: var(--radius);
       padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-soft);
       flex: 0 0 calc(33.333% - 20px);
       min-width: 320px;
       box-sizing: border-box;
@@ -62,19 +62,19 @@
       h2 {
         font-size: 1.2rem;
         margin-bottom: 5px;
-        color: #222;
+        color: var(--color-text);
       }
 
       .empresa {
         font-size: 0.95rem;
         font-weight: 500;
-        color: #555;
+        color: var(--color-text-light);
         margin-bottom: 8px;
       }
 
       .info {
         font-size: 0.9rem;
-        color: #777;
+        color: var(--color-muted);
         margin-bottom: 15px;
       }
 
@@ -97,8 +97,8 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #ccc;
-            color: white;
+            background: var(--color-border);
+            color: var(--color-surface);
             font-size: 0.8rem;
             display: flex;
             align-items: center;
@@ -109,16 +109,16 @@
 
           span {
             font-size: 0.8rem;
-            color: #666;
+            color: var(--color-muted);
             text-align: center;
           }
 
           &.active .circle {
-            background: #007bff;
+            background: var(--color-primary);
           }
 
           &.active span {
-            color: #0091ff;
+            color: var(--color-primary-dark);
             font-weight: 600;
           }
         }
@@ -131,12 +131,12 @@
           right: -50%;
           width: 100%;
           height: 4px;
-          background: #ccc;
+          background: var(--color-border);
           z-index: 1;
         }
 
         .step.active:not(:last-child)::after {
-          background: #009dff;
+          background: var(--color-primary);
         }
       }
 
@@ -146,31 +146,31 @@
         gap: 10px;
 
         .btn-acessar {
-          background: #0055ff;
-          color: white;
+          background: var(--color-primary);
+          color: var(--color-surface);
           border: none;
-          border-radius: 6px;
+          border-radius: var(--radius);
           padding: 10px 15px;
           cursor: pointer;
           transition: 0.3s;
 
           &:hover {
-            background: #0033ff;
+            background: var(--color-primary-dark);
           }
         }
 
         .btn-cancelar {
           background: transparent;
-          border: 1px solid #ccc;
-          border-radius: 6px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius);
           padding: 10px 15px;
           cursor: pointer;
-          color: #666;
+          color: var(--color-muted);
           transition: 0.3s;
 
           &:hover {
-            border-color: #999;
-            color: #333;
+            border-color: var(--color-text-light);
+            color: var(--color-text);
           }
         }
       }
@@ -195,4 +195,5 @@
     }
   }
 }
+
 

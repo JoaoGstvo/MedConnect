@@ -15,18 +15,8 @@
     cursor: pointer;
 
     &:hover {
-        background: #4a90e2;
-        color: #fff;
         transform: translateY(-6px);
-
-        h2, .value {
-            color: #fff;
-        }
-
-        .action-btn {
-            background: #fff;
-            color: #4a90e2;
-        }
+        
     }
 
     .card-header {
@@ -63,8 +53,7 @@
         cursor: pointer;
         transition: all 0.2s ease;
 
-        &:hover {
-            background: #357ABD;
-        }
+        
+        
     }
 }

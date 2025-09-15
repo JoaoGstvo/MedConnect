@@ -2,23 +2,23 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #f3f2ef; // cor de fundo suave do LinkedIn
+  background: var(--color-bg); // fundo suave
 
   .form-container {
     max-width: 720px;
     width: 100%;
     margin: 2rem auto;
     padding: 2.5rem;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
 
     h2 {
       margin-bottom: 1.5rem;
       font-size: 1.6rem;
       font-weight: 600;
-      color: #1d2226; // tom escuro, estilo LinkedIn
-      border-bottom: 1px solid #e5e5e5;
+      color: var(--color-secondary);
+      border-bottom: 1px solid var(--color-border);
       padding-bottom: 1rem;
     }
 
@@ -30,7 +30,7 @@
       label {
         font-size: 0.9rem;
         font-weight: 600;
-        color: #555;
+        color: var(--color-text-light);
         margin-bottom: 0.3rem;
       }
 
@@ -38,15 +38,15 @@
       textarea,
       select {
         padding: 0.9rem 1rem;
-        border: 1px solid #d1d1d1;
-        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
         font-size: 0.95rem;
-        background: #fff;
+        background: var(--color-surface);
         transition: all 0.2s ease;
 
         &:focus {
-          border-color: #0a66c2;
-          box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.2);
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2); // sombra suave azul primário
           outline: none;
         }
       }
@@ -57,22 +57,22 @@
       }
 
       .btn-publicar {
-        background: #000000; // azul LinkedIn
-        color: #fff;
+        background: var(--color-primary);
+        color: var(--color-surface);
         border: none;
         padding: 0.9rem 1.2rem;
         font-size: 1rem;
         font-weight: 600;
-        border-radius: 999px; // botão pill style
+        border-radius: 999px; // pill style
         cursor: pointer;
         align-self: flex-start;
         transition: all 0.3s ease;
 
         &:hover {
-          background: #ffffff;
-          color: #000000
+          background: var(--color-primary-dark);
         }
       }
     }
   }
 }
+
