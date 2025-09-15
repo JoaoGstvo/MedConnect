@@ -1,0 +1,81 @@
+.mensagemsucessopage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+  background-color: #f3f2ef;
+
+  .principal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 60vh;
+    background: linear-gradient(90deg, #0073b1, #00a0dc);
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    .title {
+      max-width: 700px;
+
+      h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 1px 2px 6px rgba(0,0,0,0.3);
+      }
+
+      p {
+        font-size: 1.2rem;
+        font-weight: 400;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      button {
+        padding: 14px 34px;
+        border: none;
+        border-radius: 50px;
+        background: #fff;
+        color: #0073b1;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+        &:hover {
+          background: #0073b1;
+          color: #fff;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .principal-container .title h1 {
+      font-size: 2rem;
+    }
+
+    .principal-container .title p {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .principal-container .title h1 {
+      font-size: 1.6rem;
+    }
+
+    .principal-container .title p {
+      font-size: 0.95rem;
+    }
+  }
+}

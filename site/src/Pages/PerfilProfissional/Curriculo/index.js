@@ -1,6 +1,6 @@
 import './index.scss';
-import Header from "../../Components/Header/index.js";
-import Footer from "../../Components/Footer/index.js";
+import Header from "../../../Components/Header/index.js";
+import Footer from "../../../Components/Footer/index.js";
 import { useState } from "react";
 
 function MeuCurriculo() {

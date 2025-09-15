@@ -1,6 +1,6 @@
 import './index.scss';
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
+import Header from "../../../Components/Header";
+import Footer from "../../../Components/Footer";
 function MaisInformacoesPage() {
     return (
         <main className='maisinfopage'>
@@ -25,8 +25,12 @@ function MaisInformacoesPage() {
                     <p><strong>Benefícios:</strong> Plano de saúde, vale alimentação, auxílio transporte, bonificação por desempenho.</p>
                 </div>
                 <div className='actions'>
+                    <a href='inscricaovaga'>
                     <button className='btn-apply'>Candidatar-se</button>
+                    </a>
+                    <a href="/">
                     <button className='btn-back'>Voltar</button>
+                    </a>
                 </div>
             </section>
 

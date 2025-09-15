@@ -33,7 +33,9 @@ function CardProfissional() {
             </div>
 
             <div className='professional-footer'>
+                <a href='/contatoprofissional'>
                 <button className='contact-button'>Entrar em Contato</button>
+                </a>
             </div>
         </div>
     );

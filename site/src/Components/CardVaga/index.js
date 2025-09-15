@@ -69,14 +69,14 @@ function CardVaga() {
         <div className="job-action">
           <button
             className="apply-button"
-            onClick={() => (window.location.href = "/inscricao")}
+            onClick={() => (window.location.href = "/inscricaovaga")}
           >
             Fazer Inscrição
           </button>
 
           <button
             className="apply-button"
-            onClick={() => (window.location.href = "/informacoes")}
+            onClick={() => (window.location.href = "/informacoesvaga")}
           >
             Mais informações
           </button>

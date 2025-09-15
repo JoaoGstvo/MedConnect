@@ -1,6 +1,6 @@
 import './index.scss';
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
+import Header from "../../../Components/Header";
+import Footer from "../../../Components/Footer";
 
 function InscricaoPage() {
     return (
@@ -44,7 +44,7 @@ function InscricaoPage() {
                     </div>
 
                     <div className='actions'>
-                        <a herf ="/inscricaosucess">
+                        <a herf ="/inscricaovagasucesso">
                         <button type="submit" className='btn-submit'>Enviar Inscrição</button>
                         </a>
                         <a href="/">        

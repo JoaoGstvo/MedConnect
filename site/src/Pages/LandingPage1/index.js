@@ -5,11 +5,13 @@ function LandingPage1() {
         <main className='landingpage'>
             <header className='header'>
                 <div className='logo'>
-                    <img src="/logo.png" alt="Logo" />
+                    <img src="Images/Logo.png" alt="Logo" />
                 </div>
                 <div className='search-login'>
                     <input type="text" placeholder="Pesquisar vagas..." />
+                    <a href='/login'>
                     <button className='login-btn'>Entrar</button>
+                    </a>
                 </div>
             </header>
 
