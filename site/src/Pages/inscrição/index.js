@@ -44,8 +44,12 @@ function InscricaoPage() {
                     </div>
 
                     <div className='actions'>
+                        <a herf ="/inscricaosucess">
                         <button type="submit" className='btn-submit'>Enviar Inscrição</button>
+                        </a>
+                        <a href="/">        
                         <button type="button" className='btn-back'>Voltar</button>
+                        </a>
                     </div>
                 </form>
             </section>

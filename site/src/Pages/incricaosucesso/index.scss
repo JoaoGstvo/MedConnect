@@ -1,0 +1,129 @@
+.inscricaosucessopage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f3f2ef;
+
+    .principal-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 60px 20px;
+        background: linear-gradient(90deg, #0073b1, #00a0dc);
+        color: #fff;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+        .icon-success {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 25px;
+
+            svg {
+                width: 100%;
+                height: 100%;
+                stroke: #fff;
+                stroke-width: 4;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                fill: none;
+                animation: pop 0.6s ease forwards;
+            }
+
+            path {
+                stroke-dasharray: 48;
+                stroke-dashoffset: 48;
+                animation: draw 0.5s ease forwards 0.5s;
+            }
+        }
+
+        .title {
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 1.1rem;
+                opacity: 0.9;
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .btn-back,
+            .btn-back-outline {
+                padding: 12px 25px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .btn-back {
+                background-color: #0073b1;
+                border: none;
+                color: #fff;
+
+                &:hover {
+                    background-color: #005f8d;
+                    transform: translateY(-2px);
+                }
+            }
+
+            .btn-back-outline {
+                background-color: transparent;
+                border: 2px solid #fff;
+                color: #fff;
+
+                &:hover {
+                    background-color: #fff;
+                    color: #0073b1;
+                    transform: translateY(-2px);
+                }
+            }
+        }
+    }
+
+    /* Animações */
+    @keyframes pop {
+        0% { transform: scale(0); opacity: 0; }
+        50% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes draw {
+        to { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 768px) {
+        .principal-container .title h1 {
+            font-size: 1.5rem;
+        }
+
+        .actions {
+            flex-direction: column;
+
+            .btn-back,
+            .btn-back-outline {
+                width: 100%;
+            }
+        }
+
+        .icon-success {
+            width: 80px;
+            height: 80px;
+        }
+    }
+}

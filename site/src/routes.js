@@ -19,6 +19,7 @@ import MaisInformacoesPage from './Pages/maisinformações/index.js';
 import InscricaoPage from './Pages/inscrição/index.js';
 import GerenciamentoCandidatosPage from './Pages/gerenciamentocandidato/index.js';
 import ContatoPage from './Pages/Contato/index.js';
+import InscricaoSucessoPage from './Pages/incricaosucesso/index.js';
 
 
 export default function Index() {
@@ -44,6 +45,7 @@ export default function Index() {
                 <Route path="/inscricao" element={<InscricaoPage/>} />
                 <Route path="/gerenciamentocandidato" element={<GerenciamentoCandidatosPage/>} />
                 <Route path="/Contato" element={<ContatoPage/>} />
+                <Route path="/inscricaosucess" element={<InscricaoSucessoPage/>} />
             </Routes>
         </BrowserRouter>
     )
