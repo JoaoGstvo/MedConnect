@@ -1,9 +1,11 @@
 import './index.scss';
 import Header from "../../Components/Header/index.js";
-import Footer from "../../Components/Footer/index.js";
 import CardVaga from '../../Components/CardVaga/index.js';
 import CardEmpresa from '../../Components/CardEmpresa/index.js';
+import { hospitais } from '../Empresa/hospitais.js';
 import CardProfissional from '../../Components/CardProfissional/index.js';
+import { Link } from 'react-router-dom';
+import Footer from "../../Components/Footer";
 
 function LandingPage() {
     return (
@@ -21,12 +23,8 @@ function LandingPage() {
                     </p>
                 </div>
                 <div className='buttons'>
-                    <a href="/empresas">
-                        <button>Ver Empresas</button>
-                    </a>
-                    <a href="/vagas">
-                        <button>Ver Vagas</button>
-                    </a>
+                    <Link to="/empresas"><button>Ver Empresas</button></Link>
+                    <Link to="/vagas"><button>Ver Vagas</button></Link>
                 </div>
             </section>
 
@@ -51,9 +49,9 @@ function LandingPage() {
                 </div>
                 <div className='container'>
                     <div className='wrapper'>
-                        <CardEmpresa />
-                        
-                        
+                        {hospitais.slice(0, 4).map(hospital => (
+                            <CardEmpresa key={hospital.id} hospital={hospital} />
+                        ))}
                     </div>
                 </div>
             </section>
@@ -71,10 +69,10 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
-
             <Footer />
         </main>
     );
 }
 
 export default LandingPage;
+

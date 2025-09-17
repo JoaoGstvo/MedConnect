@@ -58,7 +58,7 @@ function Login() {
               <input type="checkbox" />
               <span>Lembrar de mim</span>
             </label>
-            <a href="/" className='forgot-password'>Esqueceu a senha?</a>
+            <a href="/senha" className='forgot-password'>Esqueceu a senha?</a>
           </div>
 
           <button className='login-button'>Entrar</button>

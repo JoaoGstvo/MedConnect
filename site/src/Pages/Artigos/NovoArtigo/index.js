@@ -78,9 +78,12 @@ function NovoArtigoPage() {
                         onChange={(e) => setImagem(e.target.value)} 
                         placeholder="Cole o link da imagem (opcional)" 
                     />
-
+                    
                     <button type="submit" className="btn-publicar">Publicar Artigo</button>
                 </form>
+                    <a href="/artigos">
+                    <button type="back" className='btn-back'>Voltar</button>
+                    </a>
             </section>
 
             <Footer />

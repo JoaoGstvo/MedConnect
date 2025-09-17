@@ -55,6 +55,7 @@
         resize: vertical;
         min-height: 120px;
       }
+      
 
       .btn-publicar {
         background: var(--color-primary);
@@ -73,6 +74,26 @@
         }
       }
     }
+    .btn-back {
+        background: var(--color-primary);
+        color: var(--color-surface);
+        border: none;
+        padding: 0.9rem 1.2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 999px; // pill style
+        cursor: pointer;
+        align-self: flex-start;
+        transition: all 0.3s ease;
+        margin-left: 600px;
+      }
+      .btn-back:hover {
+        background: black;
+        color: white
   }
 }
 
+  footer {
+    margin-top: auto;
+  }
+}

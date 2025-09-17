@@ -1,26 +1,38 @@
+/* Reset básico */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Landingpage */
 .landingpage {
+    min-height: 100vh; /* ocupa toda a tela */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 100%); /* fundo azul total */
+
     .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 20px 40px;
-        position: absolute;
         width: 100%;
-        top: 0;
-        left: 0;
+        box-sizing: border-box; /* garante que padding não quebre largura */
+        background: transparent; /* sem branco atrás, fica azul */
         z-index: 10;
 
         .logo img {
             height: 70px;
             cursor: pointer;
-            
         }
 
         .search-login {
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-right:  50px;
 
             input {
                 padding: 10px 16px;
@@ -31,8 +43,10 @@
                 transition: all 0.3s ease;
 
                 &:focus {
-                    border-color: #2181ee;
-                    box-shadow: 0 0 8px rgba(33, 129, 238, 0.5);
+                    border-color: #fff;
+                    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+                    background: rgba(255,255,255,0.1);
+                    color: #fff;
                 }
             }
 
@@ -40,14 +54,15 @@
                 padding: 10px 20px;
                 border-radius: 50px;
                 border: none;
-                background: #2181ee;
-                color: #fff;
+                background: #fff;
+                color: #2181ee;
                 font-weight: 600;
                 cursor: pointer;
                 transition: all 0.3s ease;
 
                 &:hover {
                     background: #1865c0;
+                    color: #fff;
                     transform: translateY(-2px);
                 }
             }
@@ -55,14 +70,12 @@
     }
 
     .hero {
+        flex: 1; /* ocupa espaço restante */
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        min-height: 100vh;
-        padding: 0 20px;
-        background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 100%);
-        color: #fff;
+        padding: 60px 20px;
 
         .hero-content {
             max-width: 800px;
@@ -78,8 +91,8 @@
             p {
                 font-size: 1.1rem;
                 margin-bottom: 40px;
-                color: #f0f0f0;
                 line-height: 1.6;
+                color: #f0f0f0;
             }
 
             .buttons {
@@ -103,24 +116,33 @@
                     color: #2181ee;
 
                     &:hover {
-                        background: #2181ee;
+                        background: #1865c0;
                         color: #fff;
                         transform: translateY(-3px);
                     }
                 }
 
                 .secondary {
-                    background: #fff;
-                    color: #2181ee;
+                    background: rgba(255, 255, 255, 0.3);
+                    color: #fff;
 
                     &:hover {
-                        background: #2181ee;
+                        background: #1865c0;
                         color: #fff;
                         transform: translateY(-3px);
                     }
                 }
             }
         }
+    }
+
+    footer {
+        width: 100%;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        background: transparent; /* mantém fundo azul */
+        color: #fff;
+        text-align: center;
     }
 
     /* Responsividade */
@@ -161,5 +183,7 @@
         }
     }
 }
+
+
 
 

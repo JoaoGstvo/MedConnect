@@ -14,8 +14,8 @@ function Footer() {
                 <div className="link-column">
                     <h2 className="title">Para Profissionais</h2>
                     <ul className="link-list">
-                        <li><a href="/">Buscar Vagas</a></li>
-                        <li><a href="/">Buscar Empresas</a></li>
+                        <li><a href="/vagas">Buscar Vagas</a></li>
+                        <li><a href="/empresas">Buscar Empresas</a></li>
                         <li><a href="/artigos">Ver Artigos</a></li>
                     </ul>
                 </div>

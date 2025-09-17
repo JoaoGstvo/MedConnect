@@ -4,7 +4,7 @@ import Footer from "../../Components/Footer";
 import CardArtigo from "../../Components/CardArtigo";
 
 function ArtigosPage() {
-    const categorias = ["Todos", "Tecnologia Médica", "Cuidados com Pacientes", "Inovação", "Telemedicina"];
+    const categorias = [];
 
     return (
         <main className='artigos-page'>

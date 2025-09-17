@@ -23,6 +23,7 @@ import InscricaoSucessoPage from './Pages/Vagas/inscrição/incricaosucesso/inde
 import ContatoProfissionalPage from './Pages/ContatoProfissional/index.js';
 import MensagemSucessoPage from './Pages/PerfilProfissional/menssagemsucesso/index.js';
 import ArtigoPublicadoPage from './Pages/Artigos/ArtigoPublicado/index.js';
+import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
 
 
 export default function Index() {
@@ -33,6 +34,7 @@ export default function Index() {
                 <Route path="/" element={<LandingPage/>} />
                 <Route path="/cadastro" element={<Signup/>} />
                 <Route path="/login" element={<Login/>} />
+                <Route path="/senha" element={<EsqueceuSenha/>} />
                 <Route path="/perfilempresa" element={<BusnessProfile/>} />
                 <Route path="/perfilprofissional" element={<ProfissionalProfile/>} />
                 <Route path="/artigos" element={<Artigos/>} />
@@ -52,6 +54,9 @@ export default function Index() {
                 <Route path="/contatoprofissional" element={<ContatoProfissionalPage/>} />
                 <Route path="/mensagemenviadaprofissional" element={<MensagemSucessoPage/>} />
                 <Route path="/faqsite" element={<ContatoPage/>} />
+                <Route path="/hospital" element={<hospital/>} />
+            
+
 
                 
             </Routes>

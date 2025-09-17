@@ -1,105 +1,94 @@
 import "./index.scss";
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
-import CardVaga from "../../Components/CardVaga";
-import CardProfissional from "../../Components/CardProfissional";
+import CardEmpresa from "../../Components/CardEmpresa";
+import hospitais from "./hospitais";
+import "./index.scss";
+
 function EmpresaPage() {
   return (
     <main className="empresa-page">
-      {" "}
-      <Header /> {/* Seção principal da empresa */}{" "}
+      <Header />
+
+      {/* Cabeçalho */}
       <section className="empresa-header">
-        {" "}
         <div className="empresa-info">
-          {" "}
-          <h1>Hospital Vida Saudável</h1>{" "}
+          <h1>Encontre o hospital ideal para sua carreira</h1>
           <p>
-            Conectando profissionais de saúde a oportunidades de crescimento.
-          </p>{" "}
-          <div className="acoes">
-            {" "}
-            <button>Seguir Empresa</button> <button>Visitar Site</button>{" "}
-          </div>{" "}
-        </div>{" "}
-      </section>{" "}
-      {/* Sobre a empresa */}{" "}
-      <section className="empresa-sobre">
-        {" "}
-        <h2>Sobre a Empresa</h2>{" "}
-        <div className="sobre-container">
-          {" "}
-          <p>
-            {" "}
-            O Hospital Vida Saudável é referência em atendimento humanizado, com
-            foco em medicina preventiva e inovação tecnológica.{" "}
-          </p>{" "}
-          <ul>
-            {" "}
-            <li>
-              <strong>Missão:</strong> Oferecer cuidados de saúde de alta
-              qualidade.
-            </li>{" "}
-            <li>
-              <strong>Visão:</strong> Ser referência nacional em excelência no
-              cuidado à saúde.
-            </li>{" "}
-            <li>
-              <strong>Valores:</strong> Humanização, Ética, Inovação,
-              Colaboração.
-            </li>{" "}
-          </ul>{" "}
-        </div>{" "}
-      </section>{" "}
-      {/* Vagas abertas */}{" "}
-      <section className="empresa-vagas">
-        {" "}
-        <h2>Vagas Abertas</h2>{" "}
-        <div className="filtros">
-          {" "}
+            Explore avaliações, vagas e informações sobre hospitais em todo o Brasil.
+            Descubra onde você pode crescer e fazer a diferença na área da saúde.
+          </p>
+        </div>
+      </section>
+
+      {/* Conteúdo principal */}
+      <section className="empresa-conteudo">
+        {/* Filtros */}
+        <aside className="empresa-filtros">
+          <h3>Filtre os Hospitais</h3>
+          <input type="text" placeholder="Nome do Hospital" />
+          <input type="text" placeholder="Localização (cidade / estado)" />
           <select>
-            {" "}
-            <option>Especialidade</option> <option>Enfermagem</option>{" "}
-            <option>Medicina</option> <option>Fisioterapia</option>{" "}
-          </select>{" "}
+            <option>Especialidade</option>
+            <option>Clínica Geral</option>
+            <option>Pediatria</option>
+            <option>Cardiologia</option>
+            <option>Cirurgia</option>
+          </select>
           <select>
-            {" "}
-            <option>Tipo de Contrato</option> <option>CLT</option>{" "}
-            <option>Freelancer</option> <option>Estágio</option>{" "}
-          </select>{" "}
-        </div>{" "}
-        <div className="cards-container">
-          {" "}
-          <CardVaga /> <CardVaga /> <CardVaga />{" "}
-        </div>{" "}
-      </section>{" "}
-      {/* Profissionais */}{" "}
-      <section className="empresa-profissionais">
-        {" "}
-        <h2>Profissionais da Empresa</h2>{" "}
-        <div className="cards-container">
-          {" "}
-          <CardProfissional /> <CardProfissional /> <CardProfissional />{" "}
-        </div>{" "}
-      </section>{" "}
-      {/* Contato */}{" "}
-      <section className="empresa-contato">
-        {" "}
-        <h2>Contato e Localização</h2>{" "}
-        <div className="contato-info">
-          {" "}
-          <p>
-            <strong>Endereço:</strong> Rua Saúde, 123 - São Paulo, SP
-          </p>{" "}
-          <p>
-            <strong>Telefone:</strong> (11) 98765-4321
-          </p>{" "}
-          <p>
-            <strong>Email:</strong> contato@hospitalvidasaudavel.com.br
-          </p>{" "}
-        </div>{" "}
-      </section>{" "}
-      <Footer />{" "}
+            <option>Porte do Hospital</option>
+            <option>Pequeno (até 50 leitos)</option>
+            <option>Médio (51-200 leitos)</option>
+            <option>Grande (200+ leitos)</option>
+          </select>
+          <h4>Classificação por categoria</h4>
+          <div className="chips">
+            <button className="chip">Estrutura hospitalar</button>
+            <button className="chip">Equipe e gestão</button>
+            <button className="chip">Remuneração</button>
+            <button className="chip">Qualidade de vida</button>
+          </div>
+          <button className="limpar">Apagar filtros</button>
+        </aside>
+
+        {/* Lista de hospitais */}
+        <div className="empresa-lista">
+          <div className="lista-info">
+            <h2>Explorar hospitais</h2>
+            <p>Mostrando {hospitais.length} hospitais. Use os filtros para refinar sua busca.</p>
+          </div>
+
+          {hospitais.map((hospital) => (
+            <CardEmpresa key={hospital.id} hospital={hospital} />
+          ))}
+
+          {/* Paginação simples */}
+          <div className="paginacao">
+            <button>{"<"}</button>
+            <button className="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>{">"}</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ranking */}
+      <section className="empresa-ranking">
+        <h2>🏆 Melhores Hospitais para Trabalhar</h2>
+        <ol>
+          <li>Hospital Albert Einstein - 4.8⭐</li>
+          <li>Hospital Samaritano - 4.5⭐</li>
+          <li>Rede D'Or São Luiz - 4.4⭐</li>
+          <li>Hospital Nove de Julho - 4.3⭐</li>
+        </ol>
+        <a className="ver-completa" href="#!">Ver a lista completa →</a>
+      </section>
+
+      <Footer />
     </main>
   );
 }
+
 export default EmpresaPage;
+

@@ -1,5 +1,6 @@
 import './index.scss';
 
+
 function LandingPage1() {
     return (
         <main className='landingpage'>
