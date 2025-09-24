@@ -1,24 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import "dotenv/config";
-import pool from "./Repository/connection.js";
+import routes from './routes.js';
+import pool from './connection.js';
 
-
-// To criando o servidor Express
 const server = express();
-// To habilitando o Cors
+
 server.use(cors());
-// To habilitando fazer requisições com formato JSON
 server.use(express.json());
 
 
+// Todas as rotas da API vêm do routes.js
+server.use("/api", routes);
 
-server.get("/teste", async (req, res) => {
-  const result = await pool.query("SELECT NOW()");
-  res.json(result.rows);
-});
-
-
-
-// To iniciando o servidor
-server.listen(process.env.PORT, () => console.log(`A Braba Ta On Na Porta ${process.env.PORT}`));
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => console.log(`A Braba Ta On Na Porta ${PORT} 🔥`));
