@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import "dotenv/config";
-import routes from './routes.js';
+import router from './routes.js';
 import pool from './connection.js';
 
 const server = express();
@@ -11,7 +11,7 @@ server.use(express.json());
 
 
 // Todas as rotas da API vêm do routes.js
-server.use("/api", routes);
+server.use("/api", router);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 server.listen(PORT, () => console.log(`A Braba Ta On Na Porta ${PORT} 🔥`));
