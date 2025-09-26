@@ -1,5 +1,6 @@
 import './index.scss';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -17,9 +18,10 @@ function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMsg(data.msg);
+        toast.dark('Usuário logado', { autoClose: 400, hideProgressBar: true });
+
       } else {
-        setMsg(data.msg);
+        alert(data.msg);
         console.log('Dados do usuário:', data);
       }
     } catch (err) {
@@ -66,7 +68,9 @@ function Login() {
             <a href="/senha" className='forgot-password'>Esqueceu a senha?</a>
           </div>
 
-          <button className='login-button' onClick={handleLogin}>Entrar</button>
+          <a href='/' style={{ textDecoration: 'none' }}>
+          <button className='login-button' onClick={handleLogin}> Entrar</button>
+          </a>
 
           {msg && <p className="login-msg">{msg}</p>}
 
