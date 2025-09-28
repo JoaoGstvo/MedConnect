@@ -1,13 +1,31 @@
 import './index.scss';
+import { useState, useEffect } from 'react';
 import Header from "../../Components/Header/index.js";
+import Footer from "../../Components/Footer";
 import CardVaga from '../../Components/CardVaga/index.js';
 import CardEmpresa from '../../Components/CardEmpresa/index.js';
 import { hospitais } from '../Empresa/hospitais.js';
 import CardProfissional from '../../Components/CardProfissional/index.js';
 import { Link } from 'react-router-dom';
-import Footer from "../../Components/Footer";
 
 function LandingPage() {
+    const [vagas, setVagas] = useState([]);
+
+    // Buscar vagas do backend
+    useEffect(() => {
+        const fetchVagas = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/vagas');
+                const data = await res.json();
+                setVagas(data || []);
+            } catch (err) {
+                console.error("Erro ao buscar vagas:", err);
+            }
+        };
+
+        fetchVagas();
+    }, []);
+
     return (
         <main className='landingpage'>
             <Header />
@@ -35,9 +53,11 @@ function LandingPage() {
                 </div>
                 <div className='container'>
                     <div className='wrapper'>
-                        <CardVaga />
-                        <CardVaga />
-                        <CardVaga />
+                        {vagas.length > 0 ? (
+                            vagas.map(vaga => <CardVaga key={vaga.id_vaga} vaga={vaga} />)
+                        ) : (
+                            <p>Nenhuma vaga disponível</p>
+                        )}
                     </div>
                 </div>
             </section>
@@ -69,10 +89,10 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
+
             <Footer />
         </main>
     );
 }
 
-export default LandingPage;
-
+export default LandingPage

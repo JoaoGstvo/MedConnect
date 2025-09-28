@@ -1,26 +1,35 @@
 import "./index.scss";
 
-function CardVaga() {
+function CardVaga({ vaga }) {
+  if (!vaga) return null; // evita erro se vaga não estiver definida
+
+  const formatarData = (dataString) => {
+    if (!dataString) return "Data não informada";
+    return new Date(dataString).toLocaleDateString('pt-BR');
+  };
+
   return (
     <div className="job-card">
       <div className="job-content">
         <div className="job-header">
-          <h3 className="job-title">Médico Cardiologista</h3>
+          <h3 className="job-title">{vaga.titulo}</h3>
 
-          <p className="company-name">
-            <strong>Hospital do Coração</strong>
-          </p>
+          {vaga.empresa && (
+            <p className="company-name">
+              <strong>{vaga.empresa}</strong>
+            </p>
+          )}
         </div>
 
         <div className="job-details">
           <div className="detail-item">
-            <span className="detail-text">São Paulo, SP</span>
+            <span className="detail-text">{vaga.local || "Local não informado"}</span>
           </div>
           <div className="detail-item">
-            <span className="detail-text">40h/semana</span>
+            <span className="detail-text">{vaga.modelo || "Modelo não informado"}</span>
           </div>
           <div className="detail-item">
-            <span className="detail-text">CLT</span>
+            <span className="detail-text">{vaga.tipo_contrato}</span>
           </div>
         </div>
 
@@ -28,56 +37,40 @@ function CardVaga() {
 
         <div className="salary-section">
           <p className="salary-range">
-            <strong>R$ 15.000 - R$ 25.000</strong>
+            <strong>{vaga.salario ? `R$ ${vaga.salario}` : "Salário a combinar"}</strong>
           </p>
         </div>
 
         <div className="job-description">
-          <p>
-            Procuramos médico cardiologista experiente para integrar nossa
-            equipe. Responsável por consultas, procedimentos e cirurgias
-            cardiovasculares.
-          </p>
+          <p>{vaga.descricao}</p>
         </div>
 
-        <div className="requirements-benefits">
-          <div className="requirements-section">
-            <h4>Requisitos:</h4>
-            <ul>
-              <li>CRM ativo</li>
-              <li>Residência em Cardiologia</li>
-              <li>Mínimo 3 anos de experiência</li>
-            </ul>
+        {vaga.requisitos && (
+          <div className="requirements-benefits">
+            <div className="requirements-section">
+              <h4>Requisitos:</h4>
+              <ul>
+                {vaga.requisitos.split(',').map((req, i) => (
+                  <li key={i}>{req.trim()}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-
-          <div className="benefits-section">
-            <h4>Benefícios:</h4>
-            <ul>
-              <li>Plano de saúde</li>
-              <li>Vale refeição</li>
-              <li>Participação nos lucros</li>
-            </ul>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="job-footer">
         <div className="job-meta">
-          <span className="publish-date">Publicado 2 dias atrás</span>
+          <span className="publish-date">
+            Publicado em {formatarData(vaga.data_publicacao)}
+          </span>
         </div>
 
         <div className="job-action">
-          <button
-            className="apply-button"
-            onClick={() => (window.location.href = "/inscricaovaga")}
-          >
+          <button className="apply-button" onClick={() => (window.location.href = "/inscricaovaga")}>
             Fazer Inscrição
           </button>
-
-          <button
-            className="apply-button"
-            onClick={() => (window.location.href = "/informacoesvaga")}
-          >
+          <button className="info-button" onClick={() => (window.location.href = "/informacoesvaga")}>
             Mais informações
           </button>
         </div>

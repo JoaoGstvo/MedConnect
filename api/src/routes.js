@@ -1,13 +1,15 @@
 import { Router } from "express";
-import {registerUser} from "./Controller/profissionalController.js";
-import {createVagaController} from "./Controller/vagaController.js";
+import { registerUser } from "./Controller/profissionalController.js";
+import { createVagaController } from "./Controller/vagaController.js";
+import { getVagasController } from "./Controller/vagaController.js";
 
 const router = Router();
 
 // Profissional
-router.use("/profissional", registerUser); // aqui o controller já tem o server.post interno
+router.post("/profissional", registerUser); // CORRETO: POST direto
 
-// Rota para criar vaga
-router.post("/vaga", createVagaController);
+// Vagas
+router.post("/vaga", createVagaController); // POST
+router.get("/vagas", getVagasController);  // GET
 
 export default router;
