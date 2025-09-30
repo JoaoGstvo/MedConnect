@@ -2,6 +2,7 @@ import './index.scss';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function NovoArtigoPage() {
     const [titulo, setTitulo] = useState("");
@@ -9,22 +10,35 @@ function NovoArtigoPage() {
     const [resumo, setResumo] = useState("");
     const [conteudo, setConteudo] = useState("");
     const [imagem, setImagem] = useState("");
+    const [mensagem, setMensagem] = useState("");
+
+    const navigate = useNavigate();
 
     const categorias = ["Tecnologia Médica", "Cuidados com Pacientes", "Inovação", "Telemedicina"];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const novoArtigo = {
-            titulo,
-            categoria,
-            resumo,
-            conteudo,
-            imagem
-        };
-        console.log("Artigo criado:", novoArtigo);
+        const novoArtigo = { titulo, categoria, resumo, conteudo, imagem };
 
-        // 🔗 Futuramente aqui você conecta com API/banco
-        // fetch("/api/artigos", { method: "POST", body: JSON.stringify(novoArtigo) })
+        try {
+            const response = await fetch("http://localhost:5000/api/artigos", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(novoArtigo),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redireciona para a página do artigo criado
+                navigate(`/artigos/${data.artigo.id_artigo}`);
+            } else {
+                setMensagem(data.msg || "❌ Erro ao publicar artigo");
+            }
+        } catch (error) {
+            console.error("Erro no envio:", error);
+            setMensagem("❌ Erro de conexão com o servidor");
+        }
     };
 
     return (
@@ -39,15 +53,11 @@ function NovoArtigoPage() {
                         type="text" 
                         value={titulo} 
                         onChange={(e) => setTitulo(e.target.value)} 
-                        placeholder="Digite o título do artigo" 
                         required 
                     />
 
                     <label>Categoria</label>
-                    <select 
-                        value={categoria} 
-                        onChange={(e) => setCategoria(e.target.value)}
-                    >
+                    <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
                         {categorias.map((cat, index) => (
                             <option key={index} value={cat}>{cat}</option>
                         ))}
@@ -57,7 +67,6 @@ function NovoArtigoPage() {
                     <textarea 
                         value={resumo} 
                         onChange={(e) => setResumo(e.target.value)} 
-                        placeholder="Escreva um breve resumo..."
                         rows="3"
                         required
                     />
@@ -66,7 +75,6 @@ function NovoArtigoPage() {
                     <textarea 
                         value={conteudo} 
                         onChange={(e) => setConteudo(e.target.value)} 
-                        placeholder="Escreva o conteúdo completo do artigo..."
                         rows="8"
                         required
                     />
@@ -76,14 +84,17 @@ function NovoArtigoPage() {
                         type="text" 
                         value={imagem} 
                         onChange={(e) => setImagem(e.target.value)} 
-                        placeholder="Cole o link da imagem (opcional)" 
+                        placeholder="Opcional" 
                     />
                     
                     <button type="submit" className="btn-publicar">Publicar Artigo</button>
                 </form>
-                    <a href="/artigos">
-                    <button type="back" className='btn-back'>Voltar</button>
-                    </a>
+
+                {mensagem && <p className="mensagem-feedback">{mensagem}</p>}
+
+                <a href="/artigos">
+                    <button type="button" className='btn-back'>Voltar</button>
+                </a>
             </section>
 
             <Footer />

@@ -6,10 +6,6 @@ import { useNavigate } from "react-router-dom";
 function ArtigoPublicadoPage() {
     const navigate = useNavigate();
 
-    const handleVoltar = () => {
-        navigate("/novo-artigo"); // redireciona para criar outro artigo
-    };
-
     return (
         <main className="artigo-publicado-page fade-in">
             <Header />
@@ -18,8 +14,8 @@ function ArtigoPublicadoPage() {
                 <h2>Artigo Publicado com Sucesso!</h2>
                 <p>Seu artigo foi publicado e agora está disponível para leitura.</p>
                 
-                <button className="btn-publicar" onClick={handleVoltar}>
-                    Criar Novo Artigo
+                <button className="btn-publicar" onClick={() => navigate("/artigos")}>
+                    Ver Artigos
                 </button>
             </section>
 

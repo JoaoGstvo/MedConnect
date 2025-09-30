@@ -1,81 +1,46 @@
 import './index.scss';
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
-import CardArtigo from "../../Components/CardArtigo";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-function ArtigosPage() {
-    const categorias = [];
+function ArtigoPage() {
+    const { id } = useParams();
+    const [artigo, setArtigo] = useState(null);
+
+    useEffect(() => {
+        async function carregarArtigo() {
+            try {
+                const res = await fetch(`http://localhost:5000/api/artigos/${id}`);
+                const data = await res.json();
+                setArtigo(data);
+            } catch (err) {
+                console.error("Erro ao carregar artigo:", err);
+            }
+        }
+        carregarArtigo();
+    }, [id]);
+
+    if (!artigo) return <p>Carregando artigo...</p>;
 
     return (
-        <main className='artigos-page'>
+        <main className="artigo-page">
             <Header />
 
-            <div className="layout">
-                {/* Coluna esquerda (pode ser perfil, menus, etc.) */}
-                <aside className="sidebar-esquerda">
-                    <div className="perfil-card">
-                        <div className="perfil-avatar">T</div>
-                        <h3>Thiago Ferreira</h3>
-                        <p>Estudante de TI | Inovação em Saúde</p>
-                    </div>
-
-                    <div className="menu-links">
-                        <a href="#">Meus Artigos</a>
-                        <a href="#">Minhas Conexões</a>
-                        <a href="#">Favoritos</a>
-                        <a href="/novoartigo"> Crie um Artigo</a>
-                    </div>
-                </aside>
-
-                {/* Feed principal */}
-                <section className="feed">
-                    {/* Filtros */}
-                    <div className="filtros-feed">
-                        {categorias.map((cat, index) => (
-                            <button key={index} className="filtro-btn">
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Lista de artigos */}
-                    <div className="artigos-grid">
-                        <CardArtigo />
-                        <CardArtigo />
-                        <CardArtigo />
-                        <CardArtigo />
-                    </div>
-
-                    <div className="load-more">
-                        <button>Carregar mais</button>
-                    </div>
-                </section>
-
-                {/* Coluna direita (sugestões, notícias, etc.) */}
-                <aside className="sidebar-direita">
-                    <div className="noticias-card">
-                        <h4>Últimas Notícias</h4>
-                        <ul>
-                            <li>⚕️ Avanços em IA para diagnósticos</li>
-                            <li>🏥 Novo hospital referência em SP</li>
-                            <li>💡 Telemedicina bate recordes</li>
-                        </ul>
-                    </div>
-
-                    <div className="sugestoes-card">
-                        <h4>Sugestões de Conexão</h4>
-                        <ul>
-                            <li>👩‍⚕️ Dra. Camila Tavares</li>
-                            <li>👨‍⚕️ Dr. João Henrique</li>
-                            <li>🏢 Hospital Vida Plena</li>
-                        </ul>
-                    </div>
-                </aside>
-            </div>
+            <article className="artigo-detalhe">
+                {artigo.imagem && <img src={artigo.imagem} alt={artigo.titulo} className="artigo-img" />}
+                <h1>{artigo.titulo}</h1>
+                <p className="artigo-categoria">📂 {artigo.categoria}</p>
+                <p className="artigo-resumo"><strong>Resumo:</strong> {artigo.resumo}</p>
+                <div className="artigo-conteudo">
+                    {artigo.conteudo}
+                </div>
+                <p className="artigo-data">Publicado em {new Date(artigo.data_publicacao).toLocaleDateString()}</p>
+            </article>
 
             <Footer />
         </main>
     );
 }
 
-export default ArtigosPage;
+export default ArtigoPage;

@@ -12,4 +12,10 @@ router.post("/profissional", registerUser); // CORRETO: POST direto
 router.post("/vaga", createVagaController); // POST
 router.get("/vagas", getVagasController);  // GET
 
+// Artigos
+router.post("/artigos", createArtigoController); // POST
+router.get("/artigos", getArtigosController); // GET
+router.get("/artigos/:id", getArtigoByIdController); // GET by ID
+
+
 export default router;
