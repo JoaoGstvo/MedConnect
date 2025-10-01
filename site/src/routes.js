@@ -24,12 +24,14 @@ import ContatoProfissionalPage from './Pages/ContatoProfissional/index.js';
 import MensagemSucessoPage from './Pages/PerfilProfissional/menssagemsucesso/index.js';
 import ArtigoPublicadoPage from './Pages/Artigos/ArtigoPublicado/index.js';
 import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
+import CardArtigo from './Components/CardArtigo/index.js';
 
 
 export default function Index() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/cardartigo" element={<CardArtigo/>} />
                 <Route path="/inicial" element={<LandingPage1/>} />
                 <Route path="/" element={<LandingPage/>} />
                 <Route path="/cadastro" element={<Signup/>} />

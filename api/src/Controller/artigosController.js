@@ -1,4 +1,4 @@
-import { createArtigo, getArtigos, getArtigoById } from "../Repository/artigoRepository.js";
+import { createArtigo, getArtigos, getArtigoById } from "../Repository/artigosRepository.js";
 
 export async function createArtigoController(req, res) {
   try {

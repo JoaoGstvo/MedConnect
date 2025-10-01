@@ -2,6 +2,7 @@ import { Router } from "express";
 import { registerUser } from "./Controller/profissionalController.js";
 import { createVagaController } from "./Controller/vagaController.js";
 import { getVagasController } from "./Controller/vagaController.js";
+import { createArtigoController, getArtigosController, getArtigoByIdController } from "./Controller/artigosController.js";
 
 const router = Router();
 
