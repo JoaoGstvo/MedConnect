@@ -7,6 +7,7 @@ import CardEmpresa from '../../Components/CardEmpresa/index.js';
 import { hospitais } from '../Empresa/hospitais.js';
 import CardProfissional from '../../Components/CardProfissional/index.js';
 import { Link } from 'react-router-dom';
+import MapaEmpresas from '../../Components/MapaEmpresas/index.js';
 
 function LandingPage() {
     const [vagas, setVagas] = useState([]);
@@ -87,6 +88,14 @@ function LandingPage() {
                         <CardProfissional />
                         <CardProfissional />
                     </div>
+                </div>
+            </section>
+            <section className='section'>
+                <div className='title'>
+                    <h1>Empresas que estão contratando</h1>
+                </div>
+                <div className='container'>
+                    <MapaEmpresas />
                 </div>
             </section>
 
