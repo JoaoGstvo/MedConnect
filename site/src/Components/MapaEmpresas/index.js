@@ -1,5 +1,14 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+// Criando o ícone personalizado
+const hospitalIcon = new L.Icon({
+  iconUrl: "/Images/Logo.png", // coloque a URL do seu ícone aqui
+  iconSize: [60, 40], // tamanho do ícone
+  iconAnchor: [17, 35], // ponto do ícone que vai marcar a posição
+  popupAnchor: [0, -35], // onde o popup vai abrir em relação ao ícone
+});
 
 function MapaEmpresas() {
   return (
@@ -13,16 +22,12 @@ function MapaEmpresas() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
       />
 
-      <Marker position={[-23.55, -46.63]}>
-        <Popup>
-          Teste: Hospital São Lucas
-        </Popup>
+      <Marker position={[-23.55, -46.63]} icon={hospitalIcon}>
+        <Popup>Teste: Hospital São Lucas</Popup>
       </Marker>
 
-      <Marker position={[-22.55, -46.63]}>
-        <Popup>
-          Hospital São Thiago
-        </Popup>
+      <Marker position={[-22.55, -46.63]} icon={hospitalIcon}>
+        <Popup>Hospital São Thiago</Popup>
       </Marker>
     </MapContainer>
   );
