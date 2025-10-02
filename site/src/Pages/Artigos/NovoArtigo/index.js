@@ -30,14 +30,13 @@ function NovoArtigoPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Redireciona para a página do artigo criado
                 navigate(`/artigos/${data.artigo.id_artigo}`);
             } else {
-                setMensagem(data.msg || "❌ Erro ao publicar artigo");
+                setMensagem(data.msg || "Erro ao publicar artigo");
             }
         } catch (error) {
             console.error("Erro no envio:", error);
-            setMensagem("❌ Erro de conexão com o servidor");
+            setMensagem("Erro de conexão com o servidor");
         }
     };
 
@@ -92,9 +91,9 @@ function NovoArtigoPage() {
 
                 {mensagem && <p className="mensagem-feedback">{mensagem}</p>}
 
-                <a href="/artigos">
-                    <button type="button" className='btn-back'>Voltar</button>
-                </a>
+                <button type="button" className="btn-back" onClick={() => navigate("/artigos")}>
+                    Voltar
+                </button>
             </section>
 
             <Footer />
