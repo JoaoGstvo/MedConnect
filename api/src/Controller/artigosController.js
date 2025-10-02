@@ -3,15 +3,15 @@ import { createArtigo, getArtigos, getArtigoById } from "../Repository/artigosRe
 export async function createArtigoController(req, res) {
   try {
     console.log("Body recebido (artigo):", req.body);
-    const { titulo, categoria, resumo, conteudo, imagem } = req.body;
+    const { titulo, id_categoria, resumo, conteudo, imagem } = req.body;
 
-    if (!titulo || !categoria || !conteudo) {
+    if (!titulo || !id_categoria || !conteudo) {
       return res.status(400).json({ msg: "Preencha os campos obrigatórios" });
     }
 
     const novoArtigo = await createArtigo({
       titulo: titulo.trim(),
-      categoria,
+      id_categoria,
       resumo: resumo ? resumo.trim() : null,
       conteudo: conteudo.trim(),
       imagem: imagem ? imagem.trim() : null
@@ -29,7 +29,7 @@ export async function getArtigosController(req, res) {
     const artigos = await getArtigos();
     return res.json(artigos);
   } catch (err) {
-    console.error("Erro ao buscar artigos:", err);
+    console.error(err);
     return res.status(500).json({ msg: "Erro no servidor" });
   }
 }

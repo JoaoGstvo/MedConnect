@@ -1,12 +1,13 @@
 import pool from "../connection.js";
 
-export async function createArtigo(artigo) {
-  const { titulo, categoria, resumo, conteudo, imagem } = artigo;
-  const result = await pool.query(
-    `INSERT INTO artigos (titulo, categoria, resumo, conteudo, imagem, data_publicacao)
-     VALUES ($1,$2,$3,$4,$5,NOW()) RETURNING *`,
-    [titulo, categoria, resumo, conteudo, imagem]
-  );
+export async function createArtigo({ titulo, id_categoria, resumo, conteudo, imagem }) {
+  const query = `
+    INSERT INTO artigos (titulo, categoria, resumo, conteudo, imagem, data_publicacao)
+    VALUES ($1, $2, $3, $4, $5, NOW())
+    RETURNING *
+  `;
+  const values = [titulo, id_categoria, resumo, conteudo, imagem];
+  const result = await pool.query(query, values);
   return result.rows[0];
 }
 

@@ -10,36 +10,57 @@ function ArtigosPage() {
     const [filtroAtivo, setFiltroAtivo] = useState('todos');
     const [categorias, setCategorias] = useState([]);
 
-    const filtros = [
-        { id: 'todos', label: '📰 Todos os Artigos' },
-        { id: 'medicina', label: '👨‍⚕️ Medicina' },
-        { id: 'enfermagem', label: '👩‍⚕️ Enfermagem' },
-        { id: 'pesquisa', label: '🔬 Pesquisa' }
+    const filtrosFixos = [
+        { id: 'todos', label: '📰 Todos os Artigos' }
     ];
 
+    const [filtros, setFiltros] = useState(filtrosFixos);
+
+    // Buscar categorias e montar filtros dinamicamente
+    useEffect(() => {
+        async function carregarCategorias() {
+            try {
+                const res = await fetch("http://localhost:5000/api/categorias");
+                const data = await res.json();
+
+                setCategorias(data);
+
+                const filtrosDinamicos = data.map(cat => ({
+                    id: cat.nome,
+                    label: ` ${cat.nome.charAt(0).toUpperCase() + cat.nome.slice(1)}`
+                }));
+
+                setFiltros([...filtrosFixos, ...filtrosDinamicos]);
+            } catch (err) {
+                console.error("Erro ao carregar categorias:", err);
+            }
+        }
+
+        carregarCategorias();
+    }, []);
+
+    // Buscar artigos sempre que o filtro mudar
     useEffect(() => {
         async function carregarArtigos() {
             try {
                 setLoading(true);
-                const res = await fetch("http://localhost:5000/api/artigos");
+
+                const url = filtroAtivo === 'todos'
+                    ? "http://localhost:5000/api/artigos"
+                    : `http://localhost:5000/api/artigos?categoria=${filtroAtivo}`;
+
+                const res = await fetch(url);
                 const data = await res.json();
                 setArtigos(data);
-                
-                // Extrair categorias únicas
-                const cats = [...new Set(data.map(artigo => artigo.categoria))];
-                setCategorias(cats);
             } catch (err) {
                 console.error("Erro ao carregar artigos:", err);
             } finally {
                 setLoading(false);
             }
         }
-        carregarArtigos();
-    }, []);
 
-    const artigosFiltrados = filtroAtivo === 'todos' 
-        ? artigos 
-        : artigos.filter(artigo => artigo.categoria === filtroAtivo);
+        carregarArtigos();
+    }, [filtroAtivo]);
 
     const sugestoesProfissionais = [
         { id: 1, nome: "Dr. Carlos Silva", especialidade: "Cardiologista" },
@@ -96,7 +117,7 @@ function ArtigosPage() {
                             <div className="loading-spinner"></div>
                             <p>Carregando artigos...</p>
                         </div>
-                    ) : artigosFiltrados.length === 0 ? (
+                    ) : artigos.length === 0 ? (
                         <div className="empty-state">
                             <div className="empty-icon">📚</div>
                             <h3>Nenhum artigo encontrado</h3>
@@ -113,10 +134,10 @@ function ArtigosPage() {
                     ) : (
                         <>
                             <div className="artigos-grid">
-                                {artigosFiltrados.map((artigo) => (
+                                {artigos.map((artigo) => (
                                     <CardArtigo
-                                        key={artigo.id_artigo}
-                                        id={artigo.id_artigo}
+                                        key={artigo.id}
+                                        id={artigo.id}
                                         titulo={artigo.titulo}
                                         resumo={artigo.resumo}
                                         imagem={artigo.imagem}
@@ -129,7 +150,7 @@ function ArtigosPage() {
                             </div>
 
                             {/* Botão Carregar Mais */}
-                            {artigosFiltrados.length >= 6 && (
+                            {artigos.length >= 6 && (
                                 <div className="load-more">
                                     <button>Carregar Mais Artigos</button>
                                 </div>
@@ -144,7 +165,7 @@ function ArtigosPage() {
                         <h4>📰 Notícias da Saúde</h4>
                         <ul>
                             <li>Novas diretrizes para tratamento de COVID-19</li>
-                            <li>Avancos na inteligência artificial na medicina</li>
+                            <li>Avanços na inteligência artificial na medicina</li>
                             <li>Congresso nacional de enfermagem 2024</li>
                             <li>Descobertas recentes em cardiologia</li>
                             <li>Tendências em saúde digital</li>
