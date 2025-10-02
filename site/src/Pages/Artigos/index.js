@@ -14,9 +14,7 @@ function ArtigosPage() {
         { id: 'todos', label: '📰 Todos os Artigos' },
         { id: 'medicina', label: '👨‍⚕️ Medicina' },
         { id: 'enfermagem', label: '👩‍⚕️ Enfermagem' },
-        { id: 'pesquisa', label: '🔬 Pesquisa' },
-        { id: 'tecnologia', label: '💻 Tecnologia' },
-        { id: 'gestao', label: '📊 Gestão' }
+        { id: 'pesquisa', label: '🔬 Pesquisa' }
     ];
 
     useEffect(() => {
@@ -73,10 +71,7 @@ function ArtigosPage() {
 
                     <nav className="menu-links">
                         <a href="/meus-artigos">Meus Artigos</a>
-                        <a href="/artigos-salvos">Artigos Salvos</a>
-                        <a href="/rascunhos">Rascunhos</a>
-                        <a href="/estatisticas">Estatísticas</a>
-                        <a href="/escrever-artigo">✏️ Escrever Artigo</a>
+                        <a href="/novoartigo">Escrever Artigo</a>
                     </nav>
                 </aside>
 
@@ -111,7 +106,7 @@ function ArtigosPage() {
                                     : `Não encontramos artigos na categoria ${filtroAtivo}.`
                                 }
                             </p>
-                            <a href="/escrever-artigo" className="btn-primary">
+                            <a href="/novoartigo" className="btn-primary">
                                 ✏️ Escrever Primeiro Artigo
                             </a>
                         </div>
@@ -136,7 +131,7 @@ function ArtigosPage() {
                             {/* Botão Carregar Mais */}
                             {artigosFiltrados.length >= 6 && (
                                 <div className="load-more">
-                                    <button>📖 Carregar Mais Artigos</button>
+                                    <button>Carregar Mais Artigos</button>
                                 </div>
                             )}
                         </>
