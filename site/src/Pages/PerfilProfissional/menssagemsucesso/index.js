@@ -7,15 +7,15 @@ function MensagemSucessoPage() {
         <main className='mensagemsucessopage'>
             <Header />
 
-            {/* Hero Section */}
             <section className='principal-container'>
                 <div className='title'>
-                    <h1>Mensagem Enviada com Sucesso!</h1>
+                    <h1>Mensagem Enviada com Sucesso! 🎉</h1>
                     <p>
-                        Sua mensagem foi enviada ao profissional da saúde. Ele(a) entrará em contato com você em breve.
+                        Sua mensagem foi enviada ao profissional da saúde. 
+                        Ele(a) entrará em contato com você em breve.
                     </p>
                     <a href="/empresas">
-                        <button>Voltar para empresas</button>
+                        <button>🏢 Voltar para empresas</button>
                     </a>
                 </div>
             </section>
@@ -26,4 +26,3 @@ function MensagemSucessoPage() {
 }
 
 export default MensagemSucessoPage;
-
