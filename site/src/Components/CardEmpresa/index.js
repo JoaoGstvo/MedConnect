@@ -1,38 +1,56 @@
+// Components/CardEmpresa/index.js - Versão atualizada
 import "./index.scss";
 
 function CardEmpresa({ hospital }) {
-  // Transformar nota (4.5) em estrelas (★)
-  const nota = parseFloat(hospital.nota);
+  // Garantir compatibilidade com dados do backend
+  const empresa = {
+    id: hospital.id_empresa || hospital.id,
+    nome: hospital.nome,
+    logo: hospital.logo,
+    nota: hospital.nota,
+    vagas: hospital.vagas,
+    avaliacoes: hospital.avaliacoes,
+    descricao: hospital.descricao,
+    localizacao: hospital.localizacao
+  };
+
+  // Transformar nota em estrelas
+  const nota = parseFloat(empresa.nota) || 0;
   const estrelasCheias = Math.floor(nota);
   const meiaEstrela = nota - estrelasCheias >= 0.5 ? 1 : 0;
   const estrelasVazias = 5 - estrelasCheias - meiaEstrela;
 
-  const estrelas = "★".repeat(estrelasCheias) + (meiaEstrela ? "⯪" : "") + "☆".repeat(estrelasVazias);
+  const estrelas = "★".repeat(estrelasCheias) + 
+                  (meiaEstrela ? "⯪" : "") + 
+                  "☆".repeat(estrelasVazias);
 
   return (
     <article className="empresa-card">
       <img
         className="logo"
-        src={hospital.logo}
-        alt={`${hospital.nome} logo`}
-        onError={(e) => { e.target.onerror = null; e.target.src = "/logos/placeholder.png"; }}
+        src={empresa.logo}
+        alt={`${empresa.nome} logo`}
+        onError={(e) => { 
+          e.target.onerror = null; 
+          e.target.src = "/logos/placeholder.png"; 
+        }}
       />
 
       <div className="empresa-card-info">
         <div className="top">
-          <h3>{hospital.nome}</h3>
+          <h3>{empresa.nome}</h3>
           <div className="rating">
             <span className="nota">{estrelas}</span>
-            <span className="valor">{hospital.nota}</span>
+            <span className="valor">{empresa.nota}</span>
           </div>
         </div>
 
-        <p className="descricao">{hospital.descricao}</p>
+        <p className="descricao">{empresa.descricao}</p>
 
         <div className="meta">
-          <span>{hospital.localizacao}</span>
-          <span>{hospital.vagas} vagas</span>
-          <span>{hospital.avaliacoes} avaliações</span>
+          <span>{empresa.localizacao}</span>
+          <span>{empresa.vagas} vagas</span>
+          <span>{empresa.avaliacoes} avaliações</span>
         </div>
       </div>
     </article>
