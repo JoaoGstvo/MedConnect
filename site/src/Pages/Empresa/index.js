@@ -3,9 +3,70 @@ import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import CardEmpresa from "../../Components/CardEmpresa";
 import hospitais from "./hospitais";
-import "./index.scss";
+import { useState, useEffect, useRef } from 'react';
 
 function EmpresaPage() {
+  const [filtros, setFiltros] = useState({
+    nome: '',
+    localizacao: '',
+    especialidade: '',
+    porte: '',
+    categoria: ''
+  });
+  
+  const sectionRefs = useRef([]);
+
+  // Observer para animações de scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view', 'fade-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    sectionRefs.current.forEach(section => {
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const addToRefs = (el) => {
+    if (el && !sectionRefs.current.includes(el)) {
+      sectionRefs.current.push(el);
+    }
+  };
+
+  const handleFiltroChange = (e) => {
+    const { name, value } = e.target;
+    setFiltros(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleChipClick = (categoria) => {
+    setFiltros(prev => ({
+      ...prev,
+      categoria: prev.categoria === categoria ? '' : categoria
+    }));
+  };
+
+  const limparFiltros = () => {
+    setFiltros({
+      nome: '',
+      localizacao: '',
+      especialidade: '',
+      porte: '',
+      categoria: ''
+    });
+  };
+
   return (
     <main className="empresa-page">
       <Header />
@@ -22,33 +83,77 @@ function EmpresaPage() {
       </section>
 
       {/* Conteúdo principal */}
-      <section className="empresa-conteudo">
+      <section className="empresa-conteudo" ref={addToRefs}>
         {/* Filtros */}
         <aside className="empresa-filtros">
           <h3>Filtre os Hospitais</h3>
-          <input type="text" placeholder="Nome do Hospital" />
-          <input type="text" placeholder="Localização (cidade / estado)" />
-          <select>
-            <option>Especialidade</option>
-            <option>Clínica Geral</option>
-            <option>Pediatria</option>
-            <option>Cardiologia</option>
-            <option>Cirurgia</option>
+          <input 
+            type="text" 
+            name="nome"
+            placeholder="🏥 Nome do Hospital"
+            value={filtros.nome}
+            onChange={handleFiltroChange}
+          />
+          <input 
+            type="text" 
+            name="localizacao"
+            placeholder="📍 Localização (cidade / estado)"
+            value={filtros.localizacao}
+            onChange={handleFiltroChange}
+          />
+          <select 
+            name="especialidade"
+            value={filtros.especialidade}
+            onChange={handleFiltroChange}
+          >
+            <option value="">🎯 Especialidade</option>
+            <option value="Clínica Geral">Clínica Geral</option>
+            <option value="Pediatria">Pediatria</option>
+            <option value="Cardiologia">Cardiologia</option>
+            <option value="Cirurgia">Cirurgia</option>
           </select>
-          <select>
-            <option>Porte do Hospital</option>
-            <option>Pequeno (até 50 leitos)</option>
-            <option>Médio (51-200 leitos)</option>
-            <option>Grande (200+ leitos)</option>
+          <select 
+            name="porte"
+            value={filtros.porte}
+            onChange={handleFiltroChange}
+          >
+            <option value="">📊 Porte do Hospital</option>
+            <option value="Pequeno">Pequeno (até 50 leitos)</option>
+            <option value="Médio">Médio (51-200 leitos)</option>
+            <option value="Grande">Grande (200+ leitos)</option>
           </select>
+          
           <h4>Classificação por categoria</h4>
           <div className="chips">
-            <button className="chip">Estrutura hospitalar</button>
-            <button className="chip">Equipe e gestão</button>
-            <button className="chip">Remuneração</button>
-            <button className="chip">Qualidade de vida</button>
+            <button 
+              className={`chip ${filtros.categoria === 'Estrutura hospitalar' ? 'active' : ''}`}
+              onClick={() => handleChipClick('Estrutura hospitalar')}
+            >
+              Estrutura hospitalar
+            </button>
+            <button 
+              className={`chip ${filtros.categoria === 'Equipe e gestão' ? 'active' : ''}`}
+              onClick={() => handleChipClick('Equipe e gestão')}
+            >
+              Equipe e gestão
+            </button>
+            <button 
+              className={`chip ${filtros.categoria === 'Remuneração' ? 'active' : ''}`}
+              onClick={() => handleChipClick('Remuneração')}
+            >
+              Remuneração
+            </button>
+            <button 
+              className={`chip ${filtros.categoria === 'Qualidade de vida' ? 'active' : ''}`}
+              onClick={() => handleChipClick('Qualidade de vida')}
+            >
+              Qualidade de vida
+            </button>
           </div>
-          <button className="limpar">Apagar filtros</button>
+          
+          <button className="limpar" onClick={limparFiltros}>
+            🗑️ Apagar filtros
+          </button>
         </aside>
 
         {/* Lista de hospitais */}
@@ -74,7 +179,7 @@ function EmpresaPage() {
       </section>
 
       {/* Ranking */}
-      <section className="empresa-ranking">
+      <section className="empresa-ranking" ref={addToRefs}>
         <h2>🏆 Melhores Hospitais para Trabalhar</h2>
         <ol>
           <li>Hospital Albert Einstein - 4.8⭐</li>
@@ -91,4 +196,3 @@ function EmpresaPage() {
 }
 
 export default EmpresaPage;
-

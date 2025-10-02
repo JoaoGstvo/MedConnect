@@ -23,10 +23,10 @@ function InscricaoSucessoPage() {
 
                 <div className='actions'>
                     <a href="/">
-                        <button className='btn-back'>Voltar à Home</button>
+                        <button className='btn-back'> Voltar à Home</button>
                     </a>
                     <a href="/vagas">
-                        <button className='btn-back-outline'>Ver Outras Vagas</button>
+                        <button className='btn-back-outline'> Ver Outras Vagas</button>
                     </a>
                 </div>
             </section>

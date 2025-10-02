@@ -1,5 +1,6 @@
+// index.js atualizado com melhorias
 import './index.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from "../../Components/Header/index.js";
 import Footer from "../../Components/Footer";
 import CardVaga from '../../Components/CardVaga/index.js';
@@ -11,6 +12,7 @@ import MapaEmpresas from '../../Components/MapaEmpresas/index.js';
 
 function LandingPage() {
     const [vagas, setVagas] = useState([]);
+    const sectionRefs = useRef([]);
 
     // Buscar vagas do backend
     useEffect(() => {
@@ -26,6 +28,32 @@ function LandingPage() {
 
         fetchVagas();
     }, []);
+
+    // Observer para animações de scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view', 'fade-in');
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        sectionRefs.current.forEach(section => {
+            if (section) observer.observe(section);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    const addToRefs = (el) => {
+        if (el && !sectionRefs.current.includes(el)) {
+            sectionRefs.current.push(el);
+        }
+    };
 
     return (
         <main className='landingpage'>
@@ -48,29 +76,33 @@ function LandingPage() {
             </section>
 
             {/* Vagas em Destaque */}
-            <section className='section'>
+            <section className='section' ref={addToRefs}>
                 <div className='title'>
                     <h1>Vagas em Destaque</h1>
                 </div>
                 <div className='container'>
                     <div className='wrapper'>
                         {vagas.length > 0 ? (
-                            vagas.map(vaga => <CardVaga key={vaga.id_vaga} vaga={vaga} />)
+                            vagas.slice(0, 3).map(vaga => (
+                                <CardVaga key={vaga.id_vaga} vaga={vaga} />
+                            ))
                         ) : (
-                            <p>Nenhuma vaga disponível</p>
+                            <div className="no-data">
+                                <p>Nenhuma vaga disponível no momento</p>
+                            </div>
                         )}
                     </div>
                 </div>
             </section>
 
             {/* Empresas em Destaque */}
-            <section className='section'>
+            <section className='section' ref={addToRefs}>
                 <div className='title'>
                     <h1>Empresas em Destaque</h1>
                 </div>
                 <div className='container'>
                     <div className='wrapper'>
-                        {hospitais.slice(0, 4).map(hospital => (
+                        {hospitais.slice(0, 3).map(hospital => (
                             <CardEmpresa key={hospital.id} hospital={hospital} />
                         ))}
                     </div>
@@ -78,7 +110,7 @@ function LandingPage() {
             </section>
 
             {/* Profissionais em Destaque */}
-            <section className='section'>
+            <section className='section' ref={addToRefs}>
                 <div className='title'>
                     <h1>Profissionais em Destaque</h1>
                 </div>
@@ -90,7 +122,9 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
-            <section className='section'>
+
+            {/* Mapa de Empresas */}
+            <section className='section' ref={addToRefs}>
                 <div className='title'>
                     <h1>Empresas que estão contratando</h1>
                 </div>
@@ -104,4 +138,4 @@ function LandingPage() {
     );
 }
 
-export default LandingPage
+export default LandingPage;
