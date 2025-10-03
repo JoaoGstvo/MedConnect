@@ -20,10 +20,37 @@ function InscricaoPage() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Lógica de envio do formulário aqui
-        console.log('Dados do formulário:', formData);
+
+        try {
+            const body = {
+                nome: formData.nome,
+                email: formData.email,
+                telefone: formData.telefone,
+                curriculo: formData.curriculo ? formData.curriculo.name : null, // só o nome do arquivo
+                mensagem: formData.mensagem
+            };
+
+            const response = await fetch("http://localhost:5000/api/inscricao", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.msg); // sucesso
+                setFormData({ nome: '', email: '', telefone: '', curriculo: null, mensagem: '' });
+            } else {
+                alert(data.msg || "Erro ao enviar inscrição");
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert("Erro no servidor");
+        }
     };
 
     return (

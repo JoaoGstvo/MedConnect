@@ -13,6 +13,8 @@ import {
   deleteEmpresaCadastroController,
 } from "./Controller/empresaCadastroController.js";
 
+import { registerInscricaoController } from "./Controller/cadastrarEmVagas.js";
+
 
 const router = Router();
 
@@ -44,5 +46,9 @@ router.get("/", getEmpresasCadastroController);
 router.get("/:id", getEmpresaCadastroByIdController);
 router.put("/:id", updateEmpresaCadastroController);
 router.delete("/:id", deleteEmpresaCadastroController);
+
+
+// Se cadastrar em vagas
+router.post("/inscricao", registerInscricaoController);
 
 export default router;
