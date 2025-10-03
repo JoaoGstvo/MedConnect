@@ -1,11 +1,12 @@
+// index (3).scss - Signup atualizado
 .signup-page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
   padding: 20px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   position: relative;
 
   .form-container {
@@ -43,7 +44,7 @@
       height: 1px;
       background: linear-gradient(90deg, 
         transparent 0%, 
-        rgba(102, 126, 234, 0.3) 50%, 
+        rgba(58, 155, 220, 0.3) 50%, 
         transparent 100%);
       margin: 24px 0;
     }
@@ -84,15 +85,15 @@
           overflow: hidden;
 
           &:hover {
-            border-color: #667eea;
+            border-color: #2181ee;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 8px 25px rgba(33, 129, 238, 0.15);
           }
 
           &.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+            border-color: #2181ee;
+            background: linear-gradient(135deg, rgba(58, 155, 220, 0.15) 0%, rgba(33, 129, 238, 0.15) 100%);
+            box-shadow: 0 8px 25px rgba(33, 129, 238, 0.2);
           }
 
           .card-icon {
@@ -103,7 +104,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 100%);
             
             &.professional-icon::before {
               content: "👤";
@@ -198,8 +199,8 @@
 
               &:focus {
                 outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                border-color: #2181ee;
+                box-shadow: 0 0 0 3px rgba(33, 129, 238, 0.1);
                 background: #fafbff;
               }
 
@@ -219,7 +220,7 @@
       .signup-button {
         width: 100%;
         padding: 16px 24px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 100%);
         color: white;
         border: none;
         border-radius: 12px;
@@ -232,7 +233,7 @@
 
         &:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+          box-shadow: 0 12px 30px rgba(33, 129, 238, 0.4);
         }
 
         &:active:not(:disabled) {
@@ -277,13 +278,13 @@
           font-size: 14px;
 
           a {
-            color: #667eea;
+            color: #2181ee;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
 
             &:hover {
-              color: #764ba2;
+              color: #1865c0;
               text-decoration: underline;
             }
           }
@@ -292,7 +293,6 @@
     }
   }
 
-  /* Animações */
   @keyframes spin {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
@@ -309,7 +309,6 @@
     }
   }
 
-  /* Responsividade */
   @media (max-width: 768px) {
     padding: 16px;
 
@@ -335,7 +334,6 @@
     }
   }
 
-  /* Acessibilidade */
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
