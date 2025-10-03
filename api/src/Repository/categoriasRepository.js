@@ -1,28 +1,34 @@
 import pool from "../connection.js";
 
-// Buscar todas as categorias
-export async function getCategorias() {
-    const result = await pool.query(`
-        SELECT id_categoria, nome FROM categorias_artigos
-        ORDER BY nome
-    `);
-    return result.rows;
-}
-
-// Buscar categoria por ID
-export async function getCategoriaById(id) {
-    const result = await pool.query(
-        `SELECT * FROM categorias_artigos WHERE id_categoria = $1`,
-        [id]
-    );
-    return result.rows[0];
-}
-
-// Criar nova categoria
 export async function createCategoria(nome) {
-    const result = await pool.query(
-        `INSERT INTO categorias_artigos (nome) VALUES ($1) RETURNING *`,
-        [nome]
-    );
-    return result.rows[0];
+  const query = `
+    INSERT INTO artigos_categorias (nome) 
+    VALUES ($1) 
+    RETURNING *
+  `;
+  const result = await pool.query(query, [nome]);
+  return result.rows[0];
+}
+
+export async function getCategorias() {
+  const query = `SELECT * FROM artigos_categorias`;
+  const result = await pool.query(query);
+  return result.rows;
+}
+
+export async function getCategoriaById(id) {
+  const query = `SELECT * FROM artigos_categorias WHERE id_categoria = $1`;
+  const result = await pool.query(query, [id]);
+  return result.rows[0];
+}
+
+export async function updateCategoria(id, nome) {
+  const query = `UPDATE artigos_categorias SET nome = $1 WHERE id_categoria = $2 RETURNING *`;
+  const result = await pool.query(query, [nome, id]);
+  return result.rows[0];
+}
+
+export async function deleteCategoria(id) {
+  const query = `DELETE FROM artigos_categorias WHERE id_categoria = $1`;
+  await pool.query(query, [id]);
 }

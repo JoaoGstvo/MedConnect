@@ -1,36 +1,57 @@
-import { createVaga, getVagas } from "../Repository/vagaRepository.js";
+import * as vagaRepository from '../Repository/vagaRepository.js';
 
 export async function createVagaController(req, res) {
   try {
-    console.log("Body recebido do site:", req.body);
-    const { titulo, descricao, tipo_contrato, requisitos, salario } = req.body;
-
-    if (!titulo || !descricao || !tipo_contrato) {
-      return res.status(400).json({ msg: "Preencha os campos obrigatórios" });
-    }
-
-    const novaVaga = await createVaga({
-      titulo: titulo.trim(),
-      descricao: descricao.trim(),
-      tipo_contrato,
-      requisitos: requisitos ? requisitos.trim() : null,
-      salario: salario ? Number(salario) : null
-    });
-
-    res.status(201).json({ msg: "Vaga criada com sucesso 🔥", vaga: novaVaga });
-
-  } catch (err) {
-    console.error("Erro no createVagaController:", err);
-    res.status(500).json({ msg: "Erro no servidor" });
+    const { id_empresa, titulo, descricao, requisitos, localizacao, salario, modalidade } = req.body;
+    const vaga = await vagaRepository.createVaga(id_empresa, titulo, descricao, requisitos, localizacao, salario, modalidade);
+    res.status(201).json(vaga);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
 export async function getVagasController(req, res) {
   try {
-    const vagas = await getVagas();
+    const vagas = await vagaRepository.getVagas();
     res.json(vagas);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Erro ao buscar vagas" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function getVagaByIdController(req, res) {
+  try {
+    const { id } = req.params;
+    const vaga = await vagaRepository.getVagaById(id);
+    
+    if (!vaga) {
+      return res.status(404).json({ error: 'Vaga não encontrada' });
+    }
+    
+    res.json(vaga);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function updateVagaController(req, res) {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    const vaga = await vagaRepository.updateVaga(id, updates);
+    res.json(vaga);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function deleteVagaController(req, res) {
+  try {
+    const { id } = req.params;
+    await vagaRepository.deleteVaga(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }

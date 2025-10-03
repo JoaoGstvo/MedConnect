@@ -1,36 +1,57 @@
-import { getCategorias, getCategoriaById, createCategoria } from "../Repository/categoriasRepository.js";
+import * as categoriasRepository from '../Repository/categoriasRepository.js';
+
+export async function createCategoriaController(req, res) {
+  try {
+    const { nome } = req.body;
+    const categoria = await categoriasRepository.createCategoria(nome);
+    res.status(201).json(categoria);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 export async function getCategoriasController(req, res) {
   try {
-    const categorias = await getCategorias();
-    return res.json(categorias);
-  } catch (err) {
-    console.error("Erro ao buscar categorias:", err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+    const categorias = await categoriasRepository.getCategorias();
+    res.json(categorias);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
 export async function getCategoriaByIdController(req, res) {
   try {
     const { id } = req.params;
-    const categoria = await getCategoriaById(id);
-    if (!categoria) return res.status(404).json({ msg: "Categoria não encontrada" });
-    return res.json(categoria);
-  } catch (err) {
-    console.error("Erro ao buscar categoria:", err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+    const categoria = await categoriasRepository.getCategoriaById(id);
+    
+    if (!categoria) {
+      return res.status(404).json({ error: 'Categoria não encontrada' });
+    }
+    
+    res.json(categoria);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
-export async function createCategoriaController(req, res) {
+export async function updateCategoriaController(req, res) {
   try {
+    const { id } = req.params;
     const { nome } = req.body;
-    if (!nome) return res.status(400).json({ msg: "Nome da categoria é obrigatório" });
+    
+    const categoria = await categoriasRepository.updateCategoria(id, nome);
+    res.json(categoria);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
-    const novaCategoria = await createCategoria(nome.trim());
-    return res.status(201).json({ msg: "Categoria criada com sucesso ✅", categoria: novaCategoria });
-  } catch (err) {
-    console.error("Erro ao criar categoria:", err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+export async function deleteCategoriaController(req, res) {
+  try {
+    const { id } = req.params;
+    await categoriasRepository.deleteCategoria(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }

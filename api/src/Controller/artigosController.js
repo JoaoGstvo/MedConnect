@@ -1,47 +1,57 @@
-import { createArtigo, getArtigos, getArtigoById } from "../Repository/artigosRepository.js";
+import * as artigosRepository from '../Repository/artigosRepository.js';
 
 export async function createArtigoController(req, res) {
   try {
-    console.log("Body recebido (artigo):", req.body);
-    const { titulo, id_categoria, resumo, conteudo, imagem } = req.body;
-
-    if (!titulo || !id_categoria || !conteudo) {
-      return res.status(400).json({ msg: "Preencha os campos obrigatórios" });
-    }
-
-    const novoArtigo = await createArtigo({
-      titulo: titulo.trim(),
-      id_categoria,
-      resumo: resumo ? resumo.trim() : null,
-      conteudo: conteudo.trim(),
-      imagem: imagem ? imagem.trim() : null
-    });
-
-    return res.status(201).json({ msg: "Artigo criado com sucesso 🔥", artigo: novoArtigo });
-  } catch (err) {
-    console.error("Erro no createArtigoController:", err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+    const { id_usuario, id_categoria, titulo, resumo, conteudo, imagem } = req.body;
+    const artigo = await artigosRepository.createArtigo(id_usuario, id_categoria, titulo, resumo, conteudo, imagem);
+    res.status(201).json(artigo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
 export async function getArtigosController(req, res) {
   try {
-    const artigos = await getArtigos();
-    return res.json(artigos);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+    const artigos = await artigosRepository.getArtigos();
+    res.json(artigos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
 export async function getArtigoByIdController(req, res) {
   try {
     const { id } = req.params;
-    const artigo = await getArtigoById(id);
-    if (!artigo) return res.status(404).json({ msg: "Artigo não encontrado" });
-    return res.json(artigo);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ msg: "Erro no servidor" });
+    const artigo = await artigosRepository.getArtigoById(id);
+    
+    if (!artigo) {
+      return res.status(404).json({ error: 'Artigo não encontrado' });
+    }
+    
+    res.json(artigo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function updateArtigoController(req, res) {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    const artigo = await artigosRepository.updateArtigo(id, updates);
+    res.json(artigo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function deleteArtigoController(req, res) {
+  try {
+    const { id } = req.params;
+    await artigosRepository.deleteArtigo(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
