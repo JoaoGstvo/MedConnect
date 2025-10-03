@@ -5,6 +5,14 @@ import { createVagaController, getVagasController } from "./Controller/vagaContr
 import { createArtigoController, getArtigosController, getArtigoByIdController } from "./Controller/artigosController.js";
 import { getCategoriasController, getCategoriaByIdController, createCategoriaController } from "./Controller/categoriasController.js";
 import { getEmpresasController, getEmpresaByIdController, createEmpresaController } from "./Controller/empresaController.js";
+import {
+  createEmpresaCadastroController,
+  getEmpresasCadastroController,
+  getEmpresaCadastroByIdController,
+  updateEmpresaCadastroController,
+  deleteEmpresaCadastroController,
+} from "./Controller/empresaCadastroController.js";
+
 
 const router = Router();
 
@@ -29,5 +37,12 @@ router.post("/categorias", createCategoriaController);
 router.get("/empresas", getEmpresasController);
 router.get("/empresas/:id", getEmpresaByIdController);
 router.post("/empresas", createEmpresaController);
+
+// Criando Empresas
+router.post("/", createEmpresaCadastroController);
+router.get("/", getEmpresasCadastroController);
+router.get("/:id", getEmpresaCadastroByIdController);
+router.put("/:id", updateEmpresaCadastroController);
+router.delete("/:id", deleteEmpresaCadastroController);
 
 export default router;
