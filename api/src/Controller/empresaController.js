@@ -55,3 +55,35 @@ export async function deleteEmpresaController(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+// empresaController.js
+export async function loginEmpresaController(req, res) {
+  try {
+    const { email, senha } = req.body;
+
+    if (!email || !senha) {
+      return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+    }
+
+    const empresa = await empresaRepository.getEmpresaByEmail(email);
+
+    if (!empresa) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Comparação de senha em texto (não seguro - apenas para exemplo)
+    if (empresa.senha !== senha) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Remove a senha do objeto de retorno
+    const { senha: _, ...empresaWithoutPassword } = empresa;
+
+    res.json({
+      message: 'Login realizado com sucesso',
+      empresa: empresaWithoutPassword
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

@@ -39,3 +39,18 @@ export async function updateUser(id, updates) {
   const result = await pool.query(query, [id, ...values]);
   return result.rows[0];
 }
+
+// NOVO: Função para login do profissional
+export async function loginProfissional(email, senha) {
+  try {
+    const query = `
+      SELECT id_usuario, nome, email, tipo_usuario, data_cadastro 
+      FROM usuarios 
+      WHERE email = $1 AND senha = $2
+    `;
+    const result = await pool.query(query, [email, senha]);
+    return result.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}

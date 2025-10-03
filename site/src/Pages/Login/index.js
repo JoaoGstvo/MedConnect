@@ -9,6 +9,7 @@ function Login() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [userType, setUserType] = useState('profissional'); // profissional ou empresa
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,7 +28,12 @@ function Login() {
     setMsg('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/profissional/login', {
+      // Determina o endpoint baseado no tipo de usuário
+      const endpoint = userType === 'profissional' 
+        ? 'http://localhost:5000/api/profissionais/login'
+        : 'http://localhost:5000/api/empresas/login';
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
@@ -41,19 +47,25 @@ function Login() {
           hideProgressBar: true 
         });
         
-        // Salvar dados do usuário no localStorage se "Lembrar de mim" estiver marcado
+        // Salvar dados do usuário
+        const userData = {
+          ...data,
+          userType: userType,
+          timestamp: new Date().toISOString()
+        };
+
         if (rememberMe) {
-          localStorage.setItem('userData', JSON.stringify(data));
+          localStorage.setItem('userData', JSON.stringify(userData));
         } else {
-          sessionStorage.setItem('userData', JSON.stringify(data));
+          sessionStorage.setItem('userData', JSON.stringify(userData));
         }
         
         // Redirecionar após sucesso
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          window.location.href = userType === 'profissional' ? '/' : '/';
         }, 2000);
       } else {
-        setMsg(data.msg || 'Erro ao fazer login');
+        setMsg(data.error || 'Erro ao fazer login');
         toast.error('Credenciais inválidas', { 
           autoClose: 3000, 
           hideProgressBar: true 
@@ -78,14 +90,34 @@ function Login() {
         </div>
 
         <form className='form' onSubmit={handleLogin}>
-          <h2>Fazer Login como Profissional</h2>
+          <h2>Fazer Login</h2>
           <p className='form-description'>Digite suas credenciais para acessar sua conta</p>
+
+          {/* Seletor de tipo de usuário */}
+          <div className='user-type-selector'>
+            <div className='user-type-options'>
+              <button
+                type='button'
+                className={`user-type-btn ${userType === 'profissional' ? 'active' : ''}`}
+                onClick={() => setUserType('profissional')}
+              >
+                Profissional
+              </button>
+              <button
+                type='button'
+                className={`user-type-btn ${userType === 'empresa' ? 'active' : ''}`}
+                onClick={() => setUserType('empresa')}
+              >
+                Empresa
+              </button>
+            </div>
+          </div>
 
           <div className='input-field'>
             <span>E-mail</span>
             <input 
               type="email" 
-              placeholder='seu@email.com' 
+              placeholder={userType === 'profissional' ? 'seu@email.com' : 'empresa@email.com'} 
               value={email} 
               onChange={e => setEmail(e.target.value)}
               disabled={loading}
@@ -121,7 +153,7 @@ function Login() {
             className={`login-button ${loading ? 'loading' : ''}`}
             disabled={loading}
           >
-            {loading ? '' : 'Entrar'}
+            {loading ? '' : `Entrar como ${userType === 'profissional' ? 'Profissional' : 'Empresa'}`}
           </button>
 
           {msg && (
@@ -131,7 +163,7 @@ function Login() {
           )}
 
           <div className="signup-redirect">
-            Não tem uma conta? <a href="/cadastro">Cadastre-se como Profissional</a>
+            Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a>
           </div>
         </form>
       </section>

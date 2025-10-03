@@ -38,3 +38,18 @@ export async function deleteEmpresa(id) {
   const query = `DELETE FROM empresas WHERE id_empresa = $1`;
   await pool.query(query, [id]);
 }
+
+// NOVO: Função para login da empresa
+export async function loginEmpresa(email, senha) {
+  try {
+    const query = `
+      SELECT id_empresa, nome, cnpj, email, endereco, logo, descricao 
+      FROM empresas 
+      WHERE email = $1 AND senha = $2
+    `;
+    const result = await pool.query(query, [email, senha]);
+    return result.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}

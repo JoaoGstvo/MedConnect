@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-// Controllers
+// Controllers existentes...
 import {
   registerProfissionalController,
   getProfissionaisController,
@@ -53,7 +53,17 @@ import {
   updateCurriculoController
 } from "./Controller/curriculoController.js";
 
+// NOVO: Importar controllers de autenticação
+import {
+  loginProfissionalController,
+  loginEmpresaController
+} from "./Controller/authController.js";
+
 const router = Router();
+
+// ----------------- AUTENTICAÇÃO -----------------
+router.post("/profissionais/login", loginProfissionalController);
+router.post("/empresas/login", loginEmpresaController);
 
 // ----------------- PROFISSIONAIS -----------------
 router.post("/profissionais", registerProfissionalController);

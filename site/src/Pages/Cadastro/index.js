@@ -7,29 +7,25 @@ function Signup() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState({ type: '', text: '' });
 
-  // Estados para profissional
+  // Estados para profissional - adaptados ao backend
   const [profissionalData, setProfissionalData] = useState({
-    nome_completo: "",
-    cpf: "",
+    nome: "",
     email: "",
-    telefone: "",
-    profissao: "",
-    crm: "",
-    especializacoes: "",
     senha: "",
-    confirmaSenha: ""
+    confirmaSenha: "",
+    tipo_usuario: "candidato"
   });
 
-  // Estados para empresa
+  // Estados para empresa - adaptados ao backend
   const [empresaData, setEmpresaData] = useState({
-    nome_empresa: "",
+    nome: "",
     cnpj: "",
     email: "",
-    telefone: "",
+    senha: "",
+    confirmaSenha: "",
     endereco: "",
     descricao: "",
-    senha: "",
-    confirmaSenha: ""
+    logo: ""
   });
 
   const navigate = useNavigate();
@@ -68,109 +64,100 @@ function Signup() {
   };
 
   const handleProfissionalSubmit = async () => {
-    const { nome_completo, cpf, email, telefone, profissao, crm, especializacoes, senha, confirmaSenha } = profissionalData;
+    const { nome, email, senha, confirmaSenha } = profissionalData;
 
     if (senha !== confirmaSenha) {
-      showMensagem('error', "❌ As senhas não conferem!");
+      showMensagem('error', "As senhas não conferem!");
       return;
     }
 
-    if (!nome_completo || !cpf || !email || !senha) {
-      showMensagem('error', "❌ Preencha todos os campos obrigatórios!");
+    if (!nome || !email || !senha) {
+      showMensagem('error', "Preencha todos os campos obrigatórios!");
       return;
     }
 
     try {
       const body = {
-        nome_completo: nome_completo.trim(),
-        cpf: cpf.trim(),
+        nome: nome.trim(),
         email: email.trim(),
-        telefone: telefone?.trim() || "",
-        profissao: profissao?.trim() || "",
-        crm: crm?.trim() || "",
-        especializacoes: especializacoes?.trim() || "",
-        senha: senha
+        senha: senha,
+        tipo_usuario: "candidato"
       };
 
-      console.log("📤 Enviando dados do profissional:", body);
+      console.log("Enviando dados do profissional:", body);
 
-      const response = await fetch("http://localhost:5000/api/profissional/register", {
+      const response = await fetch("http://localhost:5000/api/profissionais", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
       const data = await response.json();
-      console.log("📥 Resposta do servidor:", data);
+      console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        showMensagem('success', "🎉 Cadastro realizado com sucesso!");
-        // Limpar formulário
+        showMensagem('success', "Cadastro realizado com sucesso!");
         setProfissionalData({
-          nome_completo: "", cpf: "", email: "", telefone: "",
-          profissao: "", crm: "", especializacoes: "", senha: "", confirmaSenha: ""
+          nome: "", email: "", senha: "", confirmaSenha: "", tipo_usuario: "candidato"
         });
-        // Redirecionar após sucesso
         setTimeout(() => navigate('/login'), 2000);
       } else {
-        showMensagem('error', data.msg || data.erro || "❌ Erro ao cadastrar");
+        showMensagem('error', data.error || "Erro ao cadastrar");
       }
     } catch (err) {
-      console.error("❌ Erro no servidor:", err);
-      showMensagem('error', "❌ Erro de conexão com o servidor");
+      console.error("Erro no servidor:", err);
+      showMensagem('error', "Erro de conexão com o servidor");
     }
   };
 
   const handleEmpresaSubmit = async () => {
-    const { nome_empresa, cnpj, email, telefone, endereco, descricao, senha, confirmaSenha } = empresaData;
+    const { nome, cnpj, email, senha, confirmaSenha, endereco, descricao } = empresaData;
 
     if (senha !== confirmaSenha) {
-      showMensagem('error', "❌ As senhas não conferem!");
+      showMensagem('error', "As senhas não conferem!");
       return;
     }
 
-    if (!nome_empresa || !cnpj || !email || !senha) {
-      showMensagem('error', "❌ Preencha todos os campos obrigatórios!");
+    if (!nome || !cnpj || !email || !senha) {
+      showMensagem('error', "Preencha todos os campos obrigatórios!");
       return;
     }
 
     try {
       const body = {
-        nome_empresa: nome_empresa.trim(),
+        nome: nome.trim(),
         cnpj: cnpj.trim(),
         email: email.trim(),
-        telefone: telefone?.trim() || "",
+        senha: senha,
         endereco: endereco?.trim() || "",
         descricao: descricao?.trim() || "",
-        senha: senha
+        logo: ""
       };
 
-      console.log("📤 Enviando dados da empresa:", body);
+      console.log("Enviando dados da empresa:", body);
 
-      const response = await fetch("http://localhost:5000/api/empresa/register", {
+      const response = await fetch("http://localhost:5000/api/empresas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
       const data = await response.json();
-      console.log("📥 Resposta do servidor:", data);
+      console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        showMensagem('success', "🎉 Empresa cadastrada com sucesso!");
-        // Limpar formulário
+        showMensagem('success', "Empresa cadastrada com sucesso!");
         setEmpresaData({
-          nome_empresa: "", cnpj: "", email: "", telefone: "",
-          endereco: "", descricao: "", senha: "", confirmaSenha: ""
+          nome: "", cnpj: "", email: "", senha: "", confirmaSenha: "", 
+          endereco: "", descricao: "", logo: ""
         });
-        // Redirecionar após sucesso
         setTimeout(() => navigate('/login'), 2000);
       } else {
-        showMensagem('error', data.msg || data.erro || "❌ Erro ao cadastrar empresa");
+        showMensagem('error', data.error || "Erro ao cadastrar empresa");
       }
     } catch (err) {
-      console.error("❌ Erro no servidor:", err);
-      showMensagem('error', "❌ Erro de conexão com o servidor");
+      console.error("Erro no servidor:", err);
+      showMensagem('error', "Erro de conexão com o servidor");
     }
   };
 
@@ -178,7 +165,7 @@ function Signup() {
     <main className="signup-page">
       <section className="form-container">
         <div className="header">
-          <img src="/Images/Logo.png" alt="Logo" className="logo" />
+          <img src="/Images/Logo.png" alt="Logo MedConnect" className="logo" />
         </div>
 
         <div className="divider"></div>
@@ -192,22 +179,21 @@ function Signup() {
               className={`account-type-card ${accountType === 'profissional' ? 'selected' : ''}`}
               onClick={() => setAccountType('profissional')}
             >
-              <div className="card-icon">👨‍⚕️</div>
+              <div className="card-icon professional-icon"></div>
               <h3>Profissional</h3>
-              <p>Busco oportunidades</p>
+              <p>Busco oportunidades de emprego</p>
             </div>
 
             <div
               className={`account-type-card ${accountType === 'empresa' ? 'selected' : ''}`}
               onClick={() => setAccountType('empresa')}
             >
-              <div className="card-icon">🏢</div>
+              <div className="card-icon company-icon"></div>
               <h3>Empresa</h3>
               <p>Contrato profissionais</p>
             </div>
           </div>
 
-          {/* Mensagem de Feedback */}
           {mensagem.text && (
             <div className={`mensagem-feedback ${mensagem.type}`}>
               {mensagem.text}
@@ -217,13 +203,13 @@ function Signup() {
           <form onSubmit={handleSubmit} className="form-grid">
             {accountType === 'profissional' && (
               <>
-                <div className='form-group'>
+                <div className='form-group full-width'>
                   <label className='input-field'>
-                    <span>👤 Nome Completo *</span>
+                    <span>Nome Completo *</span>
                     <input 
                       type="text" 
-                      name="nome_completo"
-                      value={profissionalData.nome_completo}
+                      name="nome"
+                      value={profissionalData.nome}
                       onChange={handleProfissionalChange}
                       placeholder="Digite seu nome completo"
                       required 
@@ -231,23 +217,9 @@ function Signup() {
                   </label>
                 </div>
 
-                <div className='form-group'>
+                <div className='form-group full-width'>
                   <label className='input-field'>
-                    <span>🔢 CPF *</span>
-                    <input 
-                      type="text" 
-                      name="cpf"
-                      value={profissionalData.cpf}
-                      onChange={handleProfissionalChange}
-                      placeholder="000.000.000-00"
-                      required 
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group'>
-                  <label className='input-field'>
-                    <span>📧 E-mail *</span>
+                    <span>E-mail *</span>
                     <input 
                       type="email" 
                       name="email"
@@ -261,59 +233,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>📞 Telefone</span>
-                    <input 
-                      type="tel" 
-                      name="telefone"
-                      value={profissionalData.telefone}
-                      onChange={handleProfissionalChange}
-                      placeholder="(11) 99999-9999"
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group'>
-                  <label className='input-field'>
-                    <span>💼 Profissão</span>
-                    <input 
-                      type="text" 
-                      name="profissao"
-                      value={profissionalData.profissao}
-                      onChange={handleProfissionalChange}
-                      placeholder="Sua profissão"
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group'>
-                  <label className='input-field'>
-                    <span>🏥 CRM/Registro</span>
-                    <input 
-                      type="text" 
-                      name="crm"
-                      value={profissionalData.crm}
-                      onChange={handleProfissionalChange}
-                      placeholder="Número do registro profissional"
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group double-width'>
-                  <label className='input-field'>
-                    <span>🎯 Especializações</span>
-                    <textarea 
-                      name="especializacoes"
-                      value={profissionalData.especializacoes}
-                      onChange={handleProfissionalChange}
-                      placeholder="Suas especializações e áreas de atuação..."
-                      rows="3"
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group'>
-                  <label className='input-field'>
-                    <span>🔒 Senha *</span>
+                    <span>Senha *</span>
                     <input 
                       type="password" 
                       name="senha"
@@ -328,7 +248,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>🔒 Confirmar Senha *</span>
+                    <span>Confirmar Senha *</span>
                     <input 
                       type="password" 
                       name="confirmaSenha"
@@ -346,7 +266,7 @@ function Signup() {
                     type="submit"
                     disabled={loading}
                   >
-                    {loading ? '⏳ Cadastrando...' : '🚀 Criar Conta Profissional'}
+                    {loading ? 'Cadastrando...' : 'Criar Conta Profissional'}
                   </button>
                 </div>
               </>
@@ -354,13 +274,13 @@ function Signup() {
 
             {accountType === 'empresa' && (
               <>
-                <div className='form-group'>
+                <div className='form-group full-width'>
                   <label className='input-field'>
-                    <span>🏢 Nome da Empresa *</span>
+                    <span>Nome da Empresa *</span>
                     <input 
                       type="text" 
-                      name="nome_empresa"
-                      value={empresaData.nome_empresa}
+                      name="nome"
+                      value={empresaData.nome}
                       onChange={handleEmpresaChange}
                       placeholder="Razão social da empresa"
                       required 
@@ -370,7 +290,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>🔢 CNPJ *</span>
+                    <span>CNPJ *</span>
                     <input 
                       type="text" 
                       name="cnpj"
@@ -384,7 +304,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>📧 E-mail *</span>
+                    <span>E-mail *</span>
                     <input 
                       type="email" 
                       name="email"
@@ -396,35 +316,22 @@ function Signup() {
                   </label>
                 </div>
 
-                <div className='form-group'>
+                <div className='form-group full-width'>
                   <label className='input-field'>
-                    <span>📞 Telefone</span>
+                    <span>Endereço</span>
                     <input 
-                      type="tel" 
-                      name="telefone"
-                      value={empresaData.telefone}
-                      onChange={handleEmpresaChange}
-                      placeholder="(11) 99999-9999"
-                    />
-                  </label>
-                </div>
-
-                <div className='form-group double-width'>
-                  <label className='input-field'>
-                    <span>📍 Endereço</span>
-                    <textarea 
+                      type="text" 
                       name="endereco"
                       value={empresaData.endereco}
                       onChange={handleEmpresaChange}
                       placeholder="Endereço completo da empresa"
-                      rows="2"
                     />
                   </label>
                 </div>
 
-                <div className='form-group double-width'>
+                <div className='form-group full-width'>
                   <label className='input-field'>
-                    <span>📝 Descrição da Empresa</span>
+                    <span>Descrição da Empresa</span>
                     <textarea 
                       name="descricao"
                       value={empresaData.descricao}
@@ -437,7 +344,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>🔒 Senha *</span>
+                    <span>Senha *</span>
                     <input 
                       type="password" 
                       name="senha"
@@ -452,7 +359,7 @@ function Signup() {
 
                 <div className='form-group'>
                   <label className='input-field'>
-                    <span>🔒 Confirmar Senha *</span>
+                    <span>Confirmar Senha *</span>
                     <input 
                       type="password" 
                       name="confirmaSenha"
@@ -470,7 +377,7 @@ function Signup() {
                     type="submit"
                     disabled={loading}
                   >
-                    {loading ? '⏳ Cadastrando...' : '🏢 Criar Conta Empresa'}
+                    {loading ? 'Cadastrando...' : 'Criar Conta Empresa'}
                   </button>
                 </div>
               </>
