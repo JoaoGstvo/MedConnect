@@ -1,11 +1,14 @@
 import "./index.scss";
+import { useNavigate } from "react-router-dom"; // ← Importar useNavigate
 
 function CardVaga({ vaga }) {
+  const navigate = useNavigate(); // ← Hook para navegação
+
   if (!vaga) return null;
 
-  // Formatação dos dados de acordo com o backend
+  // Formatação dos dados (mantém igual)
   const formatarSalario = (salario) => {
-    if (!salario || salario === "A combinar" || salario === "0") return "Salário a combinar";
+    if (!salario || salario === "0") return "Salário a combinar";
     return `R$ ${parseFloat(salario).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
@@ -18,25 +21,23 @@ function CardVaga({ vaga }) {
     return modalidades[modalidade] || modalidade || "Não informado";
   };
 
-  const getRequisitosArray = (requisitos) => {
-    if (!requisitos) return [];
-    if (Array.isArray(requisitos)) return requisitos;
-    if (typeof requisitos === 'string') {
-      return requisitos.split(',').map(req => req.trim()).filter(req => req.length > 0);
-    }
-    return [];
+  // NOVA FUNÇÃO: Redireciona para página de inscrição
+  const handleFazerInscricao = () => {
+    navigate(`/inscricaovaga/${vaga.id_vaga}`);
   };
 
-  const handleInscricao = () => {
-    // Redireciona para a página de login
-    window.location.href = '/login';
+  // Função antiga (pode remover se não for usar mais)
+  /*
+  const handleInscricao = async () => {
+    // ... código antigo ...
   };
+  */
 
   const handleMaisInformacoes = () => {
-    window.location.href = `/vaga/${vaga.id_vaga}`;
+    // Melhor usar navigate em vez de window.location
+    navigate(`/vaga/${vaga.id_vaga}`);
   };
 
-  // Verificar se a vaga está aberta
   const isVagaAberta = vaga.status === 'aberta';
 
   return (
@@ -86,20 +87,11 @@ function CardVaga({ vaga }) {
           <p>{vaga.descricao || "Descrição não disponível."}</p>
         </div>
 
-        {vaga.requisitos && getRequisitosArray(vaga.requisitos).length > 0 && (
+        {vaga.requisitos && (
           <div className="requirements-section">
             <h4>Requisitos</h4>
-            <div className="requirements-list">
-              {getRequisitosArray(vaga.requisitos).slice(0, 5).map((req, i) => (
-                <span key={i} className="requirement-tag">
-                  {req}
-                </span>
-              ))}
-              {getRequisitosArray(vaga.requisitos).length > 5 && (
-                <span className="requirement-tag">
-                  +{getRequisitosArray(vaga.requisitos).length - 5}
-                </span>
-              )}
+            <div className="requirements-text">
+              {vaga.requisitos}
             </div>
           </div>
         )}
@@ -115,15 +107,16 @@ function CardVaga({ vaga }) {
         <div className="job-action">
           <button 
             className="apply-button" 
-            onClick={handleInscricao}
+            onClick={handleFazerInscricao} // ← Agora chama a nova função
+            disabled={!isVagaAberta} // ← Remove inscrito e loading do disable
           >
-            Fazer Inscrição
+            📝 Fazer Inscrição {/* ← Texto sempre igual */}
           </button>
           <button 
             className="info-button" 
             onClick={handleMaisInformacoes}
           >
-            Ver Detalhes
+            🔍 Ver Detalhes
           </button>
         </div>
       </div>

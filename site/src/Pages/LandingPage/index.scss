@@ -1,10 +1,28 @@
+:root {
+  --primary-color: #3a9bdc;
+  --primary-dark: #2181ee;
+  --primary-darker: #1865c0;
+  --secondary-color: #1a2434;
+  --background-color: #f3f2ef;
+  --surface-color: #ffffff;
+  --text-primary: #222222;
+  --text-secondary: #979fae;
+  --text-light: #cbd5e0;
+  --border-color: rgba(58, 155, 220, 0.1);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.15);
+  --shadow-button: 0 8px 20px rgba(0, 0, 0, 0.15);
+  --border-radius: 16px;
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .landingpage {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #222;
-  background-color: #f3f2ef;
+  color: var(--text-primary);
+  background-color: var(--background-color);
   overflow-x: hidden;
 
   /* Hero Section Modernizada */
@@ -15,8 +33,11 @@
     justify-content: center;
     width: 100%;
     min-height: 85vh;
-    background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
-    color: #fff;
+    background:  radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        z-index: 1;
+    color: var(--surface-color);
     text-align: center;
     padding: 80px 20px;
     position: relative;
@@ -43,7 +64,7 @@
         font-size: 3.2rem;
         font-weight: 800;
         margin-bottom: 20px;
-        text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+        text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
         line-height: 1.2;
         background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
         -webkit-background-clip: text;
@@ -58,7 +79,7 @@
         line-height: 1.7;
         max-width: 700px;
         margin: 0 auto;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
       }
     }
 
@@ -72,16 +93,16 @@
 
       button {
         padding: 18px 42px;
-        border: 2px solid rgba(255,255,255,0.3);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 50px;
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(10px);
-        color: #fff;
+        color: var(--surface-color);
         font-size: 1.1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        transition: var(--transition);
+        box-shadow: var(--shadow-button);
         position: relative;
         overflow: hidden;
 
@@ -92,16 +113,16 @@
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
           transition: left 0.6s;
         }
 
         &:hover {
-          background: #fff;
-          color: #2181ee;
+          background: var(--surface-color);
+          color: var(--primary-dark);
           transform: translateY(-5px) scale(1.05);
-          box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-          border-color: #fff;
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+          border-color: var(--surface-color);
 
           &::before {
             left: 100%;
@@ -119,7 +140,7 @@
   .section {
     flex: 1;
     padding: 100px 20px;
-    background-color: #fff;
+    background-color: var(--surface-color);
     position: relative;
 
     &:nth-child(even) {
@@ -133,7 +154,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #3a9bdc, #2181ee, #1865c0);
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
       opacity: 0;
       transform: scaleX(0);
       transition: all 0.6s ease;
@@ -151,7 +172,7 @@
       h1 {
         font-size: 2.6rem;
         font-weight: 700;
-        color: #2181ee;
+        color: var(--primary-dark);
         position: relative;
         display: inline-block;
         padding-bottom: 15px;
@@ -162,7 +183,7 @@
           width: 80px;
           height: 5px;
           margin: 15px auto 0;
-          background: linear-gradient(90deg, #3a9bdc, #2181ee);
+          background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
           border-radius: 3px;
           transition: width 0.3s ease;
         }
@@ -185,11 +206,11 @@
         width: 100%;
 
         & > * {
-          border-radius: 16px;
-          background: #fff;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          border: 1px solid rgba(58, 155, 220, 0.1);
+          border-radius: var(--border-radius);
+          background: var(--surface-color);
+          box-shadow: var(--shadow);
+          transition: var(--transition);
+          border: 1px solid var(--border-color);
           position: relative;
           overflow: hidden;
 
@@ -200,14 +221,14 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #3a9bdc, #2181ee);
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
             transform: scaleX(0);
             transition: transform 0.3s ease;
           }
 
           &:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-hover);
 
             &::before {
               transform: scaleX(1);
@@ -222,9 +243,9 @@
   .footer-page {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #1a2434 0%, #2d3748 100%);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #2d3748 100%);
     padding: 3rem 1rem 1rem 1rem;
-    color: #979fae;
+    color: var(--text-secondary);
     position: relative;
     overflow: hidden;
 
@@ -235,7 +256,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #3a9bdc, #2181ee, #1865c0);
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
     }
 
     .footer-section {
@@ -260,7 +281,7 @@
         .description {
           font-size: 1rem;
           line-height: 1.6;
-          color: #cbd5e0;
+          color: var(--text-light);
         }
       }
 
@@ -268,7 +289,7 @@
         .title {
           font-size: 1.3rem;
           font-weight: 600;
-          color: #ffffff;
+          color: var(--surface-color);
           margin-bottom: 1.5rem;
           position: relative;
           padding-bottom: 10px;
@@ -280,7 +301,7 @@
             left: 0;
             width: 40px;
             height: 2px;
-            background: #2181ee;
+            background: var(--primary-dark);
           }
         }
 
@@ -293,23 +314,23 @@
             margin-bottom: 0.8rem;
 
             a {
-              color: #979fae;
+              color: var(--text-secondary);
               text-decoration: none;
               font-size: 1rem;
-              transition: all 0.3s ease;
+              transition: var(--transition);
               display: flex;
               align-items: center;
 
               &::before {
                 content: '▸';
                 margin-right: 8px;
-                color: #2181ee;
+                color: var(--primary-dark);
                 font-size: 0.8rem;
                 transition: transform 0.3s ease;
               }
 
               &:hover {
-                color: #3a9bdc;
+                color: var(--primary-color);
                 transform: translateX(5px);
 
                 &::before {
@@ -327,7 +348,7 @@
       justify-content: center;
       padding: 2rem 0 1rem;
       font-size: 0.9rem;
-      color: #979fae;
+      color: var(--text-secondary);
       border-top: 1px solid #4a5568;
       text-align: center;
       position: relative;

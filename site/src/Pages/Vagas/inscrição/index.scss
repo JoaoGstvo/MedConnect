@@ -1,13 +1,20 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
+    --white: #fff;
+    --text-primary: #2c3e50;
+    --border-light: rgba(255, 255, 255, 0.3);
+    --shadow-light: rgba(0, 0, 0, 0.1);
+}
+
 .inscricaopage {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #f4f5f7 0%, #e8ecf1 100%);
+    background: var(--primary-gradient);
     position: relative;
     overflow-x: hidden;
 
-    /* Efeito de background sutil */
     &::before {
         content: '';
         position: absolute;
@@ -16,12 +23,12 @@
         right: 0;
         bottom: 0;
         background: 
-            radial-gradient(circle at 10% 20%, rgba(58, 155, 220, 0.05) 0%, transparent 50%),
-            radial-gradient(circle at 90% 80%, rgba(33, 129, 238, 0.03) 0%, transparent 50%);
-        z-index: 0;
+            radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        z-index: 1;
     }
 
-    /* Header da inscrição */
     .principal-container {
         display: flex;
         flex-direction: column;
@@ -29,22 +36,10 @@
         justify-content: center;
         width: 100%;
         padding: 100px 20px 80px;
-        background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
-        color: #fff;
+        color: var(--white);
         text-align: center;
         position: relative;
-        overflow: hidden;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,1000 1000,0 1000,1000"/></svg>');
-            background-size: cover;
-        }
+        z-index: 2;
 
         .title {
             max-width: 700px;
@@ -57,7 +52,7 @@
                 font-size: 2.8rem;
                 font-weight: 800;
                 margin-bottom: 15px;
-                text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                text-shadow: 0 4px 12px rgba(0,0,0,0.3);
                 background: linear-gradient(135deg, #ffffff 0%, #e6f4ff 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
@@ -68,24 +63,23 @@
                 font-size: 1.3rem;
                 opacity: 0.95;
                 line-height: 1.6;
-                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                text-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
         }
     }
 
-    /* Seção do formulário */
     .section {
         display: flex;
         justify-content: center;
         padding: 80px 20px;
         position: relative;
-        z-index: 1;
+        z-index: 2;
 
         .form-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             padding: 50px;
             max-width: 600px;
             width: 100%;
@@ -93,7 +87,7 @@
             flex-direction: column;
             gap: 25px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--border-light);
             position: relative;
             overflow: hidden;
 
@@ -109,7 +103,7 @@
 
             &:hover {
                 transform: translateY(-8px);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             }
 
             .form-group {
@@ -119,7 +113,7 @@
 
                 label {
                     font-weight: 600;
-                    color: #2c3e50;
+                    color: var(--white);
                     font-size: 1rem;
                     display: flex;
                     align-items: center;
@@ -127,7 +121,7 @@
 
                     &::before {
                         content: '•';
-                        color: #2181ee;
+                        color: var(--white);
                         font-size: 1.2rem;
                     }
                 }
@@ -135,22 +129,22 @@
                 input, textarea {
                     padding: 16px 20px;
                     border-radius: 12px;
-                    border: 2px solid rgba(58, 155, 220, 0.2);
+                    border: 2px solid rgba(255, 255, 255, 0.3);
                     font-size: 1rem;
                     transition: all 0.3s ease;
-                    background: rgba(255, 255, 255, 0.8);
+                    background: rgba(255, 255, 255, 0.15);
                     backdrop-filter: blur(10px);
-                    color: #2c3e50;
+                    color: var(--white);
 
                     &::placeholder {
-                        color: rgba(44, 62, 80, 0.6);
+                        color: rgba(255, 255, 255, 0.7);
                     }
 
                     &:focus {
                         outline: none;
-                        border-color: #3a9bdc;
-                        box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
-                        background: rgba(255, 255, 255, 0.95);
+                        border-color: var(--white);
+                        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+                        background: rgba(255, 255, 255, 0.25);
                         transform: translateY(-2px);
                     }
                 }
@@ -163,29 +157,28 @@
 
                 input[type="file"] {
                     padding: 14px;
-                    background: rgba(58, 155, 220, 0.05);
+                    background: rgba(255, 255, 255, 0.1);
                     border-style: dashed;
 
                     &::file-selector-button {
                         padding: 10px 16px;
                         border-radius: 8px;
-                        border: 2px solid #3a9bdc;
-                        background: rgba(58, 155, 220, 0.1);
-                        color: #2181ee;
+                        border: 2px solid var(--white);
+                        background: rgba(255, 255, 255, 0.1);
+                        color: var(--white);
                         font-weight: 600;
                         cursor: pointer;
                         transition: all 0.3s ease;
                         margin-right: 15px;
 
                         &:hover {
-                            background: #3a9bdc;
-                            color: #fff;
+                            background: var(--white);
+                            color: #2181ee;
                         }
                     }
                 }
             }
 
-            /* Botões */
             .actions {
                 display: flex;
                 justify-content: space-between;
@@ -211,9 +204,9 @@
 
                 .btn-submit {
                     border: none;
-                    background: linear-gradient(135deg, #3a9bdc, #2181ee);
-                    color: white;
-                    box-shadow: 0 8px 20px rgba(58, 155, 220, 0.3);
+                    background: rgba(255, 255, 255, 0.95);
+                    color: #2181ee;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 
                     &::before {
                         content: '';
@@ -222,14 +215,14 @@
                         left: -100%;
                         width: 100%;
                         height: 100%;
-                        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                        background: linear-gradient(90deg, transparent, rgba(33,129,238,0.2), transparent);
                         transition: left 0.6s;
                     }
 
                     &:hover {
-                        background: linear-gradient(135deg, #2181ee, #1865c0);
+                        background: var(--white);
                         transform: translateY(-3px) scale(1.05);
-                        box-shadow: 0 12px 25px rgba(58, 155, 220, 0.4);
+                        box-shadow: 0 12px 25px rgba(0,0,0,0.3);
 
                         &::before {
                             left: 100%;
@@ -242,22 +235,21 @@
                 }
 
                 .btn-back {
-                    border: 2px solid #3a9bdc;
+                    border: 2px solid rgba(255, 255, 255, 0.5);
                     background: transparent;
-                    color: #3a9bdc;
+                    color: var(--white);
 
                     &:hover {
-                        background: #3a9bdc;
-                        color: #fff;
+                        background: var(--white);
+                        color: #2181ee;
                         transform: translateY(-3px);
-                        box-shadow: 0 8px 20px rgba(58, 155, 220, 0.3);
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
                     }
                 }
             }
         }
     }
 
-    /* Animações */
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -269,7 +261,6 @@
         }
     }
 
-    /* Responsividade */
     @media (max-width: 768px) {
         .principal-container {
             padding: 80px 20px 60px;
@@ -331,7 +322,6 @@
         }
     }
 
-    /* Acessibilidade */
     @media (prefers-reduced-motion: reduce) {
         * {
             animation-duration: 0.01ms !important;

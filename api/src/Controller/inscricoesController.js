@@ -47,13 +47,14 @@ export async function updateStatusInscricaoController(req, res) {
     const { id } = req.params;
     const { status } = req.body;
     
-    if (!['pendente', 'aprovado', 'recusado'].includes(status)) {
+    // ADICIONE 'cancelado' na lista de status válidos
+    if (!['pendente', 'aprovado', 'recusado', 'cancelado'].includes(status)) {
       return res.status(400).json({ error: 'Status inválido' });
     }
     
-    const inscricao = await inscricaoRepository.updateStatusInscricao(id, status);
+    const inscricao = await inscricaoRepository.updateStatusInscricao(id, status); // ← nome correto
     
-    if (!inscricao) {
+    if (!inscricao) { // ← CORRIGIDO: estava 'insscricao'
       return res.status(404).json({ error: 'Inscrição não encontrada' });
     }
     

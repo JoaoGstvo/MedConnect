@@ -20,7 +20,6 @@ function PostarVaga() {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-        // Limpar feedback quando o usuário começar a digitar
         if (feedback.message) {
             setFeedback({ type: '', message: '' });
         }
@@ -42,35 +41,34 @@ function PostarVaga() {
             return;
         }
 
-        // Preparar body para o backend
-        const body = {
-            titulo: form.titulo.trim(),
-            descricao: form.descricao.trim(),
-            tipo_contrato: form.contrato,
-            requisitos: form.descricao.trim(), // Usando a descrição como requisitos
-            salario: null,
-            area: form.area,
-            modelo: form.modelo,
-            local: form.local,
-            beneficios: form.beneficios || "A combinar",
-            data_limite: form.dataLimite
+        // Para funcionar sem login, vamos usar uma empresa demo (id_empresa = 1)
+        const empresaDemo = {
+            id_empresa: 1
         };
 
-        console.log("Enviando pro backend:", body);
+        // Preparar body para o backend
+        const body = {
+            id_empresa: empresaDemo.id_empresa,
+            titulo: form.titulo.trim(),
+            descricao: form.descricao.trim(),
+            requisitos: form.descricao.trim(), // Usando a descrição como requisitos por enquanto
+            localizacao: form.local,
+            salario: null, // Não temos campo no form, pode adicionar depois
+            modalidade: form.modelo,
+            // status: 'aberta' // Já é default no backend
+        };
 
         try {
-            const res = await fetch("http://localhost:5000/api/vaga", {
+            const res = await fetch("http://localhost:3000/vagas", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
 
             const data = await res.json();
-            console.log("Resposta do backend:", data);
 
             if (res.ok) {
                 showFeedback('success', '🎉 Vaga postada com sucesso!');
-                // Resetar formulário
                 setForm({
                     titulo: "",
                     descricao: "",
@@ -82,7 +80,7 @@ function PostarVaga() {
                     dataLimite: ""
                 });
             } else {
-                showFeedback('error', `❌ Erro ao postar vaga: ${data.msg || 'Tente novamente'}`);
+                showFeedback('error', `❌ Erro ao postar vaga: ${data.error || 'Tente novamente'}`);
             }
         } catch (err) {
             console.error("Erro no fetch:", err);
@@ -105,14 +103,12 @@ function PostarVaga() {
 
             <section className="form-section">
                 <form onSubmit={handleSubmit} className="vaga-form">
-                    {/* Feedback Message */}
                     {feedback.message && (
                         <div className={`form-feedback ${feedback.type}`}>
                             {feedback.message}
                         </div>
                     )}
 
-                    {/* Título da Vaga */}
                     <div className="form-group">
                         <label>Título da vaga</label>
                         <input 
@@ -125,7 +121,6 @@ function PostarVaga() {
                         />
                     </div>
 
-                    {/* Descrição */}
                     <div className="form-group">
                         <label>Descrição da Vaga</label>
                         <textarea 
@@ -137,7 +132,6 @@ function PostarVaga() {
                         ></textarea>
                     </div>
 
-                    {/* Área da Saúde */}
                     <div className="form-group">
                         <label>Área da Saúde</label>
                         <select name="area" value={form.area} onChange={handleChange} required>
@@ -153,7 +147,6 @@ function PostarVaga() {
                         </select>
                     </div>
 
-                    {/* Contrato e Modelo */}
                     <div className="form-inline">
                         <div className="form-group">
                             <label>Tipo de Contrato</label>
@@ -178,7 +171,6 @@ function PostarVaga() {
                         </div>
                     </div>
 
-                    {/* Localidade */}
                     <div className="form-group">
                         <label>Localidade</label>
                         <input 
@@ -191,7 +183,6 @@ function PostarVaga() {
                         />
                     </div>
 
-                    {/* Benefícios */}
                     <div className="form-group">
                         <label>Benefícios</label>
                         <input 
@@ -203,7 +194,6 @@ function PostarVaga() {
                         />
                     </div>
 
-                    {/* Data Limite */}
                     <div className="form-group">
                         <label>📅 Data limite para candidatura</label>
                         <input 
@@ -216,7 +206,6 @@ function PostarVaga() {
                         />
                     </div>
 
-                    {/* Botão de Envio */}
                     <div className="form-actions">
                         <button 
                             type="submit" 

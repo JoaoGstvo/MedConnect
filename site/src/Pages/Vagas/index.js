@@ -1,5 +1,5 @@
 import './index.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import CardVaga from '../../Components/CardVaga';
@@ -11,58 +11,36 @@ function VagasPage() {
         localidade: '',
         tipoContrato: ''
     });
-    const sectionRefs = useRef([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Simulação de busca de vagas
+    // Buscar vagas da API
     useEffect(() => {
-        // Aqui você pode fazer a chamada para a API
         const fetchVagas = async () => {
             try {
-                // const res = await fetch('http://localhost:5000/api/vagas');
-                // const data = await res.json();
-                // setVagas(data || []);
+                setLoading(true);
+                setError(null);
+                console.log('Buscando vagas da API...');
                 
-                // Dados mockados para exemplo
-                setVagas([
-                    { id: 1, titulo: "Enfermeiro Intensivista", empresa: "Hospital Central", local: "São Paulo", tipo: "CLT" },
-                    { id: 2, titulo: "Médico Cardiologista", empresa: "Clínica Saúde", local: "Rio de Janeiro", tipo: "PJ" },
-                    { id: 3, titulo: "Fisioterapeuta", empresa: "Hospital Municipal", local: "Belo Horizonte", tipo: "CLT" },
-                    { id: 4, titulo: "Enfermeiro Pediátrico", empresa: "Hospital Infantil", local: "Curitiba", tipo: "Estágio" },
-                    { id: 5, titulo: "Médico Pediatra", empresa: "Clínica Kids", local: "Porto Alegre", tipo: "PJ" }
-                ]);
-            } catch (err) {
-                console.error("Erro ao buscar vagas:", err);
+                const response = await fetch('http://localhost:5000/api/vagas');
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Vagas carregadas da API:', data);
+                setVagas(data);
+            } catch (error) {
+                console.error('Erro ao buscar vagas:', error);
+                setError('Erro ao carregar vagas. Tente novamente.');
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchVagas();
     }, []);
-
-    // Observer para animações de scroll
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view', 'fade-in');
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        sectionRefs.current.forEach(section => {
-            if (section) observer.observe(section);
-        });
-
-        return () => observer.disconnect();
-    }, []);
-
-    const addToRefs = (el) => {
-        if (el && !sectionRefs.current.includes(el)) {
-            sectionRefs.current.push(el);
-        }
-    };
 
     const handleFiltroChange = (e) => {
         const { name, value } = e.target;
@@ -72,77 +50,121 @@ function VagasPage() {
         }));
     };
 
-    const handleBuscar = () => {
-        // Implementar lógica de filtro aqui
-        console.log('Aplicando filtros:', filtros);
+    // Filtrar vagas localmente
+    const vagasFiltradas = vagas.filter(vaga => {
+        const matchPesquisa = !filtros.pesquisa || 
+            vaga.titulo?.toLowerCase().includes(filtros.pesquisa.toLowerCase()) ||
+            vaga.empresa_nome?.toLowerCase().includes(filtros.pesquisa.toLowerCase());
+        
+        const matchLocalidade = !filtros.localidade || 
+            vaga.localizacao?.toLowerCase().includes(filtros.localidade.toLowerCase());
+        
+        const matchContrato = !filtros.tipoContrato || 
+            vaga.modalidade?.toLowerCase().includes(filtros.tipoContrato.toLowerCase());
+
+        return matchPesquisa && matchLocalidade && matchContrato;
+    });
+
+    const handleLimparFiltros = () => {
+        setFiltros({
+            pesquisa: '',
+            localidade: '',
+            tipoContrato: ''
+        });
     };
 
     return (
         <main className='vagaspage'>
             <Header />
 
-            <section className='principal-container'>
-                <div className='title'>
-                    <h1>Encontre a Oportunidade Ideal na Área da Saúde</h1>
-                    <p>Busque vagas por especialidade, localidade ou tipo de contrato e distribua melhor os profissionais da saúde.</p>
+            {/* Hero Section */}
+            <section className='hero-section'>
+                <div className='hero-content'>
+                    <h1>Encontre Sua Vaga na Área da Saúde</h1>
+                    <p>Conectamos profissionais qualificados às melhores oportunidades</p>
                 </div>
             </section>
 
-            <section className='section' ref={addToRefs}>
-                <div className='title'>
-                    <h1>Filtros de Busca</h1>
-                </div>
-                <div className='filters'>
-                    <input 
-                        type="text" 
-                        name="pesquisa"
-                        placeholder="🔍 Pesquisar por cargo ou especialidade"
-                        value={filtros.pesquisa}
-                        onChange={handleFiltroChange}
-                    />
-                    <input 
-                        type="text" 
-                        name="localidade"
-                        placeholder="📍 Cidade ou região"
-                        value={filtros.localidade}
-                        onChange={handleFiltroChange}
-                    />
-                    <select 
-                        name="tipoContrato"
-                        value={filtros.tipoContrato}
-                        onChange={handleFiltroChange}
-                    >
-                        <option value="">📄 Tipo de Contrato</option>
-                        <option value="CLT">CLT</option>
-                        <option value="PJ">PJ</option>
-                        <option value="Estágio">Estágio</option>
-                        <option value="Temporário">Temporário</option>
-                    </select>
-                    <button onClick={handleBuscar}>
-                        Buscar Vagas
-                    </button>
-                </div>
-            </section>
-
-            <section className='section' ref={addToRefs}>
-                <div className='title'>
-                    <h1>Vagas Disponíveis</h1>
-                </div>
-                <div className='container'>
-                    <div className='wrapper'>
-                        {vagas.length > 0 ? (
-                            vagas.map(vaga => (
-                                <CardVaga 
-                                    key={vaga.id} 
-                                    vaga={vaga}
-                                />
-                            ))
-                        ) : (
-                            <div className="no-vagas">
-                                <p>Nenhuma vaga encontrada</p>
-                            </div>
-                        )}
+            {/* Filtros */}
+            <section className='filters-section'>
+                <div className='filters-container'>
+                    <h2>Buscar Vagas</h2>
+                    <div className='filters-grid'>
+                        <input 
+                            type="text" 
+                            name="pesquisa"
+                            placeholder="🔍 Cargo, especialidade ou empresa"
+                            value={filtros.pesquisa}
+                            onChange={handleFiltroChange}
+                            className='filter-input'
+                        />
+                        <input 
+                            type="text" 
+                            name="localidade"
+                            placeholder="📍 Cidade ou estado"
+                            value={filtros.localidade}
+                            onChange={handleFiltroChange}
+                            className='filter-input'
+                        />
+                        <select 
+                            name="tipoContrato"
+                            value={filtros.tipoContrato}
+                            onChange={handleFiltroChange}
+                            className='filter-select'
+                        >
+                            <option value="">📄 Todos os contratos</option>
+                            <option value="CLT">CLT</option>
+                            <option value="PJ">PJ</option>
+                            <option value="Estágio">Estágio</option>
+                            <option value="Temporário">Temporário</option>
+                        </select>
                     </div>
+                    <div className='filters-actions'>
+                        <button onClick={handleLimparFiltros} className='btn-limpar'>
+                            Limpar Filtros
+                        </button>
+                        <div className='results-count'>
+                            {vagasFiltradas.length} vaga(s) encontrada(s)
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Lista de Vagas */}
+            <section className='vagas-section'>
+                <div className='container'>
+                    <h2 className='section-title'>
+                        Vagas Disponíveis 
+                        <span className='vagas-count'> ({vagasFiltradas.length})</span>
+                    </h2>
+                    
+                    {error && (
+                        <div className="error-message">
+                            <p>{error}</p>
+                        </div>
+                    )}
+                    
+                    {loading ? (
+                        <div className="loading">
+                            <div className="spinner"></div>
+                            <p>Carregando vagas...</p>
+                        </div>
+                    ) : vagasFiltradas.length > 0 ? (
+                        <div className='vagas-grid'>
+                            {vagasFiltradas.map(vaga => (
+                                <CardVaga key={vaga.id_vaga} vaga={vaga} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="no-vagas">
+                            <div className="no-vagas-icon">🔍</div>
+                            <h3>Nenhuma vaga encontrada</h3>
+                            <p>Tente ajustar os filtros de busca ou limpar os filtros</p>
+                            <button onClick={handleLimparFiltros} className='btn-primary'>
+                                Limpar Filtros
+                            </button>
+                        </div>
+                    )}
                 </div>
             </section>
 

@@ -1,0 +1,49 @@
+.vagas-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  h2 {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 30px;
+    font-size: 2rem;
+  }
+}
+
+.vagas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.loading, .error, .no-vagas {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #4a5568;
+}
+
+.error {
+  color: #e53e3e;
+}
+
+.loading {
+  color: #667eea;
+}
+
+@media (max-width: 768px) {
+  .vagas-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .vagas-container {
+    padding: 10px;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+}

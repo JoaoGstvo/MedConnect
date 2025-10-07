@@ -97,9 +97,9 @@
   router.delete("/vagas/:id", deleteVagaController);
 
   // ----------------- INSCRIÇÕES -----------------
-  router.post("/inscricoes", registerInscricaoController);
-  router.get("/inscricoes/vaga/:id_vaga", getInscricoesByVagaController);
-  router.get("/inscricoes/usuario/:id_usuario", getInscricoesByUsuarioController);
-  router.put("/inscricoes/:id/status", updateStatusInscricaoController);
+router.post("/inscricoes", registerInscricaoController);
+router.get("/inscricoes/vaga/:id_vaga", getInscricoesByVagaController);
+router.get("/inscricoes/usuario/:id_usuario", getInscricoesByUsuarioController);
+router.put("/inscricoes/:id/status", updateStatusInscricaoController);
 
   export default router;

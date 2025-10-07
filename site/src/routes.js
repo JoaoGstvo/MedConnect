@@ -31,36 +31,41 @@ export default function Index() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/cardartigo" element={<CardArtigo/>} />
-                <Route path="/inicial" element={<LandingPage1/>} />
-                <Route path="/" element={<LandingPage/>} />
-                <Route path="/cadastro" element={<Signup/>} />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/senha" element={<EsqueceuSenha/>} />
-                <Route path="/perfilempresa" element={<BusnessProfile/>} />
-                <Route path="/perfilprofissional" element={<ProfissionalProfile/>} />
-                <Route path="/artigos" element={<Artigos/>} />
-                <Route path="/novoartigo" element={<NovoArtigoPage/>} />
-                <Route path="/artigopublicado" element={<ArtigoPublicadoPage/>} />
-                <Route path="/empresas" element={<EmpresaPage/>} />
-                <Route path="/vagas" element={<VagasPage/>} />
-                <Route path="/minhasvagas" element={<MinhasVagas/>} />
-                <Route path="/postarvaga" element={<PostarVaga/>} />
-                <Route path="/informacoesvaga" element={<MaisInformacoesPage/>} />
-                <Route path="/inscricaovaga" element={<InscricaoPage/>} />
-                <Route path="/inscricaovagasucesso" element={<InscricaoSucessoPage/>} />
-                <Route path="/dashempresa" element={<DashboardEmpresaPage/>} />
-                <Route path="/dashcandidato" element={<DashboardCandidatoPage/>} />
-                <Route path="/meucurriculo" element={<MeuCurriculo/>} />
-                <Route path="/gerenciamentocandidato" element={<GerenciamentoCandidatosPage/>} />
-                <Route path="/contatoprofissional" element={<ContatoProfissionalPage/>} />
-                <Route path="/mensagemenviadaprofissional" element={<MensagemSucessoPage/>} />
-                <Route path="/faqsite" element={<ContatoPage/>} />
-                <Route path="/hospital" element={<hospital/>} />
-            
+                <Route path="/cardartigo" element={<CardArtigo />} />
+                <Route path="/inicial" element={<LandingPage1 />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/cadastro" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/senha" element={<EsqueceuSenha />} />
+                <Route path="/perfilempresa" element={<BusnessProfile />} />
+                <Route path="/perfilprofissional" element={<ProfissionalProfile />} />
+                <Route path="/artigos" element={<Artigos />} />
+                <Route path="/novoartigo" element={<NovoArtigoPage />} />
+                <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} />
+                <Route path="/empresas" element={<EmpresaPage />} />
+                <Route path="/vagas" element={<VagasPage />} />
+                <Route path="/minhasvagas" element={<MinhasVagas />} />
+                <Route path="/postarvaga" element={<PostarVaga />} />
+                <Route path="/informacoesvaga" element={<MaisInformacoesPage />} />
+                <Route path="/inscricaovaga" element={<InscricaoPage />} />
+                <Route path="/inscricaovagasucesso" element={<InscricaoSucessoPage />} />
+                <Route path="/dashempresa" element={<DashboardEmpresaPage />} />
+                <Route path="/meucurriculo" element={<MeuCurriculo />} />
+                <Route path="/gerenciamentocandidato" element={<GerenciamentoCandidatosPage />} />
+                <Route path="/contatoprofissional" element={<ContatoProfissionalPage />} />
+                <Route path="/mensagemenviadaprofissional" element={<MensagemSucessoPage />} />
+                <Route path="/faqsite" element={<ContatoPage />} />
+                <Route path="/hospital" element={<hospital />} />
+                <Route path="/vagas" element={<VagasPage />} />
+                <Route path="/minhas-vagas" element={<MinhasVagas />} />
+                <Route path="/inscricaovaga/:id" element={<InscricaoPage />} />
+                <Route path="/vaga/:id" element={<MaisInformacoesPage />} />
+                <Route path="/candidato/dashboard" element={<DashboardCandidatoPage />} />
+      
 
 
-                
+
+
             </Routes>
         </BrowserRouter>
     )
