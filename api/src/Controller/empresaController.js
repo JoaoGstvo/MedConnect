@@ -56,7 +56,6 @@ export async function deleteEmpresaController(req, res) {
   }
 }
 
-// empresaController.js - ATUALIZAR a função loginEmpresaController
 export async function loginEmpresaController(req, res) {
   try {
     const { email, senha } = req.body;
@@ -65,10 +64,15 @@ export async function loginEmpresaController(req, res) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Usar a função loginEmpresa do repository que já existe
-    const empresa = await empresaRepository.loginEmpresa(email, senha);
+    // Buscar empresa pelo email primeiro
+    const empresa = await empresaRepository.getEmpresaByEmail(email);
 
     if (!empresa) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Comparação de senha (em texto para demo)
+    if (empresa.senha !== senha) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
@@ -80,6 +84,7 @@ export async function loginEmpresaController(req, res) {
       empresa: empresaWithoutPassword
     });
   } catch (error) {
+    console.error('Erro no loginEmpresaController:', error);
     res.status(500).json({ error: error.message });
   }
 }

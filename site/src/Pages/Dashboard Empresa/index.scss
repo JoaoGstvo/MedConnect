@@ -1,212 +1,1455 @@
+// Usando as variáveis do :root da landing page
 .dashboard-empresa {
   min-height: 100vh;
-  background: #f5f5f5;
+  background-color: var(--background-color);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+
+  // Página de Login
+  &.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: radial-gradient(circle at 20% 80%, rgba(58, 155, 220, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(33, 129, 238, 0.08) 0%, transparent 50%);
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--surface-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-hover);
+      padding: 3rem;
+      max-width: 420px;
+      width: 100%;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+
+      h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+      }
+    }
+
+    .login-form {
+      .input-group {
+        margin-bottom: 1.5rem;
+
+        input {
+          width: 100%;
+          padding: 1rem;
+          border: 2px solid var(--border-color);
+          border-radius: 12px;
+          font-size: 1rem;
+          transition: var(--transition);
+          background: var(--surface-color);
+          color: var(--text-primary);
+
+          &:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+          }
+
+          &::placeholder {
+            color: var(--text-secondary);
+          }
+        }
+      }
+
+      .btn-login {
+        width: 100%;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-button);
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-hover);
+        }
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .demo-credentials {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(58, 155, 220, 0.05);
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+
+        strong {
+          color: var(--primary-dark);
+        }
+      }
+    }
+  }
+
+  // Header do Dashboard
+  .dashboard-header {
+    background: var(--surface-color);
+    box-shadow: var(--shadow);
+    border-bottom: 1px solid var(--border-color);
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .empresa-info {
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 0 0 0.5rem 0;
+      }
+
+      p {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 1.1rem;
+      }
+    }
+
+    .logout-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--surface-color);
+      color: var(--primary-dark);
+      border: 2px solid var(--primary-color);
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+
+      &:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-button);
+      }
+    }
+  }
+
+  // Navegação
+  .dashboard-nav {
+    background: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-tab {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      border-radius: 8px 8px 0 0;
+
+      &.active {
+        color: var(--primary-dark);
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+          border-radius: 3px 3px 0 0;
+        }
+      }
+
+      &:hover:not(.active) {
+        color: var(--primary-color);
+        background: rgba(58, 155, 220, 0.05);
+      }
+    }
+  }
+
+  // Conteúdo Principal
+  .dashboard-main {
+    padding: 2rem;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+
+  // Seções
+  .section {
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+
+      h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 0;
+      }
+    }
+  }
+
+  // Botões
+  .btn-primary {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-button);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    background: var(--surface-color);
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+
+    &:hover:not(:disabled) {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+
+  // Modal
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+  }
+
+  .modal {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-hover);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 2rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+
+      h3 {
+        margin: 0;
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: var(--transition);
+
+        &:hover {
+          color: var(--primary-dark);
+        }
+      }
+    }
+
+    .modal-form {
+      padding: 2rem;
+
+      .form-group {
+        margin-bottom: 1.5rem;
+
+        input, textarea, select {
+          width: 100%;
+          padding: 1rem;
+          border: 2px solid var(--border-color);
+          border-radius: 12px;
+          font-size: 1rem;
+          transition: var(--transition);
+          background: var(--surface-color);
+          color: var(--text-primary);
+
+          &:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+          }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  // Grid de Vagas
+  .vagas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .vaga-card {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    position: relative;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .vaga-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        color: var(--primary-dark);
+        font-size: 1.3rem;
+        flex: 1;
+        margin-right: 1rem;
+      }
+    }
+
+    .vaga-descricao {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .vaga-detalhes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .detalhe {
+      background: rgba(58, 155, 220, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    .vaga-footer {
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      
+      .vaga-data {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // Lista de Candidaturas
+  .candidaturas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .candidatura-card {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .candidato-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .candidato-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 1.2rem;
+      }
+
+      .candidato-detalhes {
+        h4 {
+          margin: 0 0 0.25rem 0;
+          color: var(--primary-dark);
+        }
+
+        p {
+          margin: 0 0 0.5rem 0;
+          color: var(--text-secondary);
+        }
+      }
+    }
+
+    .status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.status-pendente {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      &.status-aprovado {
+        background: #d1edff;
+        color: #004085;
+      }
+
+      &.status-recusado {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      &.status-cancelado {
+        background: #e2e3e5;
+        color: #383d41;
+      }
+    }
+
+    .status-select {
+      padding: 0.5rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--surface-color);
+      color: var(--text-primary);
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  // Perfil da Empresa
+  .empresa-profile {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      .empresa-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+      }
+
+      .empresa-titulo {
+        h3 {
+          margin: 0 0 0.5rem 0;
+          color: var(--primary-dark);
+          font-size: 1.8rem;
+        }
+
+        p {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .profile-detalhes {
+      display: grid;
+      gap: 1rem;
+
+      .detalhe-item {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(58, 155, 220, 0.05);
+        border-radius: 8px;
+
+        strong {
+          color: var(--primary-dark);
+          font-weight: 600;
+        }
+
+        span {
+          color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
+
+  // Estados Vazios
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    h3 {
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+  }
+
+  // Mensagens de Erro e Loading
+  .error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #f5c6cb;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+  }
 }
 
-.login-empresa {
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+// Responsividade
+@media (max-width: 768px) {
+  .dashboard-empresa {
+    .dashboard-header .header-content {
+      padding: 1rem;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .dashboard-nav .nav-container {
+      padding: 0 1rem;
+      overflow-x: auto;
+    }
+
+    .dashboard-main {
+      padding: 1rem;
+    }
+
+    .section .section-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .vagas-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .candidatura-card {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .empresa-profile .profile-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
 }
 
-.login-empresa form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+// ... (mantenha todo o CSS anterior e adicione estas novas classes)
 
-.login-empresa input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.login-empresa button {
-  padding: 12px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.demo-credentials {
-  margin-top: 20px;
-  padding: 15px;
-  background: #e9f7fe;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.dashboard-header {
-  background: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.empresa-info h1 {
-  margin: 0;
-  color: #333;
-}
-
-.logout-btn {
-  padding: 8px 16px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.dashboard-nav {
-  background: white;
-  padding: 0 20px;
-  display: flex;
-  gap: 20px;
-  border-bottom: 1px solid #ddd;
-}
-
-.dashboard-nav button {
-  padding: 15px 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-}
-
-.dashboard-nav button.active {
-  border-bottom-color: #007bff;
-  color: #007bff;
-}
-
-.dashboard-content {
-  padding: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.btn-primary {
-  padding: 12px 24px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-secondary {
-  padding: 8px 16px;
-  background: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-}
-
-.modal form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.modal input, .modal textarea, .modal select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.vagas-list {
+// Estatísticas
+.stats-grid {
   display: grid;
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.vaga-card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.vaga-info {
+.stat-card {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
   display: flex;
-  gap: 15px;
-  margin: 10px 0;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+  }
+
+  .stat-info {
+    h3 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    p {
+      margin: 0.25rem 0 0 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+  }
 }
 
-.vaga-info span {
-  background: #f8f9fa;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 14px;
+// Filtros de Candidaturas
+.candidaturas-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: var(--surface-color);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+    }
+
+    select {
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--surface-color);
+      color: var(--text-primary);
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+    }
+  }
 }
 
-.candidatura-card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 15px;
+// Ações da Seção
+.section-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+// Status das Vagas
+.vaga-status {
+  .status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.status-aberta {
+      background: #d1edff;
+      color: #004085;
+    }
+
+    &.status-fechada {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+  }
+}
+
+// Footer da Vaga
+.vaga-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .vaga-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .vaga-data {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .vaga-candidaturas {
+      color: var(--primary-dark);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+
+  .vaga-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .btn-edit {
+      padding: 0.5rem 1rem;
+      background: #ffc107;
+      color: #212529;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+
+      &:hover {
+        background: #e0a800;
+        transform: translateY(-1px);
+      }
+    }
+
+    .btn-delete {
+      padding: 0.5rem 1rem;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+
+      &:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+    }
+  }
 }
 
-.status {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: bold;
+// Meta da Candidatura
+.candidatura-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+
+  .vaga-titulo {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+  }
+
+  .candidatura-data {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
 }
 
-.status.pendente { background: #fff3cd; color: #856404; }
-.status.aprovado { background: #d1edff; color: #004085; }
-.status.recusado { background: #f8d7da; color: #721c24; }
-
-.empresa-profile {
-  background: white;
-  padding: 30px;
+// Status Select com cores
+.status-select {
+  padding: 0.5rem;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--surface-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+
+  &.status-pendente {
+    border-color: #fff3cd;
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.status-aprovado {
+    border-color: #d1edff;
+    background: #d1edff;
+    color: #004085;
+  }
+
+  &.status-recusado {
+    border-color: #f8d7da;
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  &.status-cancelado {
+    border-color: #e2e3e5;
+    background: #e2e3e5;
+    color: #383d41;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Ações da Candidatura
+.candidatura-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+// Item de detalhe full width
+.detalhe-item.full-width {
+  grid-column: 1 / -1;
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candidaturas-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .vaga-footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .vaga-actions {
+      justify-content: center;
+    }
+  }
+
+  .candidatura-card {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+
+    .candidatura-actions {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+// ... (mantenha todo o CSS anterior e adicione estas novas classes)
+
+// Modal Grande
+.modal-large {
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+
+  .modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 2rem;
+  }
+}
+
+// Conteúdo do Currículo
+.curriculo-content {
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--primary-color);
+  }
+
+  .curriculo-detalhes {
+    padding: 1rem 0;
+  }
+}
+
+.curriculo-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+
+  h4 {
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), transparent);
+      margin-left: 1rem;
+    }
+  }
+}
+
+.curriculo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: rgba(58, 155, 220, 0.05);
+    border-radius: 8px;
+
+    strong {
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    span {
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+  }
+}
+
+.text-content {
+  line-height: 1.6;
+  color: var(--text-primary);
+
+  p {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(58, 155, 220, 0.03);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+  }
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .skill-tag {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+  }
+}
+
+.empty-curriculo {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+
+  p {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+// Responsividade para o modal de currículo
+@media (max-width: 768px) {
+  .modal-large {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+
+    .modal-content {
+      padding: 0 1rem;
+    }
+  }
+
+  .curriculo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .curriculo-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    h4 {
+      font-size: 1.1rem;
+    }
+  }
+
+  .skills-grid {
+    justify-content: center;
+  }
+}
+
+// Melhorias visuais para o botão de currículo
+.candidatura-actions {
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+}
+
+// ... (mantenha todo o CSS anterior e adicione estas novas classes)
+
+// Formulário de Edição do Perfil
+.perfil-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--surface-color);
+      color: var(--text-primary);
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+      }
+
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Upload de Logo
+.logo-upload-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.logo-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  border: 2px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface-color);
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.logo-placeholder {
+  text-align: center;
+  color: var(--text-secondary);
+  
+  span {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+.upload-controls {
+  flex: 1;
+
+  .file-input {
+    display: none;
+  }
+
+  .btn-upload {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--surface-color);
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+
+    &:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .upload-hint {
+    margin: 0.5rem 0 0 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+}
+
+// Logo da Empresa no Perfil
+.logo-empresa {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.empresa-avatar-inicial {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 2.5rem;
+}
+
+// Ações do Formulário
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+// Melhorias no Profile Header para incluir logo
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  .empresa-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid var(--border-color);
+  }
+
+  .empresa-titulo {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--primary-dark);
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+
+    .empresa-avatar {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+// Estados de Loading para Upload
+.uploading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+// Mensagens de sucesso (opcional)
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border: 1px solid #c3e6cb;
+}
+
+// Adicione este CSS para o select de estados
+.perfil-form {
+  .form-group {
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--surface-color);
+      color: var(--text-primary);
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+      }
+    }
+  }
+}
+
+// Ajuste para mostrar todos os detalhes do perfil em grid
+.profile-detalhes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+
+  .detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem;
+    background: rgba(58, 155, 220, 0.05);
+    border-radius: 8px;
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    strong {
+      color: var(--primary-dark);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    span {
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    
+    .detalhe-item.full-width {
+      grid-column: 1;
+    }
+  }
 }
