@@ -75,6 +75,7 @@ router.post("/curriculos/salvar", createCurriculoController);
   router.post("/empresas", createEmpresaController);
   router.put("/empresas/:id", updateEmpresaController);
   router.delete("/empresas/:id", deleteEmpresaController);
+  router.post("/empresas/login", loginEmpresaController);
 
   // ----------------- CATEGORIAS -----------------
   router.get("/categorias", getCategoriasController);

@@ -86,7 +86,7 @@ export async function getInscricoesByUsuario(id_usuario) {
                 v.modalidade as vaga_modalidade,
                 v.salario as vaga_salario,
                 e.nome as empresa_nome,
-                e.logo as empresa_logo
+                e.logo_url as empresa_logo
             FROM vaga_candidaturas vc
             JOIN vagas v ON vc.id_vaga = v.id_vaga
             JOIN empresas e ON v.id_empresa = e.id_empresa
