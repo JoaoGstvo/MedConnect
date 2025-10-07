@@ -7,7 +7,10 @@ import router from './routes.js';
 const server = express();
 
 server.use(cors());
+server.use(express.json())
+
 server.use(express.json());
+server.use(express.urlencoded({ extended: true }));;
 
 
 // Todas as rotas da API vêm do routes.js

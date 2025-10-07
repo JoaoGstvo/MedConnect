@@ -64,9 +64,10 @@
   router.put("/profissionais/:id", updateProfissionalController);
 
   // ----------------- CURRÍCULOS -----------------
-  router.post("/curriculos", createCurriculoController);
-  router.get("/curriculos/usuario/:id_usuario", getCurriculoByUsuarioController);
-  router.put("/curriculos/:id_curriculo", updateCurriculoController);
+router.post("/curriculos", createCurriculoController);
+router.get("/curriculos/usuario/:id_usuario", getCurriculoByUsuarioController);
+router.put("/curriculos/:id_curriculo", updateCurriculoController);
+router.post("/curriculos/salvar", createCurriculoController);
 
   // ----------------- EMPRESAS -----------------
   router.get("/empresas", getEmpresasController);

@@ -8,40 +8,46 @@ function InscricaoPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [vaga, setVaga] = useState(null);
+    const [curriculo, setCurriculo] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [formData, setFormData] = useState({
-        nome: 'Usuário Demo',
-        email: 'demo@saude.com',
-        telefone: '',
-        curriculo: null,
-        mensagem: ''
-    });
     const [enviando, setEnviando] = useState(false);
+    const [etapa, setEtapa] = useState(1); // 1: Revisão, 2: Confirmação
+    const [usarCurriculoSalvo, setUsarCurriculoSalvo] = useState(true);
+    const [curriculoPDF, setCurriculoPDF] = useState(null);
 
     useEffect(() => {
-        const fetchVaga = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/vagas/${id}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setVaga(data);
+                // Buscar vaga
+                const responseVaga = await fetch(`http://localhost:5000/api/vagas/${id}`);
+                if (responseVaga.ok) {
+                    const dataVaga = await responseVaga.json();
+                    setVaga(dataVaga);
+                }
+
+                // Buscar currículo do usuário
+                const responseCurriculo = await fetch(`http://localhost:5000/api/curriculos/usuario/1`);
+                if (responseCurriculo.ok) {
+                    const dataCurriculo = await responseCurriculo.json();
+                    setCurriculo(dataCurriculo);
                 }
             } catch (error) {
-                console.error('Erro ao buscar vaga:', error);
+                console.error('Erro ao buscar dados:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchVaga();
+        fetchData();
     }, [id]);
 
-    const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: files ? files[0] : value
-        }));
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === 'application/pdf') {
+            setCurriculoPDF(file);
+        } else {
+            alert('Por favor, selecione um arquivo PDF.');
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -49,13 +55,33 @@ function InscricaoPage() {
         setEnviando(true);
 
         try {
-            // Primeiro faz a inscrição na vaga
+            let curriculoPdfUrl = null;
+
+            // Se o usuário enviou um novo PDF, faz o upload
+            if (curriculoPDF) {
+                const formData = new FormData();
+                formData.append('curriculo_pdf', curriculoPDF);
+                formData.append('id_usuario', 1);
+
+                const uploadResponse = await fetch('http://localhost:5000/api/curriculos/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadResult = await uploadResponse.json();
+                    curriculoPdfUrl = uploadResult.arquivo_url;
+                }
+            }
+
+            // Fazer a inscrição
             const inscricaoResponse = await fetch('http://localhost:5000/api/inscricoes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     id_vaga: parseInt(id),
-                    id_usuario: 1 // Usuário demo
+                    id_usuario: 1,
+                    usar_curriculo_salvo: usarCurriculoSalvo
                 })
             });
 
@@ -63,8 +89,18 @@ function InscricaoPage() {
                 const error = await inscricaoResponse.json();
                 throw new Error(error.error || 'Erro ao realizar inscrição');
             }
+
+            const resultado = await inscricaoResponse.json();
             
-            alert('🎉 Inscrição realizada com sucesso!');
+            let mensagemSucesso = '🎉 Inscrição realizada com sucesso!';
+            if (resultado.dados_curriculo_incluidos) {
+                mensagemSucesso += '\n📄 Seus dados do currículo foram incluídos automaticamente!';
+            }
+            if (curriculoPdfUrl) {
+                mensagemSucesso += '\n📎 Currículo em PDF anexado com sucesso!';
+            }
+
+            alert(mensagemSucesso);
             navigate('/minhas-vagas');
             
         } catch (error) {
@@ -75,6 +111,14 @@ function InscricaoPage() {
         }
     };
 
+    const avancarEtapa = () => {
+        setEtapa(2);
+    };
+
+    const voltarEtapa = () => {
+        setEtapa(1);
+    };
+
     if (loading) return <div className="loading-page">Carregando...</div>;
     if (!vaga) return <div className="error-page">Vaga não encontrada</div>;
 
@@ -82,89 +126,305 @@ function InscricaoPage() {
         <main className='inscricaopage'>
             <Header />
 
-            <section className='principal-container'>
-                <div className='title'>
-                    <h1>Inscreva-se na Vaga</h1>
-                    <p>Preencha seus dados para se candidatar à oportunidade</p>
+            {/* Cabeçalho */}
+            <section className='hero-section'>
+                <div className='container'>
+                    <div className='hero-content'>
+                        <h1>Inscreva-se na Vaga</h1>
+                        <p>Revise seus dados e confirme sua candidatura</p>
+                        
+                        {/* Progresso */}
+                        <div className='progress-steps'>
+                            <div className={`step ${etapa >= 1 ? 'active' : ''}`}>
+                                <div className='step-number'>1</div>
+                                <span>Revisar Dados</span>
+                            </div>
+                            <div className='step-line'></div>
+                            <div className={`step ${etapa >= 2 ? 'active' : ''}`}>
+                                <div className='step-number'>2</div>
+                                <span>Confirmar</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <section className='section'>
-                <div className='vaga-info'>
-                    <h2>{vaga.titulo}</h2>
-                    <p><strong>Empresa:</strong> {vaga.empresa_nome}</p>
-                    <p><strong>Local:</strong> {vaga.localizacao}</p>
-                    <p><strong>Modalidade:</strong> {vaga.modalidade}</p>
+                <div className='container'>
+                    <div className='inscricao-grid'>
+                        {/* Coluna da Esquerda - Informações da Vaga */}
+                        <div className='vaga-sidebar'>
+                            <div className='vaga-card'>
+                                <h3>📋 Detalhes da Vaga</h3>
+                                <div className='vaga-info'>
+                                    <h2>{vaga.titulo}</h2>
+                                    <p className='empresa'>{vaga.empresa_nome}</p>
+                                    
+                                    <div className='vaga-details'>
+                                        <div className='detail-item'>
+                                            <span className='icon'>📍</span>
+                                            <span>{vaga.localizacao}</span>
+                                        </div>
+                                        <div className='detail-item'>
+                                            <span className='icon'>💼</span>
+                                            <span>{vaga.modalidade}</span>
+                                        </div>
+                                        {vaga.salario && (
+                                            <div className='detail-item'>
+                                                <span className='icon'>💰</span>
+                                                <span>{vaga.salario}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {vaga.descricao && (
+                                        <div className='vaga-descricao'>
+                                            <h4>Sobre a vaga:</h4>
+                                            <p>{vaga.descricao}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Coluna da Direita - Formulário */}
+                        <div className='form-container'>
+                            {etapa === 1 ? (
+                                /* ETAPA 1: REVISÃO DE DADOS */
+                                <div className='etapa-revisao'>
+                                    <h2>📄 Seus Dados de Candidatura</h2>
+                                    <p className='subtitulo'>
+                                        Revise as informações que serão enviadas para a empresa
+                                    </p>
+
+                                    {/* Opção de usar currículo salvo */}
+                                    <div className='opcao-curriculo'>
+                                        <label className='checkbox-container'>
+                                            <input
+                                                type="checkbox"
+                                                checked={usarCurriculoSalvo}
+                                                onChange={(e) => setUsarCurriculoSalvo(e.target.checked)}
+                                            />
+                                            <span className='checkmark'></span>
+                                            Usar dados do meu currículo salvo
+                                        </label>
+                                        <small>
+                                            {usarCurriculoSalvo 
+                                                ? 'Seus dados do currículo serão enviados automaticamente'
+                                                : 'Apenas informações básicas serão enviadas'
+                                            }
+                                        </small>
+                                    </div>
+
+                                    {/* Dados do Currículo (se disponível e selecionado) */}
+                                    {usarCurriculoSalvo && curriculo && (
+                                        <div className='dados-curriculo'>
+                                            <h3>📋 Dados do seu Currículo</h3>
+                                            
+                                            <div className='info-grid'>
+                                                <div className='info-group'>
+                                                    <label>Nome Completo</label>
+                                                    <div className='info-value'>{curriculo.nome_completo || 'Não informado'}</div>
+                                                </div>
+                                                
+                                                <div className='info-group'>
+                                                    <label>E-mail</label>
+                                                    <div className='info-value'>{curriculo.email || 'Não informado'}</div>
+                                                </div>
+                                                
+                                                <div className='info-group'>
+                                                    <label>Telefone</label>
+                                                    <div className='info-value'>{curriculo.telefone || 'Não informado'}</div>
+                                                </div>
+                                                
+                                                <div className='info-group'>
+                                                    <label>Cidade</label>
+                                                    <div className='info-value'>{curriculo.cidade || 'Não informado'}</div>
+                                                </div>
+
+                                                {curriculo.objetivo && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Objetivo Profissional</label>
+                                                        <div className='info-value'>{curriculo.objetivo}</div>
+                                                    </div>
+                                                )}
+
+                                                {curriculo.resumo && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Resumo Profissional</label>
+                                                        <div className='info-value'>{curriculo.resumo}</div>
+                                                    </div>
+                                                )}
+
+                                                {curriculo.formacao && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Formação Acadêmica</label>
+                                                        <div className='info-value'>{curriculo.formacao}</div>
+                                                    </div>
+                                                )}
+
+                                                {curriculo.experiencia && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Experiência Profissional</label>
+                                                        <div className='info-value'>{curriculo.experiencia}</div>
+                                                    </div>
+                                                )}
+
+                                                {curriculo.habilidades && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Habilidades</label>
+                                                        <div className='info-value'>{curriculo.habilidades}</div>
+                                                    </div>
+                                                )}
+
+                                                {curriculo.idiomas && (
+                                                    <div className='info-group full-width'>
+                                                        <label>Idiomas</label>
+                                                        <div className='info-value'>{curriculo.idiomas}</div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className='editar-curriculo'>
+                                                <a href="/meucurriculo" className='btn-link'>
+                                                     Editar meu currículo
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Upload de PDF adicional */}
+                                    <div className='upload-section'>
+                                        <h3>📎 Anexar Currículo em PDF (Opcional)</h3>
+                                        <p>
+                                            Você pode enviar um currículo em PDF para complementar sua candidatura. 
+                                            Este arquivo será enviado junto com seus dados.
+                                        </p>
+                                        
+                                        <div className='upload-area'>
+                                            {curriculoPDF ? (
+                                                <div className='file-selected'>
+                                                    <div className='file-info'>
+                                                        <span className='file-icon'>📄</span>
+                                                        <div className='file-details'>
+                                                            <strong>{curriculoPDF.name}</strong>
+                                                            <span>{(curriculoPDF.size / 1024 / 1024).toFixed(2)} MB</span>
+                                                        </div>
+                                                    </div>
+                                                    <button 
+                                                        type='button' 
+                                                        className='btn-remove'
+                                                        onClick={() => setCurriculoPDF(null)}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className='upload-placeholder'>
+                                                    <input
+                                                        type="file"
+                                                        id="curriculoPDF"
+                                                        accept=".pdf"
+                                                        onChange={handleFileChange}
+                                                        className='file-input'
+                                                    />
+                                                    <label htmlFor="curriculoPDF" className='upload-label'>
+                                                        <div className='upload-icon'>📤</div>
+                                                        <div className='upload-text'>
+                                                            <strong>Clique para selecionar um arquivo PDF</strong>
+                                                            <span>ou arraste e solte aqui</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <small>Tamanho máximo: 5MB • Formato: PDF</small>
+                                    </div>
+
+                                    {/* Ações */}
+                                    <div className='actions'>
+                                        <button 
+                                            type="button" 
+                                            className='btn-secondary'
+                                            onClick={() => navigate(-1)}
+                                        >
+                                            ← Voltar
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className='btn-primary'
+                                            onClick={avancarEtapa}
+                                        >
+                                            Continuar para Confirmação →
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                /* ETAPA 2: CONFIRMAÇÃO */
+                                <div className='etapa-confirmacao'>
+                                    <h2>✅ Confirmar Candidatura</h2>
+                                    <p className='subtitulo'>
+                                        Revise todas as informações antes de confirmar sua inscrição
+                                    </p>
+
+                                    <div className='resumo-candidatura'>
+                                        <div className='resumo-item'>
+                                            <strong>Vaga:</strong> {vaga.titulo}
+                                        </div>
+                                        <div className='resumo-item'>
+                                            <strong>Empresa:</strong> {vaga.empresa_nome}
+                                        </div>
+                                        <div className='resumo-item'>
+                                            <strong>Dados enviados:</strong> 
+                                            {usarCurriculoSalvo && curriculo 
+                                                ? ' Currículo completo + informações básicas'
+                                                : ' Apenas informações básicas'
+                                            }
+                                        </div>
+                                        {curriculoPDF && (
+                                            <div className='resumo-item'>
+                                                <strong>Arquivo anexado:</strong> {curriculoPDF.name}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className='confirmacao-aviso'>
+                                        <div className='aviso-icon'>💡</div>
+                                        <div className='aviso-text'>
+                                            <strong>Importante:</strong> Após a confirmação, sua candidatura será enviada 
+                                            e você poderá acompanhar o status na página "Minhas Candidaturas".
+                                        </div>
+                                    </div>
+
+                                    <div className='actions'>
+                                        <button 
+                                            type="button" 
+                                            className='btn-secondary'
+                                            onClick={voltarEtapa}
+                                        >
+                                            ← Voltar para Revisão
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className='btn-primary'
+                                            onClick={handleSubmit}
+                                            disabled={enviando}
+                                        >
+                                            {enviando ? (
+                                                <>
+                                                    <div className='spinner'></div>
+                                                    Enviando...
+                                                </>
+                                            ) : (
+                                                '✅ Confirmar e Enviar Candidatura'
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
-
-                <form className='form-container' onSubmit={handleSubmit}>
-                    <div className='form-group'>
-                        <label>Nome Completo *</label>
-                        <input 
-                            type="text" 
-                            name="nome"
-                            value={formData.nome}
-                            onChange={handleInputChange}
-                            required 
-                            disabled
-                        />
-                        <small>Usuário demo - em produção será automático</small>
-                    </div>
-
-                    <div className='form-group'>
-                        <label>E-mail *</label>
-                        <input 
-                            type="email" 
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required 
-                            disabled
-                        />
-                    </div>
-
-                    <div className='form-group'>
-                        <label>Telefone</label>
-                        <input 
-                            type="tel" 
-                            name="telefone"
-                            placeholder="(11) 99999-9999"
-                            value={formData.telefone}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-
-                    <div className='form-group'>
-                        <label>Currículo (PDF)</label>
-                        <input 
-                            type="file" 
-                            name="curriculo"
-                            accept=".pdf" 
-                            onChange={handleInputChange}
-                        />
-                        <small>Opcional para demonstração</small>
-                    </div>
-
-                    <div className='form-group'>
-                        <label>Mensagem para o recrutador</label>
-                        <textarea 
-                            name="mensagem"
-                            placeholder="Conte um pouco sobre sua experiência e por que você é a pessoa ideal para esta vaga..."
-                            rows="4"
-                            value={formData.mensagem}
-                            onChange={handleInputChange}
-                        ></textarea>
-                    </div>
-
-                    <div className='actions'>
-                        <button type="submit" className='btn-submit' disabled={enviando}>
-                            {enviando ? 'Enviando...' : '✅ Confirmar Inscrição'}
-                        </button>
-                        <button type="button" className='btn-back' onClick={() => navigate(-1)}>
-                            ← Voltar
-                        </button>
-                    </div>
-                </form>
             </section>
 
             <Footer />

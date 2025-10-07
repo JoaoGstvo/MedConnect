@@ -60,7 +60,8 @@ export default function Index() {
                 <Route path="/minhas-vagas" element={<MinhasVagas />} />
                 <Route path="/inscricaovaga/:id" element={<InscricaoPage />} />
                 <Route path="/vaga/:id" element={<MaisInformacoesPage />} />
-                <Route path="/candidato/dashboard" element={<DashboardCandidatoPage />} />
+                <Route path="/candidato" element={<DashboardCandidatoPage />} />
+                
       
 
 
