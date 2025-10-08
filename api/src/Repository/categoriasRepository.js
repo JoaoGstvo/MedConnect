@@ -1,3 +1,4 @@
+// Repository/categoriasRepository.js
 import pool from "../connection.js";
 
 export async function createCategoria(nome) {
@@ -11,7 +12,13 @@ export async function createCategoria(nome) {
 }
 
 export async function getCategorias() {
-  const query = `SELECT * FROM artigos_categorias`;
+  const query = `
+    SELECT 
+      id_categoria,
+      nome
+    FROM artigos_categorias 
+    ORDER BY nome
+  `;
   const result = await pool.query(query);
   return result.rows;
 }
@@ -23,7 +30,12 @@ export async function getCategoriaById(id) {
 }
 
 export async function updateCategoria(id, nome) {
-  const query = `UPDATE artigos_categorias SET nome = $1 WHERE id_categoria = $2 RETURNING *`;
+  const query = `
+    UPDATE artigos_categorias 
+    SET nome = $1 
+    WHERE id_categoria = $2 
+    RETURNING *
+  `;
   const result = await pool.query(query, [nome, id]);
   return result.rows[0];
 }

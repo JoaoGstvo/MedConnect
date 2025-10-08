@@ -1,20 +1,57 @@
+// Controller/artigosController.js
 import * as artigosRepository from '../Repository/artigosRepository.js';
 
 export async function createArtigoController(req, res) {
   try {
     const { id_usuario, id_categoria, titulo, resumo, conteudo, imagem } = req.body;
-    const artigo = await artigosRepository.createArtigo(id_usuario, id_categoria, titulo, resumo, conteudo, imagem);
-    res.status(201).json(artigo);
+    
+    // Validação dos campos obrigatórios
+    if (!id_usuario || !id_categoria || !titulo || !conteudo) {
+      return res.status(400).json({ 
+        error: 'Campos obrigatórios: id_usuario, id_categoria, titulo e conteudo' 
+      });
+    }
+
+    const artigo = await artigosRepository.createArtigo(
+      id_usuario, 
+      id_categoria, 
+      titulo, 
+      resumo, 
+      conteudo, 
+      imagem
+    );
+    
+    res.status(201).json({
+      message: 'Artigo criado com sucesso',
+      artigo: {
+        id: artigo.id_artigo,
+        titulo: artigo.titulo,
+        resumo: artigo.resumo,
+        conteudo: artigo.conteudo,
+        imagem: artigo.imagem,
+        data_publicacao: artigo.data_publicacao
+      }
+    });
   } catch (error) {
+    console.error('Erro no createArtigoController:', error);
     res.status(500).json({ error: error.message });
   }
 }
 
 export async function getArtigosController(req, res) {
   try {
-    const artigos = await artigosRepository.getArtigos();
+    const { categoria } = req.query;
+    
+    let artigos;
+    if (categoria && categoria !== 'todos') {
+      artigos = await artigosRepository.getArtigosByCategoria(categoria);
+    } else {
+      artigos = await artigosRepository.getArtigos();
+    }
+    
     res.json(artigos);
   } catch (error) {
+    console.error('Erro no getArtigosController:', error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -30,6 +67,7 @@ export async function getArtigoByIdController(req, res) {
     
     res.json(artigo);
   } catch (error) {
+    console.error('Erro no getArtigoByIdController:', error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -40,8 +78,12 @@ export async function updateArtigoController(req, res) {
     const updates = req.body;
     
     const artigo = await artigosRepository.updateArtigo(id, updates);
-    res.json(artigo);
+    res.json({
+      message: 'Artigo atualizado com sucesso',
+      artigo
+    });
   } catch (error) {
+    console.error('Erro no updateArtigoController:', error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -52,6 +94,7 @@ export async function deleteArtigoController(req, res) {
     await artigosRepository.deleteArtigo(id);
     res.status(204).send();
   } catch (error) {
+    console.error('Erro no deleteArtigoController:', error);
     res.status(500).json({ error: error.message });
   }
 }
