@@ -24,12 +24,49 @@ export async function getEmpresaByIdController(req, res) {
   }
 }
 
+// ADICIONAR: Esta função estava faltando
 export async function createEmpresaController(req, res) {
   try {
-    const { nome, cnpj, email, senha, endereco, logo, descricao } = req.body;
-    const empresa = await empresaRepository.createEmpresa(nome, cnpj, email, senha, endereco, logo, descricao);
+    const { 
+      nome, 
+      cnpj, 
+      email, 
+      senha, 
+      endereco, 
+      logo_url, 
+      descricao, 
+      telefone, 
+      cidade, 
+      estado 
+    } = req.body;
+
+    // Validação básica
+    if (!nome || !cnpj || !email || !senha) {
+      return res.status(400).json({ error: 'Nome, CNPJ, email e senha são obrigatórios' });
+    }
+
+    // Verificar se email já existe
+    const empresaExistente = await empresaRepository.getEmpresaByEmail(email);
+    if (empresaExistente) {
+      return res.status(400).json({ error: 'Email já cadastrado' });
+    }
+
+    const empresa = await empresaRepository.createEmpresa(
+      nome, 
+      cnpj, 
+      email, 
+      senha, 
+      endereco, 
+      logo_url, 
+      descricao, 
+      telefone, 
+      cidade, 
+      estado
+    );
+    
     res.status(201).json(empresa);
   } catch (error) {
+    console.error('Erro no createEmpresaController:', error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -42,6 +79,7 @@ export async function updateEmpresaController(req, res) {
     const empresa = await empresaRepository.updateEmpresa(id, updates);
     res.json(empresa);
   } catch (error) {
+    console.error('Erro no updateEmpresaController:', error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -64,24 +102,15 @@ export async function loginEmpresaController(req, res) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Buscar empresa pelo email primeiro
-    const empresa = await empresaRepository.getEmpresaByEmail(email);
+    const empresa = await empresaRepository.loginEmpresa(email, senha);
 
     if (!empresa) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
-    // Comparação de senha (em texto para demo)
-    if (empresa.senha !== senha) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
-    }
-
-    // Remove a senha do objeto de retorno
-    const { senha: _, ...empresaWithoutPassword } = empresa;
-
     res.json({
       message: 'Login realizado com sucesso',
-      empresa: empresaWithoutPassword
+      empresa
     });
   } catch (error) {
     console.error('Erro no loginEmpresaController:', error);

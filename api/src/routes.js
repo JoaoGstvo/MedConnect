@@ -100,7 +100,10 @@ router.get("/vagas/:id", getVagaByIdController);
 router.post("/vagas", createVagaController);
 router.put("/vagas/:id", updateVagaController);
 router.delete("/vagas/:id", deleteVagaController);
-router.get("/vagas/empresa/:id_empresa", getVagasByEmpresaController); 
+router.get("/vagas/empresa/:id_empresa", getVagasByEmpresaController);
+router.get("/vagas/salvas/:id_usuario", getVagasSalvasController);
+router.post("/vagas/salvar", salvarVagaController);
+router.post("/vagas/remover-salva", removerVagaSalvaController);
 
 // ----------------- INSCRIÇÕES -----------------
 router.post("/inscricoes", registerInscricaoController);

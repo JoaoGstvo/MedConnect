@@ -16,7 +16,6 @@ export async function createVaga(id_empresa, titulo, descricao, requisitos, loca
   }
 }
 
-// vagaRepository.js - Atualizar as queries que retornam dados da empresa
 export async function getVagas() {
   try {
     const query = `
@@ -105,20 +104,109 @@ export async function deleteVaga(id) {
   }
 }
 
-
-export async function getVagasByEmpresa(id_empresa) {
+// Funções de busca e vagas salvas (se você as tiver adicionado anteriormente)
+export async function searchVagas(filters) {
   try {
-    const query = `
-      SELECT v.*, e.nome as empresa_nome, e.logo_url as empresa_logo
+    let query = `
+      SELECT v.*, e.nome as empresa_nome, e.logo_url as empresa_logo, e.descricao as empresa_descricao
       FROM vagas v 
       JOIN empresas e ON v.id_empresa = e.id_empresa 
-      WHERE v.id_empresa = $1
-      ORDER BY v.data_publicacao DESC
+      WHERE v.status = 'aberta'
     `;
-    const result = await pool.query(query, [id_empresa]);
+    
+    const values = [];
+    let paramCount = 0;
+
+    // Filtro por palavra-chave no título ou descrição
+    if (filters.palavraChave) {
+      paramCount++;
+      query += ` AND (v.titulo ILIKE $${paramCount} OR v.descricao ILIKE $${paramCount} OR v.requisitos ILIKE $${paramCount})`;
+      values.push(`%${filters.palavraChave}%`);
+    }
+
+    // Filtro por localização
+    if (filters.localizacao) {
+      paramCount++;
+      query += ` AND v.localizacao ILIKE $${paramCount}`;
+      values.push(`%${filters.localizacao}%`);
+    }
+
+    // Filtro por modalidade
+    if (filters.modalidade && filters.modalidade !== 'todas') {
+      paramCount++;
+      query += ` AND v.modalidade = $${paramCount}`;
+      values.push(filters.modalidade);
+    }
+
+    // Filtro por salário mínimo
+    if (filters.salarioMin) {
+      paramCount++;
+      // Extrai números do salário para comparação
+      query += ` AND REPLACE(REPLACE(v.salario, 'R$', ''), '.', '')::numeric >= $${paramCount}`;
+      values.push(parseFloat(filters.salarioMin));
+    }
+
+    query += ` ORDER BY v.data_publicacao DESC`;
+
+    console.log('Query de busca:', query);
+    console.log('Valores:', values);
+
+    const result = await pool.query(query, values);
     return result.rows;
   } catch (error) {
-    console.error('Erro ao buscar vagas por empresa:', error);
+    console.error('Erro ao buscar vagas:', error);
+    throw error;
+  }
+}
+
+export async function getVagasSalvas(id_usuario) {
+  try {
+    const query = `
+      SELECT v.*, e.nome as empresa_nome, e.logo_url as empresa_logo, e.descricao as empresa_descricao
+      FROM vagas_salvas vs
+      JOIN vagas v ON vs.id_vaga = v.id_vaga
+      JOIN empresas e ON v.id_empresa = e.id_empresa
+      WHERE vs.id_usuario = $1 AND v.status = 'aberta'
+      ORDER BY vs.data_salvo DESC
+    `;
+    const result = await pool.query(query, [id_usuario]);
+    return result.rows;
+  } catch (error) {
+    console.error('Erro ao buscar vagas salvas:', error);
+    throw error;
+  }
+}
+
+export async function salvarVaga(id_usuario, id_vaga) {
+  try {
+    // Verifica se já está salva
+    const checkQuery = 'SELECT * FROM vagas_salvas WHERE id_usuario = $1 AND id_vaga = $2';
+    const checkResult = await pool.query(checkQuery, [id_usuario, id_vaga]);
+    
+    if (checkResult.rows.length > 0) {
+      return { message: 'Vaga já está salva' };
+    }
+
+    const query = `
+      INSERT INTO vagas_salvas (id_usuario, id_vaga) 
+      VALUES ($1, $2) 
+      RETURNING *
+    `;
+    const result = await pool.query(query, [id_usuario, id_vaga]);
+    return result.rows[0];
+  } catch (error) {
+    console.error('Erro ao salvar vaga:', error);
+    throw error;
+  }
+}
+
+export async function removerVagaSalva(id_usuario, id_vaga) {
+  try {
+    const query = 'DELETE FROM vagas_salvas WHERE id_usuario = $1 AND id_vaga = $2';
+    await pool.query(query, [id_usuario, id_vaga]);
+    return { message: 'Vaga removida das salvas' };
+  } catch (error) {
+    console.error('Erro ao remover vaga salva:', error);
     throw error;
   }
 }
