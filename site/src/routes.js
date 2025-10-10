@@ -25,6 +25,8 @@ import MensagemSucessoPage from './Pages/PerfilProfissional/menssagemsucesso/ind
 import ArtigoPublicadoPage from './Pages/Artigos/ArtigoPublicado/index.js';
 import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
 import CardArtigo from './Components/CardArtigo/index.js';
+import CardCandidato from './Components/CardCandidato/index.js';
+import CardEmpresa from './Components/CardEmpresa/index.js';
 
 
 export default function Index() {
@@ -61,8 +63,8 @@ export default function Index() {
                 <Route path="/inscricaovaga/:id" element={<InscricaoPage />} />
                 <Route path="/vaga/:id" element={<MaisInformacoesPage />} />
                 <Route path="/candidato" element={<DashboardCandidatoPage />} />
-                
-      
+                <Route path="/cardcandidato" element={<CardCandidato />} />
+                <Route path="/cardempresa" element={<CardEmpresa />} />
 
 
 

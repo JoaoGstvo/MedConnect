@@ -1,3 +1,4 @@
+/* index.scss */
 .gerenciamento-candidatos-page {
     display: flex;
     flex-direction: column;
@@ -60,6 +61,7 @@
         gap: 20px;
         padding: 20px;
 
+        /* Card interno */
         .card-candidato {
             background: #fff;
             border-radius: 8px;
@@ -76,7 +78,6 @@
                 box-shadow: 0 8px 12px rgba(0,0,0,0.15);
             }
 
-            /* Info do candidato */
             .info {
                 margin-bottom: 15px;
 
@@ -97,7 +98,6 @@
                 }
             }
 
-            /* Ações */
             .acoes {
                 display: flex;
                 flex-direction: column;
@@ -132,5 +132,19 @@
             }
         }
     }
-}
 
+    /* Responsividade */
+    @media (max-width: 480px) {
+        .candidatos-filtros {
+            gap: 10px;
+
+            select {
+                width: 100%;
+            }
+        }
+
+        .candidatos-lista .card-candidato {
+            width: 100%;
+        }
+    }
+}

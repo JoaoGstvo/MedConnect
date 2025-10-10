@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 function Login() {
+  const [accountType, setAccountType] = useState('profissional');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [msg, setMsg] = useState('');
@@ -11,7 +12,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !senha) {
       setMsg('Por favor, preencha todos os campos');
       return;
@@ -26,7 +27,11 @@ function Login() {
     setMsg('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/profissional/login', {
+      const endpoint = accountType === 'profissional'
+        ? 'http://localhost:5000/api/profissional/login'
+        : 'http://localhost:5000/api/empresa/login';
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
@@ -35,34 +40,34 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success('Login realizado com sucesso!', { 
-          autoClose: 2000, 
-          hideProgressBar: true 
+        toast.success('Login realizado com sucesso!', {
+          autoClose: 2000,
+          hideProgressBar: true
         });
-        
+
         // Salvar dados do usuário no localStorage se "Lembrar de mim" estiver marcado
         if (rememberMe) {
           localStorage.setItem('userData', JSON.stringify(data));
         } else {
           sessionStorage.setItem('userData', JSON.stringify(data));
         }
-        
+
         // Redirecionar após sucesso
         setTimeout(() => {
           window.location.href = '/dashboard';
         }, 2000);
       } else {
         setMsg(data.msg || 'Erro ao fazer login');
-        toast.error('Credenciais inválidas', { 
-          autoClose: 3000, 
-          hideProgressBar: true 
+        toast.error('Credenciais inválidas', {
+          autoClose: 3000,
+          hideProgressBar: true
         });
       }
     } catch (err) {
       setMsg('Erro de conexão com o servidor');
-      toast.error('Erro de conexão', { 
-        autoClose: 3000, 
-        hideProgressBar: true 
+      toast.error('Erro de conexão', {
+        autoClose: 3000,
+        hideProgressBar: true
       });
     } finally {
       setLoading(false);
@@ -76,63 +81,87 @@ function Login() {
           <img src="/Images/Logo.png" alt="Logo" />
         </div>
 
-        <form className='form' onSubmit={handleLogin}>
-          <h2>Fazer Login como Profissional</h2>
-          <p className='form-description'>Digite suas credenciais para acessar sua conta</p>
+        <div className="divider"></div>
 
-          <div className='input-field'>
-            <span>E-mail</span>
-            <input 
-              type="email" 
-              placeholder='seu@email.com' 
-              value={email} 
-              onChange={e => setEmail(e.target.value)}
-              disabled={loading}
-            />
+        <div className="form-content">
+          <h2>Fazer Login</h2>
+          <p className='form-description'>Selecione o tipo de conta e digite suas credenciais</p>
+
+          <div className="account-type-options">
+            <div
+              className={`account-type-card ${accountType === 'profissional' ? 'selected' : ''}`}
+              onClick={() => setAccountType('profissional')}
+            >
+              <div className="card-icon professional-icon"></div>
+              <h3>Profissional</h3>
+              <p>Busco oportunidades</p>
+            </div>
+
+            <div
+              className={`account-type-card ${accountType === 'empresa' ? 'selected' : ''}`}
+              onClick={() => setAccountType('empresa')}
+            >
+              <div className="card-icon company-icon"></div>
+              <h3>Empresa</h3>
+              <p>Contrato profissionais</p>
+            </div>
           </div>
 
-          <div className='input-field'>
-            <span>Senha</span>
-            <input 
-              type="password" 
-              placeholder='Sua senha' 
-              value={senha} 
-              onChange={e => setSenha(e.target.value)}
-              disabled={loading}
-            />
-          </div>
-
-          <div className='remember-me'>
-            <label>
-              <input 
-                type="checkbox" 
-                checked={rememberMe}
-                onChange={e => setRememberMe(e.target.checked)}
+          <form className='form' onSubmit={handleLogin}>
+            <div className='input-field'>
+              <span>E-mail</span>
+              <input
+                type="email"
+                placeholder='seu@email.com'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 disabled={loading}
               />
-              <span>Lembrar de mim</span>
-            </label>
-            <a href="/senha" className='forgot-password'>Esqueceu a senha?</a>
-          </div>
+            </div>
 
-          <button 
-            type="submit" 
-            className={`login-button ${loading ? 'loading' : ''}`}
-            disabled={loading}
-          >
-            {loading ? '' : 'Entrar'}
-          </button>
+            <div className='input-field'>
+              <span>Senha</span>
+              <input
+                type="password"
+                placeholder='Sua senha'
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+                disabled={loading}
+              />
+            </div>
 
-          {msg && (
-            <p className={`login-msg ${msg.includes('Erro') ? 'error' : 'success'}`}>
-              {msg}
-            </p>
-          )}
+            <div className='remember-me'>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={e => setRememberMe(e.target.checked)}
+                  disabled={loading}
+                />
+                <span>Lembrar de mim</span>
+              </label>
+              <a href="/senha" className='forgot-password'>Esqueceu a senha?</a>
+            </div>
 
-          <div className="signup-redirect">
-            Não tem uma conta? <a href="/cadastro">Cadastre-se como Profissional</a>
-          </div>
-        </form>
+            <button
+              type="submit"
+              className={`login-button ${loading ? 'loading' : ''}`}
+              disabled={loading}
+            >
+              {loading ? '' : `Entrar como ${accountType === 'profissional' ? 'Profissional' : 'Empresa'}`}
+            </button>
+
+            {msg && (
+              <p className={`login-msg ${msg.includes('Erro') ? 'error' : 'success'}`}>
+                {msg}
+              </p>
+            )}
+
+            <div className="signup-redirect">
+              Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
   );

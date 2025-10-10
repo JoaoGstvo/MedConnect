@@ -2,7 +2,10 @@
 import "./index.scss";
 
 function CardEmpresa({ hospital }) {
-  // Garantir compatibilidade com dados do backend
+  if (!hospital) {
+    return null; // ou um loader simples, se quiser
+  }
+
   const empresa = {
     id: hospital.id_empresa || hospital.id,
     nome: hospital.nome,
