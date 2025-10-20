@@ -197,7 +197,7 @@ function MinhasVagas() {
                                                 className="btn-acessar"
                                                 onClick={() => handleVerVaga(inscricao.id_vaga)}
                                             >
-                                                👁️ Ver Vaga
+                                                 Ver Vaga
                                             </button>
                                             {inscricao.status === 'pendente' && (
                                                 <button 
@@ -208,7 +208,7 @@ function MinhasVagas() {
                                                     )}
                                                     disabled={cancelando === inscricao.id_candidatura}
                                                 >
-                                                    {cancelando === inscricao.id_candidatura ? 'Cancelando...' : '❌ Cancelar'}
+                                                    {cancelando === inscricao.id_candidatura ? 'Cancelando...' : ' Cancelar'}
                                                 </button>
                                             )}
                                         </div>

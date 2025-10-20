@@ -1,16 +1,19 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .empresa-page {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--background-color);
-  color: var(--text-primary);
+  font-family: $font-family-primary;
+  background: $gray-50;
+  color: $gray-900;
   min-height: 100vh;
 }
 
 /* Cabeçalho principal */
 .empresa-header {
-  background: var(--surface-color);
-  padding: 3rem 2rem;
+  background: white;
+  padding: $spacing-12 $spacing-8;
   text-align: center;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid $gray-200;
   position: relative;
   overflow: hidden;
 
@@ -21,131 +24,122 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
+    background: $gradient-primary;
   }
 
   h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--primary-dark);
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-4;
+    color: $primary-600;
   }
 
   p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+    color: $gray-600;
+    font-size: $font-size-lg;
     max-width: 600px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: $line-height-relaxed;
   }
 }
 
 /* Conteúdo principal */
 .empresa-conteudo {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
+  gap: $spacing-8;
+  padding: $spacing-8;
   max-width: 1400px;
   margin: 0 auto;
 
-  @media (max-width: 968px) {
+  @include mobile-only {
     flex-direction: column;
-    padding: 1.5rem;
+    padding: $spacing-6;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem;
-    gap: 1.5rem;
+    padding: $spacing-4;
+    gap: $spacing-6;
   }
 }
 
 /* Filtros */
 .empresa-filtros {
   flex: 0 0 350px;
-  background: var(--surface-color);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
+  @include card-base;
+  padding: $spacing-8;
+  border: 1px solid $gray-200;
   height: fit-content;
   position: sticky;
-  top: 2rem;
+  top: $spacing-8;
 
-  @media (max-width: 968px) {
+  @include mobile-only {
     position: static;
     flex: none;
     width: 100%;
   }
 
   h3 {
-    color: var(--primary-dark);
-    margin-bottom: 1.5rem;
-    font-size: 1.3rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: $primary-600;
+    margin-bottom: $spacing-6;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    @include flex-center;
+    gap: $spacing-2;
+    justify-content: flex-start;
   }
 
   input, select {
+    @include input-base;
     width: 100%;
-    padding: 12px 20px;
-    margin-bottom: 1rem;
-    border-radius: 50px;
-    border: 1px solid var(--border-color);
-    background: var(--background-color);
-    font-size: 1rem;
-    transition: var(--transition);
+    padding: $spacing-3 $spacing-6;
+    margin-bottom: $spacing-4;
+    border-radius: $radius-full;
+    background: $gray-50;
 
     &:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
     }
   }
 
   .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    gap: $spacing-2;
+    margin-bottom: $spacing-6;
   }
 
   .chip {
-    background: rgba(58, 155, 220, 0.1);
-    border-radius: 50px;
-    padding: 10px 20px;
-    color: var(--primary-dark);
-    font-weight: 600;
+    @include btn-secondary;
+    padding: $spacing-2 $spacing-5;
+    border-radius: $radius-full;
+    background: rgba($primary-500, 0.1);
+    color: $primary-600;
+    font-weight: $font-weight-semibold;
     border: none;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 0.9rem;
+    font-size: $font-size-sm;
 
-    &:hover {
-      background: rgba(58, 155, 220, 0.2);
+    &:hover:not(.active) {
+      background: rgba($primary-500, 0.2);
       transform: translateY(-2px);
     }
 
     &.active {
-      background: var(--primary-dark);
-      color: var(--surface-color);
+      background: $primary-600;
+      color: white;
     }
   }
 
   .limpar {
-    margin-top: 1rem;
+    @include btn-ghost;
+    margin-top: $spacing-4;
     background: transparent;
-    border: none;
-    color: var(--primary-dark);
-    cursor: pointer;
-    font-weight: 600;
-    transition: var(--transition);
-    padding: 8px 16px;
-    border-radius: 6px;
+    color: $primary-600;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $radius-md;
 
-    &:hover {
-      background: rgba(58, 155, 220, 0.1);
+    &:hover:not(:disabled) {
+      background: rgba($primary-500, 0.1);
     }
   }
 }
@@ -155,25 +149,22 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: $spacing-6;
 
   .lista-info {
-    margin-bottom: 1rem;
-    color: var(--text-secondary);
-    font-size: 1rem;
+    margin-bottom: $spacing-4;
+    color: $gray-600;
+    font-size: $font-size-base;
   }
 }
 
 /* Card individual */
 .empresa-card {
+  @include card-base;
   display: flex;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-  border: 1px solid var(--border-color);
+  gap: $spacing-6;
+  padding: $spacing-8;
+  border: 1px solid $gray-200;
   align-items: flex-start;
   position: relative;
 
@@ -184,22 +175,22 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+    background: $gradient-primary;
     transform: scaleX(0);
-    transition: transform 0.3s ease;
+    transition: transform $transition-base;
   }
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: $shadow-xl;
 
     &::before {
       transform: scaleX(1);
     }
 
     .logo {
-      transform: scale(1.1);
-      border-color: var(--primary-color);
+      transform: scale(1.05);
+      border-color: $primary-500;
     }
   }
 
@@ -207,11 +198,11 @@
     width: 80px;
     height: 80px;
     object-fit: contain;
-    border-radius: 12px;
-    background: var(--surface-color);
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
+    border-radius: $radius-lg;
+    background: white;
+    padding: $spacing-2;
+    border: 1px solid $gray-200;
+    transition: all $transition-base;
     flex-shrink: 0;
   }
 
@@ -219,61 +210,59 @@
     flex: 1;
 
     .top {
-      display: flex;
-      justify-content: space-between;
+      @include flex-between;
       align-items: flex-start;
-      margin-bottom: 1rem;
+      margin-bottom: $spacing-4;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         flex-direction: column;
-        gap: 1rem;
+        gap: $spacing-4;
       }
     }
 
     h3 {
       margin: 0;
-      color: var(--primary-dark);
-      font-size: 1.3rem;
-      font-weight: 700;
+      color: $primary-600;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
     }
 
     .rating {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 700;
-      color: #f6b93b;
+      @include flex-center;
+      gap: $spacing-1;
+      font-weight: $font-weight-bold;
+      color: $warning-500;
     }
 
     .valor {
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-left: 0.5rem;
-      font-size: 1.1rem;
+      font-weight: $font-weight-semibold;
+      color: $gray-900;
+      margin-left: $spacing-1;
+      font-size: $font-size-lg;
     }
 
     .descricao {
-      margin: 1rem 0;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      font-size: 1rem;
+      margin: $spacing-4 0;
+      color: $gray-600;
+      line-height: $line-height-relaxed;
+      font-size: $font-size-base;
     }
 
     .meta {
       display: flex;
-      gap: 2rem;
-      color: var(--text-light);
-      font-size: 0.95rem;
+      gap: $spacing-8;
+      color: $gray-500;
+      font-size: $font-size-sm;
 
       @media (max-width: 480px) {
         flex-direction: column;
-        gap: 0.5rem;
+        gap: $spacing-1;
       }
 
       .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        @include flex-center;
+        gap: $spacing-1;
+        justify-content: flex-start;
       }
     }
   }
@@ -282,48 +271,45 @@
 /* Paginação */
 .paginacao {
   display: flex;
-  gap: 0.75rem;
+  gap: $spacing-2;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: $spacing-8;
   flex-wrap: wrap;
 
   button {
-    background: var(--surface-color);
-    border: 1px solid var(--border-color);
-    padding: 12px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
-    color: var(--text-secondary);
+    @include btn-secondary;
+    padding: $spacing-3 $spacing-5;
+    border-radius: $radius-lg;
+    border: 1px solid $gray-300;
+    color: $gray-600;
 
     &:hover:not(.active) {
-      border-color: var(--primary-color);
-      color: var(--primary-dark);
+      border-color: $primary-500;
+      color: $primary-600;
       transform: translateY(-2px);
     }
   }
 
   .active {
-    background: var(--primary-dark);
-    color: var(--surface-color);
-    border-color: var(--primary-dark);
+    background: $primary-600;
+    color: white;
+    border-color: $primary-600;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-button);
+    box-shadow: $shadow-md;
   }
 }
 
 /* Ranking */
 .empresa-ranking {
-  padding: 3rem 2rem;
+  padding: $spacing-12 $spacing-8;
   text-align: center;
-  background: var(--surface-color);
-  margin: 3rem auto;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  max-width: 1200px;
-  border: 1px solid var(--border-color);
+  background: white;
+  margin: $spacing-12 auto;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-base;
+  border: 1px solid $gray-200;
   position: relative;
+  max-width: 1200px;
 
   &::before {
     content: '';
@@ -332,53 +318,83 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
+    background: $gradient-primary;
   }
 
   h2 {
-    color: var(--primary-dark);
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+    color: $primary-600;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-4;
   }
 
   ol {
-    margin-top: 2rem;
+    margin-top: $spacing-8;
     text-align: left;
     display: inline-block;
-    font-size: 1.1rem;
+    font-size: $font-size-lg;
     
     li {
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border-radius: 12px;
-      transition: var(--transition);
+      margin-bottom: $spacing-4;
+      padding: $spacing-4;
+      border-radius: $radius-lg;
+      transition: all $transition-base;
       
       &:hover {
-        background: var(--background-color);
-        transform: translateX(10px);
+        background: $gray-50;
+        transform: translateX($spacing-2);
       }
     }
   }
 
   .ver-completa {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 2rem;
-    color: var(--primary-dark);
-    font-weight: 700;
-    text-decoration: none;
-    padding: 12px 24px;
-    border: 2px solid var(--primary-dark);
-    border-radius: 50px;
-    transition: var(--transition);
-    gap: 8px;
+    @include btn-outline;
+    @include flex-center;
+    margin-top: $spacing-8;
+    color: $primary-600;
+    font-weight: $font-weight-semibold;
+    padding: $spacing-3 $spacing-6;
+    border: 2px solid $primary-600;
+    border-radius: $radius-full;
+    gap: $spacing-2;
 
-    &:hover {
-      background: var(--primary-dark);
-      color: var(--surface-color);
+    &:hover:not(:disabled) {
+      background: $primary-600;
+      color: white;
       transform: translateY(-2px);
-      box-shadow: var(--shadow-button);
+      box-shadow: $shadow-md;
     }
+  }
+}
+
+/* Animações */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY($spacing-4);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empresa-card {
+  @include fade-in;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .empresa-card {
+    animation: none;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
   }
 }

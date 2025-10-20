@@ -74,11 +74,11 @@ function ArtigosPage() {
                     <div className="hero-content">
                         <h1>Artigos da Comunidade de Saúde</h1>
                         <p>Compartilhe conhecimentos e insights com profissionais da saúde</p>
-                        <button 
+                        <button
                             className="btn-criar-artigo"
                             onClick={() => navigate('/novoartigo')}
                         >
-                             Escrever Artigo
+                            Escrever Artigo
                         </button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ function ArtigosPage() {
                             <div className="search-container">
                                 <div className="search-box">
                                     <span className="search-icon">🔍</span>
-                                    <input 
+                                    <input
                                         type="text"
                                         placeholder="Pesquisar artigos..."
                                         value={searchTerm}
@@ -138,8 +138,8 @@ function ArtigosPage() {
                             </div>
 
                             <div className="filters-container">
-                                <select 
-                                    value={filtroAtivo} 
+                                <select
+                                    value={filtroAtivo}
                                     onChange={(e) => setFiltroAtivo(e.target.value)}
                                     className="filter-select"
                                 >
@@ -159,7 +159,7 @@ function ArtigosPage() {
                                 {artigosFiltrados.length} de {artigos.length} artigos
                             </span>
                             {searchTerm && (
-                                <button 
+                                <button
                                     className="clear-search"
                                     onClick={() => setSearchTerm('')}
                                 >
@@ -180,12 +180,12 @@ function ArtigosPage() {
                                     <div className="empty-icon">📝</div>
                                     <h3>Nenhum artigo encontrado</h3>
                                     <p>
-                                        {searchTerm 
+                                        {searchTerm
                                             ? `Não encontramos resultados para "${searchTerm}"`
                                             : 'Ainda não há artigos publicados'
                                         }
                                     </p>
-                                    <button 
+                                    <button
                                         className="btn-primary"
                                         onClick={() => navigate('/novoartigo')}
                                     >
@@ -214,43 +214,21 @@ function ArtigosPage() {
 
                     {/* Sidebar Direita Simplificada */}
                     <aside className="sidebar-right">
-                        <div className="suggestions-card">
-                            <div className="card-header">
-                                <h4>Profissionais para seguir</h4>
-                            </div>
-                            <div className="suggestions-list">
-                                <div className="suggestion-item">
-                                    <div className="suggestion-avatar">MS</div>
-                                    <div className="suggestion-info">
-                                        <div className="suggestion-name">Dra. Maria Santos</div>
-                                        <div className="suggestion-role">Enfermeira Chefe</div>
-                                    </div>
-                                    <button className="follow-btn">Seguir</button>
-                                </div>
-                                <div className="suggestion-item">
-                                    <div className="suggestion-avatar">RL</div>
-                                    <div className="suggestion-info">
-                                        <div className="suggestion-name">Dr. Roberto Lima</div>
-                                        <div className="suggestion-role">Pesquisador</div>
-                                    </div>
-                                    <button className="follow-btn">Seguir</button>
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="trending-card">
                             <div className="card-header">
-                                <h4>Tendências</h4>
+                                <h4>Categorias</h4>
                             </div>
                             <div className="trending-list">
-                                <div className="trending-item">
-                                    <div className="trending-tag">#SaúdeDigital</div>
-                                    <div className="trending-count">2.5K posts</div>
-                                </div>
-                                <div className="trending-item">
-                                    <div className="trending-tag">#Telemedicina</div>
-                                    <div className="trending-count">1.8K posts</div>
-                                </div>
+                                {categorias.length === 0 ? (
+                                    <p>Carregando categorias...</p>
+                                ) : (
+                                    categorias.map((categoria) => (
+                                        <div key={categoria.id_categoria} className="trending-item">
+                                            <div className="trending-tag">{categoria.nome}</div>
+                                            <div className="trending-count">{categoria.quantidade || 1}</div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </aside>

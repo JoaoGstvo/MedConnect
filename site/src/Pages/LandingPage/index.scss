@@ -2,30 +2,22 @@
 @import './styles/mixins.scss';
 
 .landingpage {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   min-height: 100vh;
   font-family: $font-family-primary;
-  color: $gray-900;
+  color: $gray-800;
   background-color: $gray-50;
   overflow-x: hidden;
 
   .principal-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include flex-column-center;
     min-height: 85vh;
-    padding: $spacing-20 $spacing-6;
+    padding: $spacing-20 $spacing-5;
     text-align: center;
     color: white;
     position: relative;
     background: $gradient-secondary;
-    
-    @include mobile-only {
-      padding: $spacing-16 $spacing-4;
-      min-height: 80vh;
-    }
+    z-index: 1;
 
     &::before {
       content: '';
@@ -37,24 +29,20 @@
 
     .title {
       max-width: 900px;
-      margin-bottom: $spacing-16;
+      margin-bottom: $spacing-10;
       z-index: 2;
       position: relative;
 
       h1 {
         font-size: $font-size-5xl;
         font-weight: $font-weight-extrabold;
-        margin-bottom: $spacing-6;
-        text-shadow: $shadow-2xl;
+        margin-bottom: $spacing-5;
+        text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
         background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
-        @include mobile-only {
-          font-size: $font-size-4xl;
-          margin-bottom: $spacing-4;
-        }
+        color: $gray-900;
       }
 
       p {
@@ -62,45 +50,29 @@
         line-height: $line-height-relaxed;
         max-width: 700px;
         margin: 0 auto;
-        text-shadow: $shadow-base;
-        opacity: 0.95;
-        
-        @include mobile-only {
-          font-size: $font-size-lg;
-        }
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        color: rgba(255, 255, 255, 0.9);
       }
     }
 
     .buttons {
-      display: flex;
-      gap: $spacing-8;
+      @include flex-center;
+      gap: $spacing-6;
       z-index: 2;
       flex-wrap: wrap;
-      justify-content: center;
-
-      @include mobile-only {
-        gap: $spacing-4;
-        flex-direction: column;
-        align-items: center;
-      }
 
       button {
         @include btn-primary;
-        padding: $spacing-5 $spacing-12;
+        padding: $spacing-5 $spacing-10;
         border-radius: $radius-full;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.15);
         color: white;
         font-weight: $font-weight-semibold;
-        font-size: $font-size-lg;
+        box-shadow: $shadow-lg;
         position: relative;
         overflow: hidden;
-        
-        @include mobile-only {
-          padding: $spacing-4 $spacing-8;
-          width: 100%;
-          max-width: 300px;
-        }
+        backdrop-filter: blur(10px);
 
         &::before {
           content: '';
@@ -109,24 +81,21 @@
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
           transition: left 0.6s;
         }
 
-        &:hover:not(:disabled) {
+        &:hover {
           background: white;
-          color: $primary-600;
-          transform: translateY(-2px) scale(1.02);
+          color: $primary-700;
+          transform: translateY(-5px) scale(1.05);
           border-color: white;
-          box-shadow: $shadow-2xl;
 
-          &::before {
-            left: 100%;
-          }
+          &::before { left: 100%; }
         }
 
-        &:active:not(:disabled) {
-          transform: translateY(0) scale(1);
+        &:active { 
+          transform: translateY(-2px) scale(1.02); 
         }
       }
     }
@@ -134,16 +103,12 @@
 
   .section {
     flex: 1;
-    padding: $spacing-20 $spacing-6;
+    padding: $spacing-24 $spacing-5;
     position: relative;
     background-color: white;
 
-    @include mobile-only {
-      padding: $spacing-12 $spacing-4;
-    }
-
-    &:nth-child(even) {
-      background-color: $gray-50;
+    &:nth-child(even) { 
+      background-color: $gray-50; 
     }
 
     &::before {
@@ -156,7 +121,7 @@
       background: $gradient-primary;
       opacity: 0;
       transform: scaleX(0);
-      transition: all $transition-slow;
+      transition: all 0.6s ease;
     }
 
     &.in-view::before {
@@ -164,30 +129,22 @@
       transform: scaleX(1);
     }
 
-    .title {
+    .title { 
       text-align: center;
       margin-bottom: $spacing-16;
-
-      @include mobile-only {
-        margin-bottom: $spacing-8;
-      }
 
       h1 {
         font-size: $font-size-4xl;
         font-weight: $font-weight-bold;
-        color: $primary-600;
+        color: $gray-900;
         position: relative;
         display: inline-block;
         padding-bottom: $spacing-4;
 
-        @include mobile-only {
-          font-size: $font-size-3xl;
-        }
-
         &::after {
           content: "";
           display: block;
-          width: 80px;
+          width: 5rem;
           height: 4px;
           margin: $spacing-4 auto 0;
           background: $gradient-primary;
@@ -195,65 +152,70 @@
           transition: width $transition-base;
         }
 
-        &:hover::after {
-          width: 120px;
+        &:hover::after { 
+          width: 7.5rem; 
         }
       }
     }
 
     .container {
-      display: flex;
-      justify-content: center;
+      @include flex-center;
 
       .wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: $spacing-8;
+        @include card-grid(3, $spacing-8);
         max-width: 1300px;
         width: 100%;
-
-        @include mobile-only {
-          grid-template-columns: 1fr;
-          gap: $spacing-6;
-        }
       }
     }
   }
-}
 
-// Animações adicionais
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY($spacing-8);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .no-data {
+    @include flex-column-center;
+    padding: $spacing-16;
+    color: $gray-600;
+    font-size: $font-size-lg;
+    grid-column: 1 / -1;
   }
 }
 
-// Utilidades para animações
-.fade-in-up {
-  @include fade-in;
-  animation: fadeInUp $transition-slow ease;
-}
+// Responsive design
+@include mobile-only {
+  .landingpage {
+    .principal-container {
+      padding: $spacing-16 $spacing-4;
 
-.slide-in-left {
-  @include slide-in;
-}
+      .title {
+        h1 {
+          font-size: $font-size-3xl;
+        }
 
-.slide-in-right {
-  animation: slideInRight $transition-slow ease;
-}
+        p {
+          font-size: $font-size-lg;
+        }
+      }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX($spacing-8);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+      .buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .section {
+      padding: $spacing-16 $spacing-4;
+
+      .title h1 {
+        font-size: $font-size-3xl;
+      }
+
+      .container .wrapper {
+        grid-template-columns: 1fr;
+        gap: $spacing-6;
+      }
+    }
   }
 }

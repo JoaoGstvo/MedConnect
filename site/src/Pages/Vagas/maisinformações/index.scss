@@ -1,32 +1,15 @@
-:root {
-  --primary-color: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #3b82f6;
-  --secondary-color: #1e40af;
-  --background-color: #f8fafc;
-  --surface-color: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-light: #64748b;
-  --border-color: #e2e8f0;
-  --success-color: #059669;
-  --error-color: #dc2626;
-  --warning-color: #d97706;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
-  --border-radius: 12px;
-  --transition: all 0.3s ease;
-}
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
 
 .maisinfopage {
     min-height: 100vh;
-    background: var(--background-color);
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: $gray-50;
+    font-family: $font-family-primary;
 
     .principal-container {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-        color: var(--surface-color);
-        padding: 80px 20px;
+        background: $gradient-primary;
+        color: white;
+        padding: $spacing-20 $spacing-6;
         text-align: center;
 
         .title {
@@ -34,68 +17,66 @@
             margin: 0 auto;
 
             h1 {
-                font-size: 2.5rem;
-                font-weight: 700;
-                margin-bottom: 1rem;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                font-size: $font-size-4xl;
+                font-weight: $font-weight-bold;
+                margin-bottom: $spacing-4;
+                text-shadow: $shadow-lg;
             }
 
             p {
-                font-size: 1.2rem;
+                font-size: $font-size-xl;
                 opacity: 0.95;
+                line-height: $line-height-relaxed;
             }
         }
     }
 
     .section {
-        padding: 40px 20px;
+        padding: $spacing-16 $spacing-6;
         max-width: 800px;
         margin: 0 auto;
 
         .details-container {
-            background: var(--surface-color);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
+            @include card-base;
+            padding: $spacing-16;
+            border: 1px solid $gray-200;
+            margin-bottom: $spacing-8;
 
             h2 {
-                color: var(--text-primary);
-                font-size: 2rem;
-                margin-bottom: 25px;
-                border-bottom: 3px solid var(--primary-color);
-                padding-bottom: 10px;
+                color: $gray-800;
+                font-size: $font-size-3xl;
+                margin-bottom: $spacing-8;
+                border-bottom: 3px solid $primary-500;
+                padding-bottom: $spacing-4;
+                font-weight: $font-weight-semibold;
             }
 
             .vaga-info {
                 p {
-                    margin: 15px 0;
-                    font-size: 1.1rem;
-                    line-height: 1.6;
-                    color: var(--text-secondary);
+                    margin: $spacing-4 0;
+                    font-size: $font-size-lg;
+                    line-height: $line-height-relaxed;
+                    color: $gray-600;
 
                     strong {
-                        color: var(--text-primary);
+                        color: $gray-800;
                         min-width: 120px;
                         display: inline-block;
+                        font-weight: $font-weight-semibold;
                     }
                 }
 
                 .status {
-                    padding: 4px 12px;
-                    border-radius: 20px;
-                    font-weight: 600;
-                    font-size: 0.9rem;
+                    @include status-badge($gray-200, $gray-700);
+                    font-size: $font-size-sm;
+                    text-transform: uppercase;
 
                     &.aberta {
-                        background: #dbeafe;
-                        color: var(--primary-dark);
+                        @include status-badge($primary-100, $primary-800);
                     }
 
                     &.fechada {
-                        background: #fee2e2;
-                        color: var(--error-color);
+                        @include status-badge($error-100, $error-800);
                     }
                 }
             }
@@ -103,33 +84,42 @@
 
         .actions {
             display: flex;
-            gap: 15px;
+            gap: $spacing-4;
             justify-content: center;
             flex-wrap: wrap;
 
+            @include mobile-only {
+                flex-direction: column;
+                align-items: center;
+            }
+
             .btn-apply, .btn-back {
-                padding: 14px 28px;
-                border-radius: var(--border-radius);
-                font-size: 1rem;
-                font-weight: 600;
+                padding: $spacing-4 $spacing-8;
+                border-radius: $radius-lg;
+                font-size: $font-size-base;
+                font-weight: $font-weight-semibold;
                 cursor: pointer;
-                transition: var(--transition);
+                transition: all $transition-base;
                 min-width: 160px;
                 border: none;
+                @include flex-center;
+
+                @include mobile-only {
+                    width: 100%;
+                    max-width: 300px;
+                }
             }
 
             .btn-apply {
-                background: var(--primary-color);
-                color: var(--surface-color);
+                @include btn-primary;
 
                 &:hover:not(:disabled) {
-                    background: var(--primary-dark);
                     transform: translateY(-2px);
-                    box-shadow: var(--shadow-hover);
+                    box-shadow: $shadow-xl;
                 }
 
                 &:disabled {
-                    background: var(--text-light);
+                    background: $gray-400;
                     cursor: not-allowed;
                     transform: none;
                     box-shadow: none;
@@ -137,66 +127,88 @@
             }
 
             .btn-back {
-                background: transparent;
-                color: var(--primary-color);
-                border: 2px solid var(--primary-color);
+                @include btn-outline;
 
-                &:hover {
-                    background: var(--primary-color);
-                    color: var(--surface-color);
+                &:hover:not(:disabled) {
+                    background: $primary-600;
+                    color: white;
                     transform: translateY(-2px);
-                    box-shadow: var(--shadow-hover);
+                    box-shadow: $shadow-xl;
                 }
             }
         }
     }
 
     .loading-page, .error-page {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include flex-center;
         height: 50vh;
-        font-size: 1.2rem;
-        color: var(--text-light);
-    }
+        font-size: $font-size-lg;
+        color: $gray-600;
+        flex-direction: column;
+        gap: $spacing-4;
 
-    @media (max-width: 768px) {
+        .spinner {
+            @include loading-spinner(40px, $primary-600);
+        }
+    }
+}
+
+// Responsividade
+@include mobile-only {
+    .maisinfopage {
         .principal-container {
-            padding: 60px 20px;
+            padding: $spacing-16 $spacing-4;
 
             .title {
                 h1 {
-                    font-size: 2rem;
+                    font-size: $font-size-3xl;
                 }
 
                 p {
-                    font-size: 1rem;
+                    font-size: $font-size-lg;
                 }
             }
         }
 
         .section {
-            padding: 20px 15px;
+            padding: $spacing-8 $spacing-4;
 
             .details-container {
-                padding: 25px 20px;
+                padding: $spacing-8 $spacing-6;
 
                 h2 {
-                    font-size: 1.6rem;
+                    font-size: $font-size-2xl;
                 }
 
                 .vaga-info p {
-                    font-size: 1rem;
+                    font-size: $font-size-base;
                 }
             }
+        }
+    }
+}
 
-            .actions {
-                flex-direction: column;
-                align-items: center;
+// Estados de erro e loading adicionais
+.error-page {
+    .error-icon {
+        font-size: $font-size-5xl;
+        color: $error-500;
+        margin-bottom: $spacing-4;
+    }
 
-                .btn-apply, .btn-back {
-                    width: 100%;
-                    max-width: 300px;
+    .btn-retry {
+        @include btn-primary;
+        margin-top: $spacing-4;
+    }
+}
+
+// Acessibilidade
+@media (prefers-reduced-motion: reduce) {
+    .maisinfopage {
+        .actions {
+            .btn-apply, .btn-back {
+                &:hover:not(:disabled) {
+                    transform: none;
                 }
             }
         }

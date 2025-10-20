@@ -1,13 +1,14 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .empresa-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #f4f5f7 0%, #e8ecf1 100%);
+  font-family: $font-family-primary;
   position: relative;
   overflow-x: hidden;
 
-  /* Efeito de background sutil */
   &::before {
     content: '';
     position: absolute;
@@ -16,22 +17,25 @@
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 10% 20%, rgba(58, 155, 220, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(33, 129, 238, 0.03) 0%, transparent 50%);
+      radial-gradient(circle at 10% 20%, rgba($primary-500, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba($primary-600, 0.03) 0%, transparent 50%);
     z-index: 0;
   }
 
-  /* Cabeçalho */
   .empresa-header {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 100px 20px 80px;
-    background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
-    color: #fff;
+    padding: $spacing-20 $spacing-6 $spacing-16;
+    background: $gradient-secondary;
+    color: white;
     position: relative;
     overflow: hidden;
+
+    @include mobile-only {
+      padding: $spacing-16 $spacing-4 $spacing-12;
+    }
 
     &::before {
       content: '';
@@ -49,59 +53,72 @@
       text-align: center;
       position: relative;
       z-index: 2;
+      @include fade-in;
       animation: fadeInUp 0.8s ease-out;
 
       h1 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 20px;
-        text-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        line-height: 1.2;
+        font-size: $font-size-5xl;
+        font-weight: $font-weight-extrabold;
+        margin-bottom: $spacing-6;
+        text-shadow: $shadow-2xl;
+        line-height: $line-height-tight;
         background: linear-gradient(135deg, #ffffff 0%, #e6f4ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+
+        @include mobile-only {
+          font-size: $font-size-4xl;
+        }
       }
 
       p {
-        font-size: 1.3rem;
+        font-size: $font-size-xl;
         color: rgba(255, 255, 255, 0.95);
-        line-height: 1.6;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: $line-height-relaxed;
+        text-shadow: $shadow-base;
+
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
     }
   }
 
-  /* Conteúdo Principal */
   .empresa-conteudo {
     display: grid;
     grid-template-columns: 300px 1fr;
-    gap: 40px;
+    gap: $spacing-16;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: $spacing-12 $spacing-6;
     position: relative;
     z-index: 1;
 
-    /* Filtros */
+    @include mobile-only {
+      grid-template-columns: 1fr;
+      gap: $spacing-8;
+      padding: $spacing-8 $spacing-4;
+    }
+
     .empresa-filtros {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      @include card-glass;
+      padding: $spacing-8;
       height: fit-content;
       position: sticky;
-      top: 100px;
+      top: $spacing-20;
+
+      @include mobile-only {
+        position: static;
+      }
 
       h3 {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 25px;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $gray-800;
+        margin-bottom: $spacing-6;
         position: relative;
-        padding-bottom: 10px;
+        padding-bottom: $spacing-3;
 
         &::after {
           content: '';
@@ -110,260 +127,239 @@
           left: 0;
           width: 40px;
           height: 3px;
-          background: linear-gradient(90deg, #3a9bdc, #2181ee);
-          border-radius: 2px;
+          background: $gradient-primary;
+          border-radius: $radius-sm;
         }
       }
 
       input, select {
-        width: 100%;
-        padding: 14px 18px;
-        margin-bottom: 20px;
-        border: 2px solid rgba(58, 155, 220, 0.2);
-        border-radius: 12px;
+        @include input-base;
+        padding: $spacing-3 $spacing-4;
+        margin-bottom: $spacing-6;
+        border: 2px solid rgba($primary-500, 0.2);
         background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(10px);
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-        color: #2c3e50;
-
-        &::placeholder {
-          color: rgba(44, 62, 80, 0.6);
-        }
 
         &:focus {
-          outline: none;
-          border-color: #3a9bdc;
-          box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+          border-color: $primary-500;
+          box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
           background: rgba(255, 255, 255, 0.95);
           transform: translateY(-2px);
         }
       }
 
       h4 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin: 25px 0 15px;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: $gray-800;
+        margin: $spacing-8 0 $spacing-4;
       }
 
       .chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 25px;
+        gap: $spacing-2;
+        margin-bottom: $spacing-6;
 
         .chip {
-          padding: 10px 16px;
-          border: 2px solid rgba(58, 155, 220, 0.3);
-          border-radius: 25px;
+          @include btn-secondary;
+          padding: $spacing-2 $spacing-4;
+          border-radius: $radius-full;
+          border: 2px solid rgba($primary-500, 0.3);
           background: rgba(255, 255, 255, 0.6);
-          color: #3a9bdc;
-          font-size: 0.9rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
+          color: $primary-500;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
 
-          &:hover {
-            background: #3a9bdc;
-            color: #fff;
-            border-color: #3a9bdc;
+          &:hover:not(.active) {
+            background: $primary-500;
+            color: white;
+            border-color: $primary-500;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(58, 155, 220, 0.3);
+            box-shadow: $shadow-md;
           }
 
           &.active {
-            background: #2181ee;
-            color: #fff;
-            border-color: #2181ee;
+            background: $primary-600;
+            color: white;
+            border-color: $primary-600;
           }
         }
       }
 
       .limpar {
+        @include btn-base;
         width: 100%;
-        padding: 14px;
-        border: 2px solid rgba(255, 59, 92, 0.3);
-        border-radius: 12px;
+        padding: $spacing-3;
+        border: 2px solid rgba($error-500, 0.3);
+        border-radius: $radius-lg;
         background: rgba(255, 255, 255, 0.8);
-        color: #ff3b5c;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
+        color: $error-500;
+        font-weight: $font-weight-semibold;
 
-        &:hover {
-          background: #ff3b5c;
-          color: #fff;
+        &:hover:not(:disabled) {
+          background: $error-500;
+          color: white;
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(255, 59, 92, 0.3);
+          box-shadow: 0 6px 20px rgba($error-500, 0.3);
         }
       }
     }
 
-    /* Lista de Hospitais */
     .empresa-lista {
       .lista-info {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(15px);
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        @include card-glass;
+        padding: $spacing-8;
+        margin-bottom: $spacing-8;
 
         h2 {
-          font-size: 2rem;
-          font-weight: 700;
-          color: #2c3e50;
-          margin-bottom: 10px;
+          font-size: $font-size-3xl;
+          font-weight: $font-weight-bold;
+          color: $gray-800;
+          margin-bottom: $spacing-2;
         }
 
         p {
-          color: #666;
-          font-size: 1rem;
+          color: $gray-600;
+          font-size: $font-size-base;
         }
       }
 
-      /* Estilo para os cards de empresa */
       & > div:not(.lista-info):not(.paginacao) {
         display: grid;
-        gap: 25px;
+        gap: $spacing-6;
       }
 
       .paginacao {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 10px;
-        margin-top: 40px;
+        gap: $spacing-2;
+        margin-top: $spacing-16;
+
+        @include mobile-only {
+          flex-wrap: wrap;
+        }
 
         button {
-          padding: 12px 18px;
-          border: 2px solid rgba(58, 155, 220, 0.3);
-          border-radius: 10px;
+          @include btn-secondary;
+          padding: $spacing-3 $spacing-4;
+          border-radius: $radius-lg;
+          border: 2px solid rgba($primary-500, 0.3);
           background: rgba(255, 255, 255, 0.8);
-          color: #3a9bdc;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
+          color: $primary-500;
+          font-weight: $font-weight-semibold;
 
           &:hover:not(.active) {
-            background: rgba(58, 155, 220, 0.1);
+            background: rgba($primary-500, 0.1);
             transform: translateY(-2px);
           }
 
           &.active {
-            background: linear-gradient(135deg, #3a9bdc, #2181ee);
-            color: #fff;
-            border-color: #2181ee;
-            box-shadow: 0 4px 15px rgba(58, 155, 220, 0.4);
+            background: $gradient-primary;
+            color: white;
+            border-color: $primary-600;
+            box-shadow: $shadow-md;
           }
         }
       }
     }
   }
 
-  /* Ranking */
   .empresa-ranking {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 50px;
-    margin: 40px auto;
+    @include card-glass;
+    padding: $spacing-16;
+    margin: $spacing-16 auto;
     max-width: 1200px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     text-align: center;
     position: relative;
     z-index: 1;
 
+    @include mobile-only {
+      padding: $spacing-8;
+      margin: $spacing-8 $spacing-4;
+    }
+
     h2 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-bottom: 30px;
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      color: $gray-800;
+      margin-bottom: $spacing-8;
       position: relative;
       display: inline-block;
+
+      @include mobile-only {
+        font-size: $font-size-3xl;
+      }
 
       &::after {
         content: '';
         position: absolute;
-        bottom: -10px;
+        bottom: -$spacing-2;
         left: 50%;
         transform: translateX(-50%);
         width: 80px;
         height: 4px;
-        background: linear-gradient(90deg, #3a9bdc, #2181ee);
-        border-radius: 2px;
+        background: $gradient-primary;
+        border-radius: $radius-sm;
       }
     }
 
     ol {
       list-style: none;
       padding: 0;
-      margin: 0 0 30px;
+      margin: 0 0 $spacing-8;
       display: grid;
-      gap: 15px;
+      gap: $spacing-4;
 
       li {
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #2c3e50;
-        transition: all 0.3s ease;
+        @include card-base;
+        padding: $spacing-6;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-medium;
+        color: $gray-800;
         border: 2px solid transparent;
 
         &:hover {
-          transform: translateX(10px);
-          border-color: rgba(58, 155, 220, 0.3);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          transform: translateX($spacing-2);
+          border-color: rgba($primary-500, 0.3);
+          box-shadow: $shadow-lg;
         }
 
         &:nth-child(1) {
-          background: linear-gradient(135deg, #fff9e6, #fff);
-          border-color: #ffd700;
+          background: linear-gradient(135deg, $warning-50, white);
+          border-color: $warning-500;
         }
 
         &:nth-child(2) {
-          background: linear-gradient(135deg, #f0f0f0, #fff);
-          border-color: #c0c0c0;
+          background: linear-gradient(135deg, $gray-100, white);
+          border-color: $gray-400;
         }
 
         &:nth-child(3) {
-          background: linear-gradient(135deg, #ffe6cc, #fff);
-          border-color: #cd7f32;
+          background: linear-gradient(135deg, $warning-100, white);
+          border-color: $warning-600;
         }
       }
     }
 
     .ver-completa {
-      display: inline-block;
-      padding: 14px 28px;
-      background: linear-gradient(135deg, #3a9bdc, #2181ee);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 6px 20px rgba(58, 155, 220, 0.3);
+      @include btn-primary;
+      padding: $spacing-3 $spacing-8;
+      border-radius: $radius-lg;
+      font-weight: $font-weight-semibold;
+      box-shadow: $shadow-lg;
 
-      &:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 10px 25px rgba(58, 155, 220, 0.4);
+      &:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: $shadow-xl;
       }
     }
   }
 
-  /* Animações */
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY($spacing-8);
     }
     to {
       opacity: 1;
@@ -371,108 +367,6 @@
     }
   }
 
-  /* Responsividade */
-  @media (max-width: 1024px) {
-    .empresa-conteudo {
-      grid-template-columns: 280px 1fr;
-      gap: 30px;
-      padding: 40px 20px;
-    }
-
-    .empresa-header .empresa-info h1 {
-      font-size: 2.5rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .empresa-conteudo {
-      grid-template-columns: 1fr;
-      gap: 30px;
-      padding: 30px 15px;
-    }
-
-    .empresa-filtros {
-      position: static !important;
-    }
-
-    .empresa-header {
-      padding: 80px 20px 60px;
-
-      .empresa-info {
-        h1 {
-          font-size: 2.2rem;
-        }
-
-        p {
-          font-size: 1.1rem;
-        }
-      }
-    }
-
-    .empresa-ranking {
-      padding: 40px 25px;
-      margin: 30px 15px;
-
-      h2 {
-        font-size: 1.8rem;
-      }
-    }
-  }
-
-  @media (max-width: 480px) {
-    .empresa-header {
-      padding: 60px 15px 40px;
-
-      .empresa-info {
-        h1 {
-          font-size: 1.8rem;
-        }
-
-        p {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .empresa-conteudo {
-      padding: 20px 10px;
-
-      .empresa-filtros {
-        padding: 20px;
-      }
-
-      .empresa-lista .lista-info {
-        padding: 20px;
-
-        h2 {
-          font-size: 1.6rem;
-        }
-      }
-    }
-
-    .empresa-ranking {
-      padding: 30px 20px;
-
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      ol li {
-        padding: 15px;
-        font-size: 1rem;
-      }
-    }
-
-    .paginacao {
-      flex-wrap: wrap;
-      
-      button {
-        padding: 10px 14px;
-      }
-    }
-  }
-
-  /* Acessibilidade */
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;

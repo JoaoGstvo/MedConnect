@@ -1,13 +1,14 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .postarvaga-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #f4f5f7 0%, #e8ecf1 100%);
+  font-family: $font-family-primary;
   position: relative;
   overflow-x: hidden;
 
-  /* Efeito de background sutil */
   &::before {
     content: '';
     position: absolute;
@@ -16,8 +17,8 @@
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 10% 20%, rgba(58, 155, 220, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(33, 129, 238, 0.03) 0%, transparent 50%);
+      radial-gradient(circle at 10% 20%, rgba($primary-500, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba($primary-600, 0.03) 0%, transparent 50%);
     z-index: 0;
   }
 
@@ -27,12 +28,16 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 100px 20px 80px;
-    background: linear-gradient(135deg, #3a9bdc 0%, #2181ee 50%, #1865c0 100%);
-    color: #fff;
+    padding: $spacing-20 $spacing-6 $spacing-16;
+    background: $gradient-secondary;
+    color: white;
     text-align: center;
     position: relative;
     overflow: hidden;
+
+    @include mobile-only {
+      padding: $spacing-16 $spacing-4 $spacing-12;
+    }
 
     &::before {
       content: '';
@@ -50,24 +55,33 @@
       margin: 0 auto;
       position: relative;
       z-index: 2;
+      @include fade-in;
       animation: fadeInUp 0.8s ease-out;
 
       h1 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 20px;
-        text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        font-size: $font-size-5xl;
+        font-weight: $font-weight-extrabold;
+        margin-bottom: $spacing-6;
+        text-shadow: $shadow-2xl;
         background: linear-gradient(135deg, #ffffff 0%, #e6f4ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+
+        @include mobile-only {
+          font-size: $font-size-4xl;
+        }
       }
 
       p {
-        font-size: 1.3rem;
+        font-size: $font-size-xl;
         color: rgba(255, 255, 255, 0.95);
-        line-height: 1.6;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: $line-height-relaxed;
+        text-shadow: $shadow-base;
+
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
     }
   }
@@ -75,25 +89,30 @@
   .form-section {
     display: flex;
     justify-content: center;
-    padding: 80px 20px;
+    padding: $spacing-20 $spacing-6;
     position: relative;
     z-index: 1;
 
+    @include mobile-only {
+      padding: $spacing-12 $spacing-4;
+    }
+
     .vaga-form {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 50px;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      @include card-glass;
+      padding: $spacing-16;
       width: 100%;
       max-width: 800px;
       display: flex;
       flex-direction: column;
-      gap: 25px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      gap: $spacing-8;
       position: relative;
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all $transition-bounce;
+
+      @include mobile-only {
+        padding: $spacing-8 $spacing-6;
+        gap: $spacing-6;
+      }
 
       &::before {
         content: '';
@@ -102,54 +121,45 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #3a9bdc, #2181ee, #1865c0);
+        background: $gradient-primary;
       }
 
       &:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+        box-shadow: $shadow-2xl;
       }
 
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: $spacing-3;
 
         label {
-          font-size: 1rem;
-          font-weight: 600;
-          color: #2c3e50;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          font-size: $font-size-base;
+          font-weight: $font-weight-semibold;
+          color: $gray-800;
+          @include flex-center;
+          gap: $spacing-2;
+          justify-content: flex-start;
 
           &::before {
             content: '•';
-            color: #2181ee;
-            font-size: 1.2rem;
+            color: $primary-600;
+            font-size: $font-size-lg;
           }
         }
 
         input,
         select,
         textarea {
-          padding: 16px 20px;
-          border: 2px solid rgba(58, 155, 220, 0.2);
-          border-radius: 12px;
-          font-size: 1rem;
+          @include input-base;
+          padding: $spacing-4 $spacing-6;
+          border: 2px solid rgba($primary-500, 0.2);
           background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-          color: #2c3e50;
-
-          &::placeholder {
-            color: rgba(44, 62, 80, 0.6);
-          }
 
           &:focus {
-            outline: none;
-            border-color: #3a9bdc;
-            box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+            border-color: $primary-500;
+            box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
             background: rgba(255, 255, 255, 0.95);
             transform: translateY(-2px);
           }
@@ -158,16 +168,15 @@
         textarea {
           resize: vertical;
           min-height: 140px;
-          font-family: inherit;
-          line-height: 1.5;
+          line-height: $line-height-relaxed;
         }
 
         select {
           appearance: none;
           cursor: pointer;
-          background-image: url("data:image/svg+xml;utf8,<svg fill='%233a9bdc' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+          background-image: url("data:image/svg+xml;utf8,<svg fill='%233b82f6' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
           background-repeat: no-repeat;
-          background-position: right 16px center;
+          background-position: right $spacing-4 center;
           background-size: 16px;
         }
       }
@@ -175,9 +184,9 @@
       .form-inline {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 20px;
+        gap: $spacing-6;
 
-        @media (max-width: 768px) {
+        @include mobile-only {
           grid-template-columns: 1fr;
         }
 
@@ -188,22 +197,24 @@
 
       .form-actions {
         text-align: center;
-        margin-top: 20px;
+        margin-top: $spacing-6;
 
         button {
-          background: linear-gradient(135deg, #3a9bdc, #2181ee);
-          color: #fff;
-          padding: 18px 42px;
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          font-size: 1.1rem;
-          font-weight: 600;
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          box-shadow: 0 8px 20px rgba(58, 155, 220, 0.3);
+          @include btn-primary;
+          padding: $spacing-5 $spacing-12;
+          border-radius: $radius-lg;
+          font-size: $font-size-lg;
+          font-weight: $font-weight-semibold;
+          box-shadow: $shadow-lg;
           position: relative;
           overflow: hidden;
           min-width: 200px;
+
+          @include mobile-only {
+            padding: $spacing-4 $spacing-8;
+            width: 100%;
+            min-width: auto;
+          }
 
           &::before {
             content: '';
@@ -213,31 +224,30 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s;
+            transition: left $transition-slow;
           }
 
-          &:hover {
-            background: linear-gradient(135deg, #2181ee, #1865c0);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(58, 155, 220, 0.4);
+          &:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: $shadow-xl;
 
             &::before {
               left: 100%;
             }
           }
 
-          &:active {
-            transform: translateY(-2px) scale(1.02);
+          &:active:not(:disabled) {
+            transform: translateY(0) scale(1);
           }
 
           &:disabled {
-            background: #ccc;
+            background: $gray-400;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
 
             &:hover {
-              background: #ccc;
+              background: $gray-400;
               transform: none;
               box-shadow: none;
             }
@@ -247,11 +257,10 @@
     }
   }
 
-  /* Animações */
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY($spacing-8);
     }
     to {
       opacity: 1;
@@ -259,57 +268,46 @@
     }
   }
 
-  /* Estados de loading */
   .loading {
     position: relative;
     color: transparent !important;
 
     &::after {
       content: '';
+      @include loading-spinner(20px, white);
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border: 2px solid transparent;
-      border-top: 2px solid #fff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
     }
   }
 
-  @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-
-  /* Mensagens de feedback */
   .form-feedback {
-    padding: 15px 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    font-weight: 600;
+    padding: $spacing-4 $spacing-6;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-6;
+    font-weight: $font-weight-semibold;
     text-align: center;
+    @include slide-up;
     animation: slideIn 0.3s ease;
 
     &.success {
-      background: rgba(46, 204, 113, 0.1);
-      border: 2px solid #2ecc71;
-      color: #27ae60;
+      background: rgba($success-500, 0.1);
+      border: 2px solid $success-500;
+      color: $success-700;
     }
 
     &.error {
-      background: rgba(231, 76, 60, 0.1);
-      border: 2px solid #e74c3c;
-      color: #c0392b;
+      background: rgba($error-500, 0.1);
+      border: 2px solid $error-500;
+      color: $error-700;
     }
   }
 
   @keyframes slideIn {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-$spacing-2);
     }
     to {
       opacity: 1;
@@ -317,76 +315,41 @@
     }
   }
 
-  /* Responsividade */
-  @media (max-width: 768px) {
+  @include mobile-only {
     .principal-container {
-      padding: 80px 20px 60px;
-
       .title {
         h1 {
-          font-size: 2.2rem;
+          font-size: $font-size-3xl;
         }
 
         p {
-          font-size: 1.1rem;
+          font-size: $font-size-base;
         }
       }
     }
 
     .form-section {
-      padding: 60px 15px;
-
       .vaga-form {
-        padding: 35px 25px;
-        gap: 20px;
-      }
-    }
-  }
-
-  @media (max-width: 480px) {
-    .principal-container {
-      padding: 60px 15px 40px;
-
-      .title {
-        h1 {
-          font-size: 1.8rem;
-        }
-
-        p {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .form-section {
-      padding: 40px 10px;
-
-      .vaga-form {
-        padding: 30px 20px;
-
         .form-group {
           input,
           select,
           textarea {
-            padding: 14px 16px;
+            padding: $spacing-3 $spacing-4;
           }
-        }
-
-        .form-actions button {
-          padding: 16px 32px;
-          width: 100%;
-          min-width: auto;
         }
       }
     }
   }
 
-  /* Acessibilidade */
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+    }
+    
+    .vaga-form:hover {
+      transform: none;
     }
   }
 }

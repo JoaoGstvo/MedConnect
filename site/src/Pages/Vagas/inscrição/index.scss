@@ -1,32 +1,35 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .inscricaopage {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+   
+    font-family: $font-family-primary;
 
     .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: $gradient-secondary;
         color: white;
-        padding: 3rem 0 2rem;
+        padding: $spacing-12 0 $spacing-8;
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 $spacing-4;
         }
 
         .hero-content {
             text-align: center;
 
             h1 {
-                font-size: 2.5rem;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
+                font-size: $font-size-4xl;
+                font-weight: $font-weight-bold;
+                margin-bottom: $spacing-2;
             }
 
             p {
-                font-size: 1.2rem;
+                font-size: $font-size-xl;
                 opacity: 0.9;
-                margin-bottom: 2rem;
+                margin-bottom: $spacing-8;
             }
         }
 
@@ -34,7 +37,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 1rem;
+            gap: $spacing-4;
             max-width: 400px;
             margin: 0 auto;
 
@@ -42,9 +45,9 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 0.5rem;
+                gap: $spacing-2;
                 opacity: 0.6;
-                transition: all 0.3s ease;
+                transition: all $transition-base;
 
                 &.active {
                     opacity: 1;
@@ -58,18 +61,16 @@
                 .step-number {
                     width: 40px;
                     height: 40px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: 600;
+                    border-radius: $radius-full;
+                    @include flex-center;
+                    font-weight: $font-weight-semibold;
                     background: rgba(255, 255, 255, 0.1);
                     border: 2px solid rgba(255, 255, 255, 0.3);
                 }
 
                 span {
-                    font-size: 0.9rem;
-                    font-weight: 500;
+                    font-size: $font-size-sm;
+                    font-weight: $font-weight-medium;
                 }
             }
 
@@ -77,145 +78,142 @@
                 width: 60px;
                 height: 2px;
                 background: rgba(255, 255, 255, 0.3);
-                margin: 0 0.5rem;
+                margin: 0 $spacing-2;
             }
         }
     }
 
     .section {
-        padding: 2rem 0 4rem;
+        padding: $spacing-8 0 $spacing-16;
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 $spacing-4;
         }
     }
 
     .inscricao-grid {
         display: grid;
         grid-template-columns: 350px 1fr;
-        gap: 2rem;
+        gap: $spacing-8;
 
-        @media (max-width: 968px) {
+        @include mobile-only {
             grid-template-columns: 1fr;
         }
     }
 
     .vaga-sidebar {
         .vaga-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
+            @include card-base;
+            padding: $spacing-8;
+            border: 1px solid $gray-200;
             position: sticky;
-            top: 2rem;
+            top: $spacing-8;
 
             h3 {
-                color: #2d3748;
-                font-size: 1.3rem;
-                margin-bottom: 1.5rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
+                color: $gray-800;
+                font-size: $font-size-xl;
+                margin-bottom: $spacing-6;
+                @include flex-center;
+                gap: $spacing-2;
+                justify-content: flex-start;
             }
 
             .vaga-info {
                 h2 {
-                    color: #2d3748;
-                    font-size: 1.5rem;
-                    margin-bottom: 0.5rem;
-                    font-weight: 600;
+                    color: $gray-800;
+                    font-size: $font-size-2xl;
+                    margin-bottom: $spacing-2;
+                    font-weight: $font-weight-semibold;
                 }
 
                 .empresa {
-                    color: #667eea;
-                    font-weight: 600;
-                    font-size: 1.1rem;
-                    margin-bottom: 1.5rem;
+                    color: $primary-600;
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-lg;
+                    margin-bottom: $spacing-6;
                 }
             }
 
             .vaga-details {
                 .detail-item {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.75rem;
-                    padding: 0.75rem 0;
-                    border-bottom: 1px solid #f1f5f9;
+                    @include flex-center;
+                    gap: $spacing-2;
+                    padding: $spacing-3 0;
+                    border-bottom: 1px solid $gray-100;
+                    justify-content: flex-start;
 
                     &:last-child {
                         border-bottom: none;
                     }
 
                     .icon {
-                        font-size: 1.1rem;
+                        font-size: $font-size-lg;
+                        color: $gray-600;
                     }
 
                     span:last-child {
-                        color: #4a5568;
+                        color: $gray-700;
                     }
                 }
             }
 
             .vaga-descricao {
-                margin-top: 1.5rem;
-                padding-top: 1.5rem;
-                border-top: 1px solid #e2e8f0;
+                margin-top: $spacing-6;
+                padding-top: $spacing-6;
+                border-top: 1px solid $gray-200;
 
                 h4 {
-                    color: #2d3748;
-                    margin-bottom: 0.75rem;
-                    font-size: 1.1rem;
+                    color: $gray-800;
+                    margin-bottom: $spacing-3;
+                    font-size: $font-size-lg;
                 }
 
                 p {
-                    color: #718096;
-                    line-height: 1.6;
-                    font-size: 0.95rem;
+                    color: $gray-600;
+                    line-height: $line-height-relaxed;
+                    font-size: $font-size-sm;
                 }
             }
         }
     }
 
     .form-container {
-        background: white;
-        border-radius: 16px;
-        padding: 2.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e2e8f0;
+        @include card-base;
+        padding: $spacing-10;
+        border: 1px solid $gray-200;
 
         .etapa-revisao, .etapa-confirmacao {
             h2 {
-                color: #2d3748;
-                font-size: 1.8rem;
-                margin-bottom: 0.5rem;
-                font-weight: 600;
+                color: $gray-800;
+                font-size: $font-size-3xl;
+                margin-bottom: $spacing-2;
+                font-weight: $font-weight-semibold;
             }
 
             .subtitulo {
-                color: #718096;
-                margin-bottom: 2rem;
-                font-size: 1.1rem;
+                color: $gray-600;
+                margin-bottom: $spacing-8;
+                font-size: $font-size-lg;
             }
         }
 
         .opcao-curriculo {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 2rem;
+            background: $gray-50;
+            padding: $spacing-6;
+            border-radius: $radius-lg;
+            border: 1px solid $gray-200;
+            margin-bottom: $spacing-8;
 
             .checkbox-container {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
+                @include flex-center;
+                gap: $spacing-2;
                 cursor: pointer;
-                font-weight: 600;
-                color: #2d3748;
-                margin-bottom: 0.5rem;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+                margin-bottom: $spacing-2;
+                justify-content: flex-start;
 
                 input {
                     display: none;
@@ -224,10 +222,10 @@
                 .checkmark {
                     width: 20px;
                     height: 20px;
-                    border: 2px solid #cbd5e0;
-                    border-radius: 4px;
+                    border: 2px solid $gray-400;
+                    border-radius: $radius-sm;
                     position: relative;
-                    transition: all 0.3s ease;
+                    transition: all $transition-base;
 
                     &::after {
                         content: '';
@@ -244,8 +242,8 @@
                 }
 
                 input:checked + .checkmark {
-                    background: #667eea;
-                    border-color: #667eea;
+                    background: $primary-600;
+                    border-color: $primary-600;
 
                     &::after {
                         display: block;
@@ -254,30 +252,30 @@
             }
 
             small {
-                color: #718096;
-                font-size: 0.9rem;
+                color: $gray-600;
+                font-size: $font-size-sm;
             }
         }
 
         .dados-curriculo {
-            margin-bottom: 2rem;
+            margin-bottom: $spacing-8;
 
             h3 {
-                color: #2d3748;
-                font-size: 1.3rem;
-                margin-bottom: 1.5rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
+                color: $gray-800;
+                font-size: $font-size-xl;
+                margin-bottom: $spacing-6;
+                @include flex-center;
+                gap: $spacing-2;
+                justify-content: flex-start;
             }
 
             .info-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-                margin-bottom: 1.5rem;
+                gap: $spacing-4;
+                margin-bottom: $spacing-6;
 
-                @media (max-width: 768px) {
+                @include mobile-only {
                     grid-template-columns: 1fr;
                 }
 
@@ -288,21 +286,21 @@
 
                     label {
                         display: block;
-                        color: #718096;
-                        font-size: 0.9rem;
-                        font-weight: 600;
-                        margin-bottom: 0.5rem;
+                        color: $gray-600;
+                        font-size: $font-size-xs;
+                        font-weight: $font-weight-semibold;
+                        margin-bottom: $spacing-2;
                         text-transform: uppercase;
                         letter-spacing: 0.5px;
                     }
 
                     .info-value {
-                        background: #f7fafc;
-                        padding: 0.75rem 1rem;
-                        border-radius: 8px;
-                        border: 1px solid #e2e8f0;
-                        color: #2d3748;
-                        line-height: 1.5;
+                        background: $gray-50;
+                        padding: $spacing-3 $spacing-4;
+                        border-radius: $radius-lg;
+                        border: 1px solid $gray-200;
+                        color: $gray-800;
+                        line-height: $line-height-normal;
                     }
                 }
             }
@@ -311,63 +309,59 @@
                 text-align: center;
 
                 .btn-link {
-                    color: #667eea;
-                    text-decoration: none;
-                    font-weight: 600;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.5rem 1rem;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
+                    @include btn-ghost;
+                    color: $primary-600;
+                    font-weight: $font-weight-semibold;
+                    @include flex-center;
+                    gap: $spacing-2;
+                    padding: $spacing-2 $spacing-4;
+                    border-radius: $radius-md;
 
-                    &:hover {
-                        background: #f7fafc;
+                    &:hover:not(:disabled) {
+                        background: $gray-50;
                     }
                 }
             }
         }
 
         .upload-section {
-            background: #f0f9ff;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #bae6fd;
-            margin-bottom: 2rem;
+            background: $primary-50;
+            padding: $spacing-6;
+            border-radius: $radius-lg;
+            border: 1px solid $primary-200;
+            margin-bottom: $spacing-8;
 
             h3 {
-                color: #0369a1;
-                font-size: 1.2rem;
-                margin-bottom: 0.75rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
+                color: $primary-700;
+                font-size: $font-size-lg;
+                margin-bottom: $spacing-3;
+                @include flex-center;
+                gap: $spacing-2;
+                justify-content: flex-start;
             }
 
             p {
-                color: #0c4a6e;
-                margin-bottom: 1.5rem;
-                font-size: 0.95rem;
-                line-height: 1.5;
+                color: $primary-800;
+                margin-bottom: $spacing-6;
+                font-size: $font-size-sm;
+                line-height: $line-height-relaxed;
             }
 
             .upload-area {
                 .file-selected {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
+                    @include flex-between;
                     background: white;
-                    padding: 1rem;
-                    border-radius: 8px;
-                    border: 2px dashed #22c55e;
+                    padding: $spacing-4;
+                    border-radius: $radius-lg;
+                    border: 2px dashed $success-500;
 
                     .file-info {
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
+                        @include flex-center;
+                        gap: $spacing-4;
 
                         .file-icon {
-                            font-size: 2rem;
+                            font-size: $font-size-3xl;
+                            color: $success-500;
                         }
 
                         .file-details {
@@ -375,27 +369,25 @@
                             flex-direction: column;
 
                             strong {
-                                color: #2d3748;
+                                color: $gray-800;
                             }
 
                             span {
-                                color: #718096;
-                                font-size: 0.85rem;
+                                color: $gray-600;
+                                font-size: $font-size-xs;
                             }
                         }
                     }
 
                     .btn-remove {
-                        background: #fef2f2;
-                        border: 1px solid #fecaca;
-                        color: #dc2626;
-                        padding: 0.5rem;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
+                        @include btn-ghost;
+                        background: $error-50;
+                        border: 1px solid $error-200;
+                        color: $error-600;
+                        padding: $spacing-2;
 
-                        &:hover {
-                            background: #fecaca;
+                        &:hover:not(:disabled) {
+                            background: $error-200;
                         }
                     }
                 }
@@ -408,36 +400,36 @@
                     .upload-label {
                         display: block;
                         background: white;
-                        padding: 2rem;
-                        border-radius: 8px;
-                        border: 2px dashed #cbd5e0;
+                        padding: $spacing-8;
+                        border-radius: $radius-lg;
+                        border: 2px dashed $gray-300;
                         text-align: center;
                         cursor: pointer;
-                        transition: all 0.3s ease;
+                        transition: all $transition-base;
 
                         &:hover {
-                            border-color: #667eea;
-                            background: #f7fafc;
+                            border-color: $primary-500;
+                            background: $gray-50;
                         }
 
                         .upload-icon {
-                            font-size: 3rem;
-                            margin-bottom: 1rem;
-                            color: #cbd5e0;
+                            font-size: $font-size-4xl;
+                            margin-bottom: $spacing-4;
+                            color: $gray-400;
                         }
 
                         .upload-text {
                             display: flex;
                             flex-direction: column;
-                            gap: 0.25rem;
+                            gap: $spacing-1;
 
                             strong {
-                                color: #2d3748;
+                                color: $gray-800;
                             }
 
                             span {
-                                color: #718096;
-                                font-size: 0.9rem;
+                                color: $gray-600;
+                                font-size: $font-size-sm;
                             }
                         }
                     }
@@ -445,81 +437,78 @@
             }
 
             small {
-                color: #64748b;
-                font-size: 0.85rem;
+                color: $gray-600;
+                font-size: $font-size-xs;
             }
         }
 
         .resumo-candidatura {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 2rem;
+            background: $gray-50;
+            padding: $spacing-6;
+            border-radius: $radius-lg;
+            border: 1px solid $gray-200;
+            margin-bottom: $spacing-8;
 
             .resumo-item {
-                padding: 0.75rem 0;
-                border-bottom: 1px solid #e2e8f0;
+                padding: $spacing-3 0;
+                border-bottom: 1px solid $gray-200;
 
                 &:last-child {
                     border-bottom: none;
                 }
 
                 strong {
-                    color: #2d3748;
+                    color: $gray-800;
                 }
 
                 &:last-child {
-                    color: #667eea;
-                    font-weight: 600;
+                    color: $primary-600;
+                    font-weight: $font-weight-semibold;
                 }
             }
         }
 
         .confirmacao-aviso {
-            display: flex;
+            @include flex-center;
             align-items: flex-start;
-            gap: 1rem;
-            background: #fffbeb;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #fcd34d;
-            margin-bottom: 2rem;
+            gap: $spacing-4;
+            background: $warning-50;
+            padding: $spacing-6;
+            border-radius: $radius-lg;
+            border: 1px solid $warning-300;
+            margin-bottom: $spacing-8;
 
             .aviso-icon {
-                font-size: 1.5rem;
-                color: #d97706;
+                font-size: $font-size-2xl;
+                color: $warning-600;
             }
 
             .aviso-text {
-                color: #92400e;
-                line-height: 1.5;
+                color: $warning-800;
+                line-height: $line-height-relaxed;
 
                 strong {
-                    color: #92400e;
+                    color: $warning-800;
                 }
             }
         }
 
         .actions {
             display: flex;
-            gap: 1rem;
+            gap: $spacing-4;
             justify-content: space-between;
 
-            @media (max-width: 768px) {
+            @include mobile-only {
                 flex-direction: column;
             }
 
             button {
-                padding: 1rem 2rem;
-                border: none;
-                border-radius: 8px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
+                @include btn-base;
+                padding: $spacing-4 $spacing-8;
+                border-radius: $radius-lg;
+                font-weight: $font-weight-semibold;
+                @include flex-center;
+                gap: $spacing-2;
 
                 &:disabled {
                     opacity: 0.6;
@@ -527,27 +516,20 @@
                 }
 
                 &.btn-primary {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
+                    @include btn-primary;
 
                     &:hover:not(:disabled) {
                         transform: translateY(-2px);
-                        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                        box-shadow: $shadow-xl;
                     }
                 }
 
                 &.btn-secondary {
-                    background: #f7fafc;
-                    color: #4a5568;
-                    border: 1px solid #e2e8f0;
+                    @include btn-secondary;
 
-                    &:hover {
-                        background: #edf2f7;
-                    border-color: #cbd5e0;
-                    transform: translateY(-1px);
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                    color: #2d3748;
-                    text-decoration: none;
+                    &:hover:not(:disabled) {
+                        transform: translateY(-1px);
+                        box-shadow: $shadow-md;
                     }
                 }
             }
@@ -556,58 +538,62 @@
 
     .loading-page, .error-page {
         text-align: center;
-        padding: 4rem;
-        font-size: 1.2rem;
-        color: #718096;
+        padding: $spacing-16;
+        font-size: $font-size-lg;
+        color: $gray-600;
     }
 
     .spinner {
-        width: 16px;
-        height: 16px;
-        border: 2px solid transparent;
-        border-top: 2px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        @include loading-spinner(16px, white);
     }
 }
 
 // Responsividade
-@media (max-width: 768px) {
+@include mobile-only {
     .inscricaopage {
         .hero-section {
-            padding: 2rem 0 1.5rem;
+            padding: $spacing-8 0 $spacing-6;
 
             .hero-content {
                 h1 {
-                    font-size: 2rem;
+                    font-size: $font-size-3xl;
                 }
 
                 p {
-                    font-size: 1.1rem;
+                    font-size: $font-size-lg;
                 }
             }
 
             .progress-steps {
                 .step {
                     span {
-                        font-size: 0.8rem;
-                    text-align: center;
-                    line-height: 1.2;
-                    width: 80px;
-                    word-wrap: break-word;
-                    hyphens: auto;
+                        font-size: $font-size-xs;
+                        text-align: center;
+                        line-height: $line-height-tight;
+                        width: 80px;
+                        word-wrap: break-word;
+                        hyphens: auto;
                     }
                 }
             }
         }
 
         .form-container {
-            padding: 1.5rem;
+            padding: $spacing-6;
+        }
+    }
+}
+
+// Acessibilidade
+@media (prefers-reduced-motion: reduce) {
+    .inscricaopage {
+        * {
+            transition-duration: 0.01ms !important;
+            animation-duration: 0.01ms !important;
+        }
+        
+        .form-container .actions button:hover:not(:disabled) {
+            transform: none;
         }
     }
 }

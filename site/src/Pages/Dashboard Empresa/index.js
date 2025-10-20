@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
-
 const DashboardEmpresa = () => {
   const [empresa, setEmpresa] = useState(null);
   const [vagas, setVagas] = useState([]);
@@ -554,7 +553,7 @@ const DashboardEmpresa = () => {
             className={`nav-tab ${activeTab === 'vagas' ? 'active' : ''}`}
             onClick={() => setActiveTab('vagas')}
           >
-            📋 Minhas Vagas
+             Minhas Vagas
           </button>
           <button 
             className={`nav-tab ${activeTab === 'candidaturas' ? 'active' : ''}`}
@@ -563,13 +562,13 @@ const DashboardEmpresa = () => {
               carregarCandidaturas();
             }}
           >
-            👥 Candidaturas
+             Candidaturas
           </button>
           <button 
             className={`nav-tab ${activeTab === 'perfil' ? 'active' : ''}`}
             onClick={() => setActiveTab('perfil')}
           >
-            🏢 Perfil da Empresa
+             Perfil da Empresa
           </button>
         </div>
       </nav>

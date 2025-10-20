@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Pages/Login/index.js';
 import LandingPage from './Pages/LandingPage/index.js'
 import Signup from './Pages/Cadastro/index.js';
-import BusnessProfile from './Pages/PerfilEmpresa/index.js';
-import ProfissionalProfile from './Pages/PerfilProfissional/index.js';
 import Artigos from './Pages/Artigos/index.js';
 import NovoArtigoPage from './Pages/Artigos/NovoArtigo/index.js';
 import EmpresaPage from './Pages/Empresa/index.js';
@@ -24,7 +22,6 @@ import ContatoProfissionalPage from './Pages/ContatoProfissional/index.js';
 import MensagemSucessoPage from './Pages/PerfilProfissional/menssagemsucesso/index.js';
 import ArtigoPublicadoPage from './Pages/Artigos/ArtigoPublicado/index.js';
 import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
-import CardArtigo from './Components/CardArtigo/index.js';
 import CardCandidato from './Components/CardCandidato/index.js';
 import CardEmpresa from './Components/CardEmpresa/index.js';
 
@@ -33,17 +30,14 @@ export default function Index() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/cardartigo" element={<CardArtigo />} />
-                <Route path="/inicial" element={<LandingPage1 />} />
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/cadastro" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/senha" element={<EsqueceuSenha />} />
-                <Route path="/perfilempresa" element={<BusnessProfile />} />
-                <Route path="/perfilprofissional" element={<ProfissionalProfile />} />
-                <Route path="/artigos" element={<Artigos />} />
-                <Route path="/novoartigo" element={<NovoArtigoPage />} />
-                <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} />
+                <Route path="/inicial" element={<LandingPage1 />} />  {/*pagina 1*/}
+                <Route path="/" element={<LandingPage />} /> {/*pagina principal*/}
+                <Route path="/cadastro" element={<Signup />} /> {/*cadastro geral*/}
+                <Route path="/login" element={<Login />} /> {/*login geral*/}
+                <Route path="/senha" element={<EsqueceuSenha />} /> {/*esqueceu a senha*/}
+                <Route path="/artigos" element={<Artigos />} /> {/*tela de artigos*/}
+                <Route path="/novoartigo" element={<NovoArtigoPage />} /> {/*tela de criação de artigos*/}
+                <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} /> 
                 <Route path="/empresas" element={<EmpresaPage />} />
                 <Route path="/vagas" element={<VagasPage />} />
                 <Route path="/minhasvagas" element={<MinhasVagas />} />
@@ -56,7 +50,7 @@ export default function Index() {
                 <Route path="/gerenciamentocandidato" element={<GerenciamentoCandidatosPage />} />
                 <Route path="/contatoprofissional" element={<ContatoProfissionalPage />} />
                 <Route path="/mensagemenviadaprofissional" element={<MensagemSucessoPage />} />
-                <Route path="/faqsite" element={<ContatoPage />} />
+                <Route path="/faqsite" element={<ContatoPage />} /> {/*suporte site*/}
                 <Route path="/hospital" element={<hospital />} />
                 <Route path="/vagas" element={<VagasPage />} />
                 <Route path="/minhas-vagas" element={<MinhasVagas />} />

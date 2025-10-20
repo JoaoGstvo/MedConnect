@@ -212,7 +212,7 @@ function PostarVaga() {
                             disabled={loading}
                             className={loading ? 'loading' : ''}
                         >
-                            {loading ? 'Publicando...' : '🚀 Publicar Vaga'}
+                            {loading ? 'Publicando...' : 'Publicar Vaga'}
                         </button>
                     </div>
                 </form>

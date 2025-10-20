@@ -8,9 +8,6 @@ import CardVaga from '../../Components/CardVaga';
 import CardEmpresa from '../../Components/CardEmpresa';
 import CardProfissional from '../../Components/CardProfissional';
 import MapaEmpresas from '../../Components/MapaEmpresas';
-
-import { hospitais } from '../Empresa/hospitais';
-
 function LandingPage() {
   const [vagas, setVagas] = useState([]);
   const sectionRefs = useRef([]);
@@ -90,9 +87,6 @@ function LandingPage() {
         <div className="title"><h1>Empresas em Destaque</h1></div>
         <div className="container">
           <div className="wrapper">
-            {hospitais.slice(0, 3).map(hospital => (
-              <CardEmpresa key={hospital.id} hospital={hospital} />
-            ))}
           </div>
         </div>
       </section>
