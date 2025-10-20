@@ -12,7 +12,7 @@
   .principal-container {
     @include flex-column-center;
     min-height: 85vh;
-    padding: $spacing-20 $spacing-5;
+    padding: $spacing-20 $spacing-8;
     text-align: center;
     color: white;
     position: relative;
@@ -36,13 +36,17 @@
       h1 {
         font-size: $font-size-5xl;
         font-weight: $font-weight-extrabold;
-        margin-bottom: $spacing-5;
-        text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+        margin-bottom: $spacing-6;
+        text-shadow: $shadow-2xl;
         background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         color: $gray-900;
+
+        @include mobile-only {
+          font-size: $font-size-4xl;
+        }
       }
 
       p {
@@ -50,8 +54,12 @@
         line-height: $line-height-relaxed;
         max-width: 700px;
         margin: 0 auto;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        color: rgba(255, 255, 255, 0.9);
+        text-shadow: $shadow-base;
+        color: rgba(255, 255, 255, 0.95);
+
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
     }
 
@@ -61,41 +69,45 @@
       z-index: 2;
       flex-wrap: wrap;
 
-      button {
-        @include btn-primary;
-        padding: $spacing-5 $spacing-10;
+      .btn-primary, .btn-secondary {
+        @include btn-base;
+        padding: $spacing-4 $spacing-8;
         border-radius: $radius-full;
-        border: 2px solid rgba(255,255,255,0.3);
-        background: rgba(255,255,255,0.15);
-        color: white;
         font-weight: $font-weight-semibold;
         box-shadow: $shadow-lg;
         position: relative;
         overflow: hidden;
+        transition: all $transition-base;
+
+        @include mobile-only {
+          padding: $spacing-3 $spacing-6;
+          width: 100%;
+          max-width: 280px;
+        }
+      }
+
+      .btn-primary {
+        background: white;
+        color: $primary-700;
+        border: 2px solid white;
+
+        &:hover:not(:disabled) {
+          background: $gray-50;
+          transform: translateY(-2px);
+          box-shadow: $shadow-xl;
+        }
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
         backdrop-filter: blur(10px);
 
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.6s;
-        }
-
-        &:hover {
-          background: white;
-          color: $primary-700;
-          transform: translateY(-5px) scale(1.05);
+        &:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.1);
           border-color: white;
-
-          &::before { left: 100%; }
-        }
-
-        &:active { 
-          transform: translateY(-2px) scale(1.02); 
+          transform: translateY(-2px);
         }
       }
     }
@@ -103,7 +115,7 @@
 
   .section {
     flex: 1;
-    padding: $spacing-24 $spacing-5;
+    padding: $spacing-20 $spacing-8;
     position: relative;
     background-color: white;
 
@@ -111,111 +123,274 @@
       background-color: $gray-50; 
     }
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: $gradient-primary;
-      opacity: 0;
-      transform: scaleX(0);
-      transition: all 0.6s ease;
-    }
-
-    &.in-view::before {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-
-    .title { 
+    .section-header {
       text-align: center;
-      margin-bottom: $spacing-16;
+      margin-bottom: $spacing-12;
 
-      h1 {
+      h2 {
         font-size: $font-size-4xl;
         font-weight: $font-weight-bold;
         color: $gray-900;
+        margin-bottom: $spacing-4;
         position: relative;
         display: inline-block;
-        padding-bottom: $spacing-4;
 
         &::after {
-          content: "";
-          display: block;
-          width: 5rem;
+          content: '';
+          position: absolute;
+          bottom: -$spacing-3;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
           height: 4px;
-          margin: $spacing-4 auto 0;
           background: $gradient-primary;
           border-radius: $radius-sm;
           transition: width $transition-base;
         }
 
-        &:hover::after { 
-          width: 7.5rem; 
+        &:hover::after {
+          width: 120px;
+        }
+
+        @include mobile-only {
+          font-size: $font-size-3xl;
+        }
+      }
+
+      p {
+        font-size: $font-size-lg;
+        color: $gray-600;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: $line-height-relaxed;
+
+        @include mobile-only {
+          font-size: $font-size-base;
         }
       }
     }
 
     .container {
-      @include flex-center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-      .wrapper {
-        @include card-grid(3, $spacing-8);
-        max-width: 1300px;
-        width: 100%;
+    .cards-grid {
+      @include card-grid(3, $spacing-6);
+      margin-bottom: $spacing-8;
+
+      @include mobile-only {
+        grid-template-columns: 1fr;
+        gap: $spacing-4;
+      }
+    }
+
+    .section-footer {
+      text-align: center;
+      margin-top: $spacing-8;
+
+      .view-all-link {
+        @include btn-outline;
+        padding: $spacing-3 $spacing-8;
+        border-radius: $radius-full;
+        font-weight: $font-weight-semibold;
+        text-decoration: none;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: $shadow-md;
+        }
       }
     }
   }
 
-  .no-data {
-    @include flex-column-center;
-    padding: $spacing-16;
-    color: $gray-600;
-    font-size: $font-size-lg;
+  .loading-state, .empty-state {
     grid-column: 1 / -1;
+    @include flex-column-center;
+    padding: $spacing-12;
+    text-align: center;
+
+    .loading-spinner {
+      @include loading-spinner(3rem, $primary-500);
+      margin-bottom: $spacing-4;
+    }
+
+    p {
+      font-size: $font-size-lg;
+      color: $gray-600;
+      margin-bottom: $spacing-4;
+    }
+
+    .btn-outline {
+      @include btn-outline;
+      padding: $spacing-3 $spacing-6;
+    }
   }
-}
 
-// Responsive design
-@include mobile-only {
-  .landingpage {
-    .principal-container {
-      padding: $spacing-16 $spacing-4;
+  .empty-state {
+    .empty-icon {
+      font-size: $font-size-4xl;
+      margin-bottom: $spacing-4;
+    }
 
-      .title {
-        h1 {
+    h3 {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: $gray-800;
+      margin-bottom: $spacing-2;
+    }
+  }
+
+  .cta-section {
+    background: $gradient-primary;
+    color: white;
+    padding: $spacing-20 $spacing-8;
+    text-align: center;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,0 1000,1000 1000,0"/></svg>');
+      background-size: cover;
+    }
+
+    .cta-content {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+
+      h2 {
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-4;
+        text-shadow: $shadow-lg;
+
+        @include mobile-only {
           font-size: $font-size-3xl;
         }
+      }
 
-        p {
+      p {
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-8;
+        opacity: 0.95;
+        line-height: $line-height-relaxed;
+
+        @include mobile-only {
           font-size: $font-size-lg;
         }
       }
 
-      .buttons {
-        flex-direction: column;
-        width: 100%;
-        max-width: 300px;
+      .cta-buttons {
+        @include flex-center;
+        gap: $spacing-4;
+        flex-wrap: wrap;
 
-        button {
-          width: 100%;
+        .btn-primary, .btn-outline {
+          @include btn-base;
+          padding: $spacing-4 $spacing-8;
+          border-radius: $radius-full;
+          font-weight: $font-weight-semibold;
+          text-decoration: none;
+          transition: all $transition-base;
+
+          @include mobile-only {
+            padding: $spacing-3 $spacing-6;
+            width: 100%;
+            max-width: 280px;
+          }
+        }
+
+        .btn-primary {
+          background: white;
+          color: $primary-700;
+          border: 2px solid white;
+
+          &:hover:not(:disabled) {
+            background: $gray-50;
+            transform: translateY(-2px);
+            box-shadow: $shadow-xl;
+          }
+        }
+
+        .btn-outline {
+          background: transparent;
+          color: white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+
+          &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-2px);
+          }
         }
       }
     }
+  }
+}
 
-    .section {
+// Animações
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY($spacing-8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  @include fade-in;
+}
+
+// Acessibilidade
+@media (prefers-reduced-motion: reduce) {
+  .landingpage {
+    .principal-container,
+    .section,
+    .cta-section {
+      .buttons,
+      .cta-buttons {
+        button,
+        .btn-primary,
+        .btn-secondary,
+        .btn-outline {
+          &:hover:not(:disabled) {
+            transform: none;
+          }
+        }
+      }
+    }
+    
+    .section-header h2::after {
+      transition: none;
+    }
+  }
+  
+  .fade-in {
+    animation: none;
+  }
+}
+
+// Responsividade adicional
+@include mobile-only {
+  .landingpage {
+    .principal-container {
       padding: $spacing-16 $spacing-4;
-
-      .title h1 {
-        font-size: $font-size-3xl;
-      }
-
-      .container .wrapper {
-        grid-template-columns: 1fr;
-        gap: $spacing-6;
-      }
+      min-height: 70vh;
+    }
+    
+    .section {
+      padding: $spacing-12 $spacing-4;
+    }
+    
+    .cta-section {
+      padding: $spacing-12 $spacing-4;
     }
   }
 }

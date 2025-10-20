@@ -6,21 +6,8 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: $font-family-primary;
+  background: $gray-50;
   position: relative;
-  overflow-x: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 10% 20%, rgba($primary-500, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba($primary-600, 0.03) 0%, transparent 50%);
-    z-index: 0;
-  }
 
   .empresa-header {
     display: flex;
@@ -28,7 +15,7 @@
     justify-content: center;
     width: 100%;
     padding: $spacing-20 $spacing-6 $spacing-16;
-    background: $gradient-secondary;
+    background: $gradient-primary;
     color: white;
     position: relative;
     overflow: hidden;
@@ -54,32 +41,25 @@
       position: relative;
       z-index: 2;
       @include fade-in;
-      animation: fadeInUp 0.8s ease-out;
 
       h1 {
-        font-size: $font-size-5xl;
-        font-weight: $font-weight-extrabold;
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-bold;
         margin-bottom: $spacing-6;
-        text-shadow: $shadow-2xl;
         line-height: $line-height-tight;
-        background: linear-gradient(135deg, #ffffff 0%, #e6f4ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
 
         @include mobile-only {
-          font-size: $font-size-4xl;
+          font-size: $font-size-3xl;
         }
       }
 
       p {
-        font-size: $font-size-xl;
-        color: rgba(255, 255, 255, 0.95);
+        font-size: $font-size-lg;
+        color: rgba(255, 255, 255, 0.9);
         line-height: $line-height-relaxed;
-        text-shadow: $shadow-base;
 
         @include mobile-only {
-          font-size: $font-size-lg;
+          font-size: $font-size-base;
         }
       }
     }
@@ -87,132 +67,82 @@
 
   .empresa-conteudo {
     display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: $spacing-16;
-    max-width: 1400px;
+    grid-template-columns: 280px 1fr;
+    gap: $spacing-8;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: $spacing-12 $spacing-6;
+    padding: $spacing-8;
     position: relative;
-    z-index: 1;
 
     @include mobile-only {
       grid-template-columns: 1fr;
-      gap: $spacing-8;
-      padding: $spacing-8 $spacing-4;
+      gap: $spacing-6;
+      padding: $spacing-6 $spacing-4;
     }
 
     .empresa-filtros {
-      @include card-glass;
-      padding: $spacing-8;
+      @include card-base;
+      padding: $spacing-6;
       height: fit-content;
       position: sticky;
-      top: $spacing-20;
+      top: $spacing-8;
 
       @include mobile-only {
         position: static;
       }
 
       h3 {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
         color: $gray-800;
-        margin-bottom: $spacing-6;
-        position: relative;
-        padding-bottom: $spacing-3;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 40px;
-          height: 3px;
-          background: $gradient-primary;
-          border-radius: $radius-sm;
-        }
+        margin-bottom: $spacing-4;
       }
 
-      input, select {
+      input {
         @include input-base;
-        padding: $spacing-3 $spacing-4;
-        margin-bottom: $spacing-6;
-        border: 2px solid rgba($primary-500, 0.2);
-        background: rgba(255, 255, 255, 0.8);
+        padding: $spacing-3;
+        margin-bottom: $spacing-4;
+        border-radius: $radius-lg;
 
         &:focus {
           border-color: $primary-500;
           box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
-          background: rgba(255, 255, 255, 0.95);
-          transform: translateY(-2px);
         }
       }
 
-      h4 {
-        font-size: $font-size-lg;
-        font-weight: $font-weight-semibold;
-        color: $gray-800;
-        margin: $spacing-8 0 $spacing-4;
-      }
+      .filtros-info {
+        margin: $spacing-4 0;
+        padding: $spacing-3;
+        background: $primary-50;
+        border-radius: $radius-lg;
+        border-left: 4px solid $primary-500;
 
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $spacing-2;
-        margin-bottom: $spacing-6;
-
-        .chip {
-          @include btn-secondary;
-          padding: $spacing-2 $spacing-4;
-          border-radius: $radius-full;
-          border: 2px solid rgba($primary-500, 0.3);
-          background: rgba(255, 255, 255, 0.6);
-          color: $primary-500;
+        p {
           font-size: $font-size-sm;
-          font-weight: $font-weight-medium;
-
-          &:hover:not(.active) {
-            background: $primary-500;
-            color: white;
-            border-color: $primary-500;
-            transform: translateY(-2px);
-            box-shadow: $shadow-md;
-          }
-
-          &.active {
-            background: $primary-600;
-            color: white;
-            border-color: $primary-600;
-          }
+          color: $primary-700;
+          margin: 0;
+          line-height: $line-height-tight;
         }
       }
 
       .limpar {
-        @include btn-base;
+        @include btn-secondary;
         width: 100%;
         padding: $spacing-3;
-        border: 2px solid rgba($error-500, 0.3);
-        border-radius: $radius-lg;
-        background: rgba(255, 255, 255, 0.8);
-        color: $error-500;
-        font-weight: $font-weight-semibold;
+        font-size: $font-size-sm;
 
         &:hover:not(:disabled) {
-          background: $error-500;
-          color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba($error-500, 0.3);
+          background: $gray-200;
         }
       }
     }
 
     .empresa-lista {
       .lista-info {
-        @include card-glass;
-        padding: $spacing-8;
-        margin-bottom: $spacing-8;
+        margin-bottom: $spacing-6;
 
         h2 {
-          font-size: $font-size-3xl;
+          font-size: $font-size-2xl;
           font-weight: $font-weight-bold;
           color: $gray-800;
           margin-bottom: $spacing-2;
@@ -224,146 +154,66 @@
         }
       }
 
+      .loading-state,
+      .error-state,
+      .empty-state {
+        @include card-base;
+        @include flex-column-center;
+        padding: $spacing-12;
+        text-align: center;
+        gap: $spacing-4;
+
+        .loading-spinner {
+          @include loading-spinner(2rem, $primary-500);
+        }
+
+        .btn-retry,
+        .btn-limpar {
+          @include btn-primary;
+          margin-top: $spacing-4;
+        }
+      }
+
+      .error-state {
+        background: rgba($error-50, 0.8);
+        border: 1px solid $error-200;
+      }
+
+      .empty-state {
+        background: rgba($warning-50, 0.8);
+        border: 1px solid $warning-200;
+      }
+
       & > div:not(.lista-info):not(.paginacao) {
         display: grid;
-        gap: $spacing-6;
+        gap: $spacing-4;
       }
 
       .paginacao {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: $spacing-2;
-        margin-top: $spacing-16;
-
-        @include mobile-only {
-          flex-wrap: wrap;
-        }
+        gap: $spacing-4;
+        margin-top: $spacing-8;
+        padding: $spacing-4;
 
         button {
           @include btn-secondary;
-          padding: $spacing-3 $spacing-4;
-          border-radius: $radius-lg;
-          border: 2px solid rgba($primary-500, 0.3);
-          background: rgba(255, 255, 255, 0.8);
-          color: $primary-500;
-          font-weight: $font-weight-semibold;
+          padding: $spacing-2 $spacing-4;
+          font-size: $font-size-sm;
 
-          &:hover:not(.active) {
-            background: rgba($primary-500, 0.1);
-            transform: translateY(-2px);
-          }
-
-          &.active {
-            background: $gradient-primary;
-            color: white;
-            border-color: $primary-600;
-            box-shadow: $shadow-md;
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
         }
-      }
-    }
-  }
 
-  .empresa-ranking {
-    @include card-glass;
-    padding: $spacing-16;
-    margin: $spacing-16 auto;
-    max-width: 1200px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-
-    @include mobile-only {
-      padding: $spacing-8;
-      margin: $spacing-8 $spacing-4;
-    }
-
-    h2 {
-      font-size: $font-size-4xl;
-      font-weight: $font-weight-bold;
-      color: $gray-800;
-      margin-bottom: $spacing-8;
-      position: relative;
-      display: inline-block;
-
-      @include mobile-only {
-        font-size: $font-size-3xl;
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -$spacing-2;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: $gradient-primary;
-        border-radius: $radius-sm;
-      }
-    }
-
-    ol {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 $spacing-8;
-      display: grid;
-      gap: $spacing-4;
-
-      li {
-        @include card-base;
-        padding: $spacing-6;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-medium;
-        color: $gray-800;
-        border: 2px solid transparent;
-
-        &:hover {
-          transform: translateX($spacing-2);
-          border-color: rgba($primary-500, 0.3);
-          box-shadow: $shadow-lg;
-        }
-
-        &:nth-child(1) {
-          background: linear-gradient(135deg, $warning-50, white);
-          border-color: $warning-500;
-        }
-
-        &:nth-child(2) {
-          background: linear-gradient(135deg, $gray-100, white);
-          border-color: $gray-400;
-        }
-
-        &:nth-child(3) {
-          background: linear-gradient(135deg, $warning-100, white);
-          border-color: $warning-600;
+        .pagina-atual {
+          color: $gray-600;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
         }
       }
-    }
-
-    .ver-completa {
-      @include btn-primary;
-      padding: $spacing-3 $spacing-8;
-      border-radius: $radius-lg;
-      font-weight: $font-weight-semibold;
-      box-shadow: $shadow-lg;
-
-      &:hover:not(:disabled) {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: $shadow-xl;
-      }
-    }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY($spacing-8);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
     }
   }
 
@@ -374,4 +224,4 @@
       transition-duration: 0.01ms !important;
     }
   }
-}
+} 

@@ -12,7 +12,29 @@ function ArtigosPage() {
     const [filtroAtivo, setFiltroAtivo] = useState('todos');
     const [categorias, setCategorias] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [curriculo, setCurriculo] = useState(null);
+    const [loadingCurriculo, setLoadingCurriculo] = useState(true);
     const navigate = useNavigate();
+
+    // Buscar currículo do usuário
+    useEffect(() => {
+        async function carregarCurriculo() {
+            try {
+                const usuarioId = 1; // Você pode ajustar para pegar do contexto de autenticação
+                const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${usuarioId}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setCurriculo(data);
+                }
+            } catch (error) {
+                console.error("Erro ao carregar currículo:", error);
+            } finally {
+                setLoadingCurriculo(false);
+            }
+        }
+        carregarCurriculo();
+    }, []);
 
     // Buscar categorias
     useEffect(() => {
@@ -64,6 +86,44 @@ function ArtigosPage() {
         setArtigosFiltrados(resultado);
     }, [artigos, searchTerm]);
 
+    // Função para gerar iniciais do nome
+    const gerarIniciais = (nome) => {
+        if (!nome) return 'US';
+        return nome
+            .split(' ')
+            .map(palavra => palavra[0])
+            .join('')
+            .toUpperCase()
+            .slice(0, 2);
+    };
+
+    // Função para extrair profissão/cargo do objetivo ou resumo
+    const obterProfissao = () => {
+        if (!curriculo) return 'Profissional de Saúde';
+        
+        if (curriculo.objetivo) {
+            // Tenta extrair cargo do objetivo
+            const objetivo = curriculo.objetivo.toLowerCase();
+            if (objetivo.includes('médico') || objetivo.includes('medico')) return 'Médico';
+            if (objetivo.includes('enfermeiro')) return 'Enfermeiro';
+            if (objetivo.includes('nutricionista')) return 'Nutricionista';
+            if (objetivo.includes('fisioterapeuta')) return 'Fisioterapeuta';
+            if (objetivo.includes('dentista')) return 'Dentista';
+            if (objetivo.includes('psicólogo') || objetivo.includes('psicologo')) return 'Psicólogo';
+            if (objetivo.includes('farmacêutico') || objetivo.includes('farmaceutico')) return 'Farmacêutico';
+        }
+        
+        if (curriculo.resumo) {
+            const resumo = curriculo.resumo.toLowerCase();
+            if (resumo.includes('médico') || resumo.includes('medico')) return 'Médico';
+            if (resumo.includes('enfermeiro')) return 'Enfermeiro';
+            if (resumo.includes('nutricionista')) return 'Nutricionista';
+            if (resumo.includes('fisioterapeuta')) return 'Fisioterapeuta';
+        }
+        
+        return 'Profissional de Saúde';
+    };
+
     return (
         <main className="artigos-page linkedin-style">
             <Header />
@@ -86,35 +146,51 @@ function ArtigosPage() {
 
             <div className="container main-container">
                 <div className="layout">
-                    {/* Sidebar Esquerda Simplificada */}
+                    {/* Sidebar Esquerda com dados do currículo */}
                     <aside className="sidebar-left">
                         <div className="profile-card">
                             <div className="profile-content">
-                                <div className="avatar">JS</div>
-                                <h3>João Silva</h3>
-                                <p>Médico Cardiologista</p>
-                                <div className="profile-stats">
-                                    <div className="stat">
-                                        <span className="number">245</span>
-                                        <span className="label">Seguidores</span>
+                                {loadingCurriculo ? (
+                                    <div className="loading-curriculo">
+                                        <div className="avatar-skeleton"></div>
+                                        <div className="info-skeleton">
+                                            <div className="skeleton-line nome"></div>
+                                            <div className="skeleton-line profissao"></div>
+                                        </div>
                                     </div>
-                                    <div className="stat">
-                                        <span className="number">1.2k</span>
-                                        <span className="label">Visualizações</span>
-                                    </div>
-                                </div>
+                                ) : (
+                                    <>
+                                        <div className="avatar">
+                                            {gerarIniciais(curriculo?.nome_completo)}
+                                        </div>
+                                        <h3>{curriculo?.nome_completo || 'Usuário'}</h3>
+                                        <p>{obterProfissao()}</p>
+                                        <div className="profile-stats">
+                                            <div className="stat">
+                                                <span className="stat-number">
+                                                    {artigos.filter(a => a.autor === curriculo?.nome_completo).length}
+                                                </span>
+                                                <span className="stat-label">Artigos</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
                         <div className="menu-card">
                             <nav className="sidebar-menu">
                                 <a href="/artigos" className="menu-item active">
-                                    <span className="icon">📰</span>
+                                    <span className="icon"></span>
                                     Feed de Artigos
                                 </a>
                                 <a href="/vagas" className="menu-item">
-                                    <span className="icon">💼</span>
+                                    <span className="icon"></span>
                                     Vagas
+                                </a>
+                                <a href="/curriculo" className="menu-item">
+                                    <span className="icon"></span>
+                                    Meu Currículo
                                 </a>
                             </nav>
                         </div>
@@ -177,7 +253,7 @@ function ArtigosPage() {
                                 </div>
                             ) : artigosFiltrados.length === 0 ? (
                                 <div className="empty-state">
-                                    <div className="empty-icon">📝</div>
+                                    <div className="empty-icon"></div>
                                     <h3>Nenhum artigo encontrado</h3>
                                     <p>
                                         {searchTerm

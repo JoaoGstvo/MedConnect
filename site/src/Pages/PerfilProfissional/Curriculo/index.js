@@ -545,7 +545,7 @@ function MeuCurriculo() {
                     </div>
 
                     <div className="sidebar-links">
-                        <a href="#" onClick={() => navigate('/minhas-vagas')}>📋 Minhas Candidaturas</a>
+                        <a href="#" onClick={() => navigate('/minhasvagas')}>📋 Minhas Candidaturas</a>
                         <a href="#" onClick={() => navigate('/candidato')}>📊 Dashboard</a>
                     </div>
                 </aside>

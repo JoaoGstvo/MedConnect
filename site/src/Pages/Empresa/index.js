@@ -10,15 +10,12 @@ function EmpresaPage() {
   const [error, setError] = useState(null);
   const [filtros, setFiltros] = useState({
     nome: '',
-    localizacao: '',
-    especialidade: '',
-    porte: '',
-    categoria: ''
+    localizacao: ''
   });
   
   const sectionRefs = useRef([]);
 
-  // 🔥 Buscar empresas do backend
+  // Buscar empresas do backend
   useEffect(() => {
     async function fetchEmpresas() {
       try {
@@ -77,44 +74,25 @@ function EmpresaPage() {
     }));
   };
 
-  const handleChipClick = (categoria) => {
-    setFiltros(prev => ({
-      ...prev,
-      categoria: prev.categoria === categoria ? '' : categoria
-    }));
-  };
-
   const limparFiltros = () => {
     setFiltros({
       nome: '',
-      localizacao: '',
-      especialidade: '',
-      porte: '',
-      categoria: ''
+      localizacao: ''
     });
   };
 
-  // 🔥 Filtrar empresas baseado nos filtros
+  // Filtrar empresas baseado nos filtros
   const empresasFiltradas = empresas.filter(empresa => {
     const matchNome = filtros.nome === '' || 
-      empresa.nome.toLowerCase().includes(filtros.nome.toLowerCase());
+      (empresa.nome && empresa.nome.toLowerCase().includes(filtros.nome.toLowerCase()));
     
     const matchLocalizacao = filtros.localizacao === '' || 
-      empresa.localizacao.toLowerCase().includes(filtros.localizacao.toLowerCase());
-    
-    const matchEspecialidade = filtros.especialidade === '' || true; // Futuramente implementar especialidades
-    
-    const matchPorte = filtros.porte === '' || true; // Futuramente implementar porte
-    
-    const matchCategoria = filtros.categoria === '' || true; // Futuramente implementar categorias
+      (empresa.cidade && empresa.cidade.toLowerCase().includes(filtros.localizacao.toLowerCase())) ||
+      (empresa.estado && empresa.estado.toLowerCase().includes(filtros.localizacao.toLowerCase())) ||
+      (empresa.endereco && empresa.endereco.toLowerCase().includes(filtros.localizacao.toLowerCase()));
 
-    return matchNome && matchLocalizacao && matchEspecialidade && matchPorte && matchCategoria;
+    return matchNome && matchLocalizacao;
   });
-
-  // 🔥 Top 3 empresas para o ranking
-  const topEmpresas = [...empresas]
-    .sort((a, b) => parseFloat(b.nota) - parseFloat(a.nota))
-    .slice(0, 3);
 
   return (
     <main className="empresa-page">
@@ -125,8 +103,8 @@ function EmpresaPage() {
         <div className="empresa-info">
           <h1>Encontre o hospital ideal para sua carreira</h1>
           <p>
-            Explore avaliações, vagas e informações sobre hospitais em todo o Brasil.
-            Descobre onde você pode crescer e fazer a diferença na área da saúde.
+            Conheça hospitais, clínicas e instituições de saúde. 
+            Explore suas estruturas, localizações e oportunidades disponíveis.
           </p>
         </div>
       </section>
@@ -135,86 +113,46 @@ function EmpresaPage() {
       <section className="empresa-conteudo" ref={addToRefs}>
         {/* Filtros */}
         <aside className="empresa-filtros">
-          <h3>Filtre os Hospitais</h3>
+          <h3>Filtrar Hospitais</h3>
           <input 
             type="text" 
             name="nome"
-            placeholder="🏥 Nome do Hospital"
+            placeholder=" Nome do Hospital"
             value={filtros.nome}
             onChange={handleFiltroChange}
           />
           <input 
             type="text" 
             name="localizacao"
-            placeholder="📍 Localização (cidade / estado)"
+            placeholder=" Cidade ou Estado"
             value={filtros.localizacao}
             onChange={handleFiltroChange}
           />
-          <select 
-            name="especialidade"
-            value={filtros.especialidade}
-            onChange={handleFiltroChange}
-          >
-            <option value="">🎯 Especialidade</option>
-            <option value="Clínica Geral">Clínica Geral</option>
-            <option value="Pediatria">Pediatria</option>
-            <option value="Cardiologia">Cardiologia</option>
-            <option value="Cirurgia">Cirurgia</option>
-          </select>
-          <select 
-            name="porte"
-            value={filtros.porte}
-            onChange={handleFiltroChange}
-          >
-            <option value="">📊 Porte do Hospital</option>
-            <option value="Pequeno">Pequeno (até 50 leitos)</option>
-            <option value="Médio">Médio (51-200 leitos)</option>
-            <option value="Grande">Grande (200+ leitos)</option>
-          </select>
           
-          <h4>Classificação por categoria</h4>
-          <div className="chips">
-            <button 
-              className={`chip ${filtros.categoria === 'Estrutura hospitalar' ? 'active' : ''}`}
-              onClick={() => handleChipClick('Estrutura hospitalar')}
-            >
-              Estrutura hospitalar
-            </button>
-            <button 
-              className={`chip ${filtros.categoria === 'Equipe e gestão' ? 'active' : ''}`}
-              onClick={() => handleChipClick('Equipe e gestão')}
-            >
-              Equipe e gestão
-            </button>
-            <button 
-              className={`chip ${filtros.categoria === 'Remuneração' ? 'active' : ''}`}
-              onClick={() => handleChipClick('Remuneração')}
-            >
-              Remuneração
-            </button>
-            <button 
-              className={`chip ${filtros.categoria === 'Qualidade de vida' ? 'active' : ''}`}
-              onClick={() => handleChipClick('Qualidade de vida')}
-            >
-              Qualidade de vida
-            </button>
+          <div className="filtros-info">
+            <p>Encontre hospitais por nome ou localização</p>
           </div>
           
           <button className="limpar" onClick={limparFiltros}>
-            🗑️ Apagar filtros
+             Limpar Filtros
           </button>
         </aside>
 
         {/* Lista de hospitais */}
         <div className="empresa-lista">
           <div className="lista-info">
-            <h2>Explorar hospitais</h2>
+            <h2>Hospitais Cadastrados</h2>
             {loading ? (
-              <p>Carregando empresas...</p>
+              <p>Buscando hospitais...</p>
             ) : error ? (
               <p className="error-message">{error}</p>
             ) : (
-              <p>Mostrando {empresasFiltradas.length} de {empresas.length} hospitais. Use os filtros para refinar sua busca.</p>
+              <p>
+                {empresasFiltradas.length === empresas.length 
+                  ? `Mostrando todos os ${empresas.length} hospitais`
+                  : `Encontrados ${empresasFiltradas.length} de ${empresas.length} hospitais`
+                }
+              </p>
             )}
           </div>
 
@@ -249,41 +187,18 @@ function EmpresaPage() {
           )}
 
           {!loading && !error && empresasFiltradas.map((empresa) => (
-            <CardEmpresa key={empresa.id_empresa} hospital={empresa} />
+            <CardEmpresa key={empresa.id_empresa} empresa={empresa} />
           ))}
 
-          {/* Paginação simples - Futuramente implementar paginação no backend */}
+          {/* Paginação simples */}
           {!loading && !error && empresasFiltradas.length > 0 && (
             <div className="paginacao">
-              <button disabled>{"<"}</button>
-              <button className="active">1</button>
-              <button disabled>{">"}</button>
+              <button disabled>{"< Anterior"}</button>
+              <span className="pagina-atual">Página 1</span>
+              <button disabled>{"Próxima >"}</button>
             </div>
           )}
         </div>
-      </section>
-
-      {/* Ranking */}
-      <section className="empresa-ranking" ref={addToRefs}>
-        <h2>🏆 Melhores Hospitais para Trabalhar</h2>
-        {loading ? (
-          <p>Carregando ranking...</p>
-        ) : error ? (
-          <p>Não foi possível carregar o ranking</p>
-        ) : (
-          <>
-            <ol>
-              {topEmpresas.map((empresa, index) => (
-                <li key={empresa.id_empresa}>
-                  {empresa.nome} - {empresa.nota}⭐
-                </li>
-              ))}
-            </ol>
-            <a className="ver-completa" href="#!">
-              Ver a lista completa →
-            </a>
-          </>
-        )}
       </section>
 
       <Footer />

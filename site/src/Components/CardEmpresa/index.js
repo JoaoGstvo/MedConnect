@@ -1,38 +1,59 @@
-// Components/CardEmpresa/index.js - Versão atualizada
+// Components/CardEmpresa/index.js - VERSÃO CORRIGIDA
+import { useState, useEffect } from "react";
 import "./index.scss";
 
-function CardEmpresa({ hospital }) {
-  if (!hospital) {
-    return null; // ou um loader simples, se quiser
+function CardEmpresa({ empresa }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Se não há dados da empresa, mostra estado de erro
+  useEffect(() => {
+    if (!empresa) {
+      setError("Dados da empresa não disponíveis");
+    }
+  }, [empresa]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <article className="empresa-card loading">
+        <div className="logo-skeleton"></div>
+        <div className="empresa-card-info">
+          <div className="skeleton-text skeleton-title"></div>
+          <div className="skeleton-text skeleton-desc"></div>
+          <div className="skeleton-text skeleton-meta"></div>
+        </div>
+      </article>
+    );
   }
 
-  const empresa = {
-    id: hospital.id_empresa || hospital.id,
-    nome: hospital.nome,
-    logo: hospital.logo,
-    nota: hospital.nota,
-    vagas: hospital.vagas,
-    avaliacoes: hospital.avaliacoes,
-    descricao: hospital.descricao,
-    localizacao: hospital.localizacao
-  };
+  // Error state
+  if (error || !empresa) {
+    return (
+      <article className="empresa-card error">
+        <div className="error-message">
+          <span>⚠️</span>
+          <p>Não foi possível carregar os dados da empresa</p>
+        </div>
+      </article>
+    );
+  }
 
-  // Transformar nota em estrelas
-  const nota = parseFloat(empresa.nota) || 0;
-  const estrelasCheias = Math.floor(nota);
-  const meiaEstrela = nota - estrelasCheias >= 0.5 ? 1 : 0;
-  const estrelasVazias = 5 - estrelasCheias - meiaEstrela;
-
-  const estrelas = "★".repeat(estrelasCheias) + 
-                  (meiaEstrela ? "⯪" : "") + 
-                  "☆".repeat(estrelasVazias);
+  // Usar dados reais da empresa conforme estrutura do banco
+  const empresaNome = empresa.nome || "Hospital";
+  const empresaLogo = empresa.logo_url;
+  const empresaDescricao = empresa.descricao || "Descrição não disponível";
+  const empresaLocalizacao = `${empresa.cidade || ""}, ${empresa.estado || ""}`.trim() || "Localização não informada";
+  const empresaEndereco = empresa.endereco;
+  const empresaTelefone = empresa.telefone;
+  const empresaEmail = empresa.email;
 
   return (
     <article className="empresa-card">
       <img
         className="logo"
-        src={empresa.logo}
-        alt={`${empresa.nome} logo`}
+        src={empresaLogo || "/logos/placeholder.png"}
+        alt={`${empresaNome} logo`}
         onError={(e) => { 
           e.target.onerror = null; 
           e.target.src = "/logos/placeholder.png"; 
@@ -41,19 +62,30 @@ function CardEmpresa({ hospital }) {
 
       <div className="empresa-card-info">
         <div className="top">
-          <h3>{empresa.nome}</h3>
-          <div className="rating">
-            <span className="nota">{estrelas}</span>
-            <span className="valor">{empresa.nota}</span>
-          </div>
+          <h3>{empresaNome}</h3>
         </div>
 
-        <p className="descricao">{empresa.descricao}</p>
+        <p className="descricao">{empresaDescricao}</p>
 
         <div className="meta">
-          <span>{empresa.localizacao}</span>
-          <span>{empresa.vagas} vagas</span>
-          <span>{empresa.avaliacoes} avaliações</span>
+          <span className="meta-item">
+            📍 {empresaLocalizacao}
+          </span>
+          {empresaEndereco && (
+            <span className="meta-item">
+              🏢 {empresaEndereco}
+            </span>
+          )}
+          {empresaTelefone && (
+            <span className="meta-item">
+              📞 {empresaTelefone}
+            </span>
+          )}
+          {empresaEmail && (
+            <span className="meta-item">
+              ✉️ {empresaEmail}
+            </span>
+          )}
         </div>
       </div>
     </article>
