@@ -181,7 +181,7 @@ function NovoArtigoPage() {
               className={`btn-publicar ${loading ? 'loading' : ''}`}
               disabled={loading}
             >
-              {loading ? '📤 Publicando...' : '🚀 Publicar Artigo'}
+              {loading ? ' Publicando...' : ' Publicar Artigo'}
             </button>
           </div>
         </form>

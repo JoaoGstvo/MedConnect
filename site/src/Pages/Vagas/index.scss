@@ -1,31 +1,15 @@
-:root {
-  --primary-color: #3a9bdc;
-  --primary-dark: #2181ee;
-  --primary-darker: #1865c0;
-  --secondary-color: #1a2434;
-  --background-color: #f3f2ef;
-  --surface-color: #ffffff;
-  --text-primary: #222222;
-  --text-secondary: #979fae;
-  --text-light: #cbd5e0;
-  --border-color: rgba(58, 155, 220, 0.1);
-  --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.15);
-  --shadow-button: 0 8px 20px rgba(0, 0, 0, 0.15);
-  --border-radius: 16px;
-  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
 
 .vagaspage {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: var(--text-primary);
-  background-color: var(--background-color);
+  font-family: $font-family-primary;
+  color: $gray-900;
+  background-color: $gray-50;
   overflow-x: hidden;
 
-  /* Hero Section - IDÊNTICO ao principal-container da LandingPage */
   .hero-section {
     display: flex;
     flex-direction: column;
@@ -33,14 +17,18 @@
     justify-content: center;
     width: 100%;
     min-height: 85vh;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 50%, var(--primary-darker) 100%);
-    color: var(--surface-color);
+    background: $gradient-secondary;
+    color: white;
     text-align: center;
-    padding: 80px 20px;
+    padding: $spacing-20 $spacing-6;
     position: relative;
     overflow: hidden;
 
-    /* Efeitos de partículas IDÊNTICOS */
+    @include mobile-only {
+      padding: $spacing-16 $spacing-4;
+      min-height: 75vh;
+    }
+
     &::before {
       content: '';
       position: absolute;
@@ -55,7 +43,6 @@
       z-index: 1;
     }
 
-    /* SVG background IDÊNTICO */
     &::after {
       content: '';
       position: absolute;
@@ -70,52 +57,59 @@
 
     .hero-content {
       max-width: 900px;
-      margin-bottom: 40px;
+      margin-bottom: $spacing-16;
       position: relative;
       z-index: 2;
+      @include fade-in;
       animation: fadeInUp 0.8s ease-out;
 
       h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        margin-bottom: 20px;
-        text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
-        line-height: 1.2;
-        
-        /* Gradiente de texto IDÊNTICO */
+        font-size: $font-size-5xl;
+        font-weight: $font-weight-extrabold;
+        margin-bottom: $spacing-6;
+        line-height: $line-height-tight;
+        text-shadow: $shadow-2xl;
         background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
-        /* Garantir que o gradiente funcione em todos os navegadores */
+
+        @include mobile-only {
+          font-size: $font-size-3xl;
+        }
+
         @supports not (-webkit-background-clip: text) {
-          color: #ffffff; /* Fallback para navegadores que não suportam */
-          text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+          color: white;
+          text-shadow: $shadow-2xl;
         }
       }
 
       p {
-        font-size: 1.3rem;
-        font-weight: 400;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-normal;
         opacity: 0.95;
-        line-height: 1.7;
+        line-height: $line-height-relaxed;
         max-width: 700px;
         margin: 0 auto;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        
-        /* Cor IDÊNTICA ao da LandingPage */
+        text-shadow: $shadow-base;
         color: rgba(255, 255, 255, 0.95);
+
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
     }
   }
 
-  /* O resto do CSS permanece igual... */
   .filters-section {
     flex: 1;
-    padding: 60px 20px;
-    background-color: var(--surface-color);
+    padding: $spacing-16 $spacing-6;
+    background-color: white;
     position: relative;
+
+    @include mobile-only {
+      padding: $spacing-12 $spacing-4;
+    }
 
     &::before {
       content: '';
@@ -124,10 +118,10 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
+      background: $gradient-primary;
       opacity: 1;
       transform: scaleX(1);
-      transition: all 0.6s ease;
+      transition: all $transition-slow;
     }
 
     .filters-container {
@@ -136,23 +130,28 @@
 
       h2 {
         text-align: center;
-        margin-bottom: 40px;
-        font-size: 2.6rem;
-        font-weight: 700;
-        color: var(--primary-dark);
+        margin-bottom: $spacing-16;
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-bold;
+        color: $primary-600;
         position: relative;
         display: inline-block;
-        padding-bottom: 15px;
+        padding-bottom: $spacing-4;
+
+        @include mobile-only {
+          font-size: $font-size-3xl;
+          margin-bottom: $spacing-8;
+        }
 
         &::after {
           content: "";
           display: block;
           width: 80px;
-          height: 5px;
-          margin: 15px auto 0;
-          background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
-          border-radius: 3px;
-          transition: width 0.3s ease;
+          height: 4px;
+          margin: $spacing-4 auto 0;
+          background: $gradient-primary;
+          border-radius: $radius-sm;
+          transition: width $transition-base;
         }
 
         &:hover::after {
@@ -163,37 +162,33 @@
       .filters-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
-        gap: 20px;
+        gap: $spacing-6;
         max-width: 900px;
         margin: 0 auto;
 
-        @media (max-width: 768px) {
+        @include mobile-only {
           grid-template-columns: 1fr;
-          gap: 15px;
+          gap: $spacing-4;
         }
       }
 
       .filter-input,
       .filter-select {
-        padding: 16px 20px;
-        border: 2px solid var(--border-color);
-        border-radius: var(--border-radius);
-        background: var(--background-color);
-        color: var(--text-primary);
-        font-size: 1rem;
-        transition: var(--transition);
-        box-shadow: var(--shadow);
+        @include input-base;
+        padding: $spacing-4 $spacing-6;
+        border: 2px solid $gray-200;
+        background: $gray-50;
+        box-shadow: $shadow-base;
 
         &:focus {
-          outline: none;
-          border-color: var(--primary-color);
-          box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
-          background: var(--surface-color);
+          border-color: $primary-500;
+          box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+          background: white;
           transform: translateY(-2px);
         }
 
         &::placeholder {
-          color: var(--text-secondary);
+          color: $gray-600;
         }
       }
 
@@ -202,20 +197,23 @@
         justify-content: space-between;
         align-items: center;
         max-width: 900px;
-        margin: 30px auto 0;
-        padding-top: 25px;
-        border-top: 1px solid var(--border-color);
+        margin: $spacing-8 auto 0;
+        padding-top: $spacing-8;
+        border-top: 1px solid $gray-200;
+
+        @include mobile-only {
+          flex-direction: column;
+          gap: $spacing-6;
+          text-align: center;
+        }
 
         .btn-limpar {
-          padding: 12px 28px;
-          border: 2px solid var(--border-color);
-          border-radius: 50px;
+          @include btn-secondary;
+          padding: $spacing-3 $spacing-8;
+          border-radius: $radius-full;
+          border: 2px solid $gray-300;
           background: transparent;
-          color: var(--text-secondary);
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: var(--transition);
+          color: $gray-600;
           position: relative;
           overflow: hidden;
 
@@ -226,14 +224,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(58, 155, 220, 0.1), transparent);
-            transition: left 0.6s;
+            background: linear-gradient(90deg, transparent, rgba($primary-500, 0.1), transparent);
+            transition: left $transition-slow;
           }
 
-          &:hover {
-            background: rgba(58, 155, 220, 0.05);
-            color: var(--primary-dark);
-            border-color: var(--primary-color);
+          &:hover:not(:disabled) {
+            background: rgba($primary-500, 0.05);
+            color: $primary-600;
+            border-color: $primary-500;
             transform: translateY(-2px);
 
             &::before {
@@ -243,9 +241,9 @@
         }
 
         .results-count {
-          color: var(--text-secondary);
-          font-size: 1rem;
-          font-weight: 500;
+          color: $gray-600;
+          font-size: $font-size-base;
+          font-weight: $font-weight-medium;
         }
       }
     }
@@ -253,9 +251,13 @@
 
   .vagas-section {
     flex: 1;
-    padding: 80px 20px;
-    background-color: #f9fafc;
+    padding: $spacing-20 $spacing-6;
+    background-color: $gray-50;
     position: relative;
+
+    @include mobile-only {
+      padding: $spacing-12 $spacing-4;
+    }
 
     .container {
       display: flex;
@@ -266,25 +268,33 @@
 
       .section-title {
         text-align: center;
-        margin-bottom: 60px;
+        margin-bottom: $spacing-16;
+
+        @include mobile-only {
+          margin-bottom: $spacing-8;
+        }
 
         h2 {
-          font-size: 2.6rem;
-          font-weight: 700;
-          color: var(--primary-dark);
+          font-size: $font-size-4xl;
+          font-weight: $font-weight-bold;
+          color: $primary-600;
           position: relative;
           display: inline-block;
-          padding-bottom: 15px;
+          padding-bottom: $spacing-4;
+
+          @include mobile-only {
+            font-size: $font-size-3xl;
+          }
 
           &::after {
             content: "";
             display: block;
             width: 80px;
-            height: 5px;
-            margin: 15px auto 0;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
-            border-radius: 3px;
-            transition: width 0.3s ease;
+            height: 4px;
+            margin: $spacing-4 auto 0;
+            background: $gradient-primary;
+            border-radius: $radius-sm;
+            transition: width $transition-base;
           }
 
           &:hover::after {
@@ -292,8 +302,8 @@
           }
 
           .vagas-count {
-            color: var(--primary-darker);
-            font-weight: 800;
+            color: $primary-800;
+            font-weight: $font-weight-extrabold;
           }
         }
       }
@@ -301,15 +311,17 @@
       .vagas-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 30px;
+        gap: $spacing-8;
         width: 100%;
 
+        @include mobile-only {
+          grid-template-columns: 1fr;
+          gap: $spacing-6;
+        }
+
         & > * {
-          border-radius: var(--border-radius);
-          background: var(--surface-color);
-          box-shadow: var(--shadow);
-          transition: var(--transition);
-          border: 1px solid var(--border-color);
+          @include card-base;
+          border: 1px solid $gray-200;
           position: relative;
           overflow: hidden;
 
@@ -320,14 +332,14 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            background: $gradient-primary;
             transform: scaleX(0);
-            transition: transform 0.3s ease;
+            transition: transform $transition-base;
           }
 
           &:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: $shadow-xl;
 
             &::before {
               transform: scaleX(1);
@@ -338,36 +350,33 @@
 
       .loading {
         text-align: center;
-        padding: 80px 20px;
-        color: var(--text-secondary);
+        padding: $spacing-20 $spacing-6;
+        color: $gray-600;
 
         .spinner {
-          border: 4px solid var(--border-color);
-          border-top: 4px solid var(--primary-dark);
-          border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          animation: spin 1s linear infinite;
-          margin: 0 auto 25px;
+          @include loading-spinner(60px, $primary-600);
+          margin: 0 auto $spacing-8;
         }
 
         p {
-          font-size: 1.2rem;
-          font-weight: 500;
+          font-size: $font-size-lg;
+          font-weight: $font-weight-medium;
         }
       }
 
       .no-vagas {
+        @include card-base;
         text-align: center;
-        padding: 80px 40px;
-        background: var(--surface-color);
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border-color);
-        transition: var(--transition);
+        padding: $spacing-20 $spacing-10;
+        border: 1px solid $gray-200;
+        transition: all $transition-base;
         position: relative;
         max-width: 600px;
         margin: 0 auto;
+
+        @include mobile-only {
+          padding: $spacing-12 $spacing-6;
+        }
 
         &::before {
           content: '';
@@ -376,49 +385,45 @@
           left: 0;
           right: 0;
           height: 4px;
-          background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+          background: $gradient-primary;
           transform: scaleX(1);
         }
 
         &:hover {
-          transform: translateY(-5px);
-          box-shadow: var(--shadow-hover);
+          transform: translateY(-2px);
+          box-shadow: $shadow-xl;
         }
 
         .no-vagas-icon {
-          font-size: 4rem;
-          margin-bottom: 25px;
-          color: var(--text-light);
+          font-size: $font-size-5xl;
+          margin-bottom: $spacing-8;
+          color: $gray-400;
           opacity: 0.7;
         }
 
         h3 {
-          color: var(--text-primary);
-          margin-bottom: 15px;
-          font-size: 1.6rem;
-          font-weight: 600;
+          color: $gray-900;
+          margin-bottom: $spacing-4;
+          font-size: $font-size-2xl;
+          font-weight: $font-weight-semibold;
         }
 
         p {
-          color: var(--text-secondary);
-          margin-bottom: 30px;
-          font-size: 1.1rem;
-          line-height: 1.6;
+          color: $gray-600;
+          margin-bottom: $spacing-8;
+          font-size: $font-size-lg;
+          line-height: $line-height-relaxed;
         }
 
         .btn-primary {
-          background: var(--primary-dark);
-          color: var(--surface-color);
-          border: none;
-          padding: 14px 32px;
-          border-radius: 50px;
-          font-size: 1.1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: var(--transition);
+          @include btn-primary;
+          padding: $spacing-3 $spacing-8;
+          font-size: $font-size-lg;
+          font-weight: $font-weight-semibold;
+          border-radius: $radius-full;
+          box-shadow: $shadow-lg;
           position: relative;
           overflow: hidden;
-          box-shadow: var(--shadow-button);
 
           &::before {
             content: '';
@@ -428,21 +433,20 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
+            transition: left $transition-slow;
           }
 
-          &:hover {
-            background: var(--primary-darker);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
+          &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: $shadow-xl;
 
             &::before {
               left: 100%;
             }
           }
 
-          &:active {
-            transform: translateY(-1px);
+          &:active:not(:disabled) {
+            transform: translateY(0);
           }
         }
       }
@@ -450,17 +454,17 @@
   }
 
   .error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #dc2626;
-    padding: 20px;
-    border-radius: var(--border-radius);
+    background: rgba($error-500, 0.1);
+    border: 1px solid rgba($error-500, 0.2);
+    color: $error-600;
+    padding: $spacing-6;
+    border-radius: $radius-lg;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: $spacing-8;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    transition: var(--transition);
+    transition: all $transition-base;
     position: relative;
 
     &::before {
@@ -470,22 +474,21 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #dc2626, #ef4444);
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      background: $gradient-error;
+      border-radius: $radius-lg $radius-lg 0 0;
     }
 
     p {
       margin: 0;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-base;
     }
   }
 
-  /* Animações */
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY($spacing-8);
     }
     to {
       opacity: 1;
@@ -503,148 +506,9 @@
   }
 
   .fade-in {
-    animation: fadeInUp 0.8s ease-out;
+    @include fade-in;
   }
 
-  /* Responsividade Melhorada */
-  @media (max-width: 1200px) {
-    .hero-section {
-      .hero-content {
-        h1 {
-          font-size: 2.8rem;
-        }
-        
-        p {
-          font-size: 1.1rem;
-        }
-      }
-    }
-    
-    .vagas-section {
-      .container {
-        .vagas-grid {
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: 25px;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .hero-section {
-      padding: 60px 20px;
-      min-height: 75vh;
-
-      .hero-content {
-        h1 {
-          font-size: 2.2rem;
-        }
-        
-        p {
-          font-size: 1.1rem;
-        }
-      }
-    }
-
-    .filters-section {
-      padding: 40px 15px;
-
-      .filters-container {
-        h2 {
-          font-size: 2rem;
-        }
-
-        .filters-grid {
-          grid-template-columns: 1fr;
-          gap: 15px;
-        }
-
-        .filters-actions {
-          flex-direction: column;
-          gap: 20px;
-          text-align: center;
-        }
-      }
-    }
-
-    .vagas-section {
-      padding: 60px 15px;
-
-      .container {
-        .section-title {
-          h2 {
-            font-size: 2rem;
-          }
-        }
-
-        .vagas-grid {
-          grid-template-columns: 1fr;
-          gap: 20px;
-        }
-
-        .no-vagas {
-          padding: 60px 20px;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-section {
-      padding: 50px 15px;
-
-      .hero-content {
-        h1 {
-          font-size: 1.8rem;
-        }
-        
-        p {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .filters-section {
-      padding: 30px 10px;
-
-      .filters-container {
-        h2 {
-          font-size: 1.7rem;
-        }
-      }
-    }
-
-    .vagas-section {
-      padding: 40px 10px;
-
-      .container {
-        .section-title {
-          h2 {
-            font-size: 1.7rem;
-          }
-        }
-
-        .no-vagas {
-          padding: 40px 20px;
-
-          h3 {
-            font-size: 1.4rem;
-          }
-
-          p {
-            font-size: 1rem;
-          }
-
-          .btn-primary {
-            padding: 12px 28px;
-            font-size: 1rem;
-          }
-        }
-      }
-    }
-  }
-
-  /* Melhorias de acessibilidade */
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;

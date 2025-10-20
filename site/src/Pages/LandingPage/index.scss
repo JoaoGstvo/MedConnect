@@ -1,28 +1,13 @@
-:root {
-  --primary-color: #3a9bdc;
-  --primary-dark: #2181ee;
-  --primary-darker: #1865c0;
-  --secondary-color: #1a2434;
-  --background-color: #f3f2ef;
-  --surface-color: #ffffff;
-  --text-primary: #222222;
-  --text-secondary: #979fae;
-  --text-light: #cbd5e0;
-  --border-color: rgba(58, 155, 220, 0.1);
-  --shadow: 0 6px 20px rgba(0,0,0,0.08);
-  --shadow-hover: 0 12px 30px rgba(0,0,0,0.15);
-  --shadow-button: 0 8px 20px rgba(0,0,0,0.15);
-  --border-radius: 16px;
-  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
 
 .landingpage {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: var(--text-primary);
-  background-color: var(--background-color);
+  font-family: $font-family-primary;
+  color: $gray-900;
+  background-color: $gray-50;
   overflow-x: hidden;
 
   .principal-container {
@@ -31,14 +16,16 @@
     align-items: center;
     justify-content: center;
     min-height: 85vh;
-    padding: 80px 20px;
+    padding: $spacing-20 $spacing-6;
     text-align: center;
-    color: var(--surface-color);
+    color: white;
     position: relative;
-    background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
-    z-index: 1;
+    background: $gradient-secondary;
+    
+    @include mobile-only {
+      padding: $spacing-16 $spacing-4;
+      min-height: 80vh;
+    }
 
     &::before {
       content: '';
@@ -50,45 +37,70 @@
 
     .title {
       max-width: 900px;
-      margin-bottom: 40px;
+      margin-bottom: $spacing-16;
       z-index: 2;
       position: relative;
 
       h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        margin-bottom: 20px;
-        text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+        font-size: $font-size-5xl;
+        font-weight: $font-weight-extrabold;
+        margin-bottom: $spacing-6;
+        text-shadow: $shadow-2xl;
         background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        
+        @include mobile-only {
+          font-size: $font-size-4xl;
+          margin-bottom: $spacing-4;
+        }
       }
 
       p {
-        font-size: 1.3rem;
-        line-height: 1.7;
+        font-size: $font-size-xl;
+        line-height: $line-height-relaxed;
         max-width: 700px;
         margin: 0 auto;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        text-shadow: $shadow-base;
+        opacity: 0.95;
+        
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
     }
 
     .buttons {
       display: flex;
-      gap: 25px;
+      gap: $spacing-8;
       z-index: 2;
       flex-wrap: wrap;
+      justify-content: center;
+
+      @include mobile-only {
+        gap: $spacing-4;
+        flex-direction: column;
+        align-items: center;
+      }
 
       button {
-        padding: 18px 42px;
-        border-radius: 50px;
-        border: 2px solid rgba(255,255,255,0.3);
-        background: rgba(255,255,255,0.15);
-        color: var(--surface-color);
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        box-shadow: var(--shadow-button);
+        @include btn-primary;
+        padding: $spacing-5 $spacing-12;
+        border-radius: $radius-full;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        font-weight: $font-weight-semibold;
+        font-size: $font-size-lg;
         position: relative;
         overflow: hidden;
+        
+        @include mobile-only {
+          padding: $spacing-4 $spacing-8;
+          width: 100%;
+          max-width: 300px;
+        }
 
         &::before {
           content: '';
@@ -97,31 +109,42 @@
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
           transition: left 0.6s;
         }
 
-        &:hover {
-          background: var(--surface-color);
-          color: var(--primary-dark);
-          transform: translateY(-5px) scale(1.05);
-          border-color: var(--surface-color);
+        &:hover:not(:disabled) {
+          background: white;
+          color: $primary-600;
+          transform: translateY(-2px) scale(1.02);
+          border-color: white;
+          box-shadow: $shadow-2xl;
 
-          &::before { left: 100%; }
+          &::before {
+            left: 100%;
+          }
         }
 
-        &:active { transform: translateY(-2px) scale(1.02); }
+        &:active:not(:disabled) {
+          transform: translateY(0) scale(1);
+        }
       }
     }
   }
 
   .section {
     flex: 1;
-    padding: 100px 20px;
+    padding: $spacing-20 $spacing-6;
     position: relative;
-    background-color: var(--surface-color);
+    background-color: white;
 
-    &:nth-child(even) { background-color: #f9fafc; }
+    @include mobile-only {
+      padding: $spacing-12 $spacing-4;
+    }
+
+    &:nth-child(even) {
+      background-color: $gray-50;
+    }
 
     &::before {
       content: '';
@@ -130,10 +153,10 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--primary-dark), var(--primary-darker));
+      background: $gradient-primary;
       opacity: 0;
       transform: scaleX(0);
-      transition: all 0.6s ease;
+      transition: all $transition-slow;
     }
 
     &.in-view::before {
@@ -141,30 +164,40 @@
       transform: scaleX(1);
     }
 
-    .title { 
+    .title {
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: $spacing-16;
+
+      @include mobile-only {
+        margin-bottom: $spacing-8;
+      }
 
       h1 {
-        font-size: 2.6rem;
-        font-weight: 700;
-        color: var(--primary-dark);
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-bold;
+        color: $primary-600;
         position: relative;
         display: inline-block;
-        padding-bottom: 15px;
+        padding-bottom: $spacing-4;
+
+        @include mobile-only {
+          font-size: $font-size-3xl;
+        }
 
         &::after {
           content: "";
           display: block;
           width: 80px;
-          height: 5px;
-          margin: 15px auto 0;
-          background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
-          border-radius: 3px;
-          transition: width 0.3s ease;
+          height: 4px;
+          margin: $spacing-4 auto 0;
+          background: $gradient-primary;
+          border-radius: $radius-sm;
+          transition: width $transition-base;
         }
 
-        &:hover::after { width: 120px; }
+        &:hover::after {
+          width: 120px;
+        }
       }
     }
 
@@ -175,10 +208,52 @@
       .wrapper {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 30px;
+        gap: $spacing-8;
         max-width: 1300px;
         width: 100%;
+
+        @include mobile-only {
+          grid-template-columns: 1fr;
+          gap: $spacing-6;
+        }
       }
     }
+  }
+}
+
+// Animações adicionais
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY($spacing-8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Utilidades para animações
+.fade-in-up {
+  @include fade-in;
+  animation: fadeInUp $transition-slow ease;
+}
+
+.slide-in-left {
+  @include slide-in;
+}
+
+.slide-in-right {
+  animation: slideInRight $transition-slow ease;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX($spacing-8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

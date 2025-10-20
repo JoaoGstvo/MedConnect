@@ -14,9 +14,9 @@ function CardVaga({ vaga }) {
 
   const formatarModalidade = (modalidade) => {
     const modalidades = {
-      'presencial': '🏢 Presencial',
-      'remoto': '🏠 Remoto', 
-      'hibrido': '⚡ Híbrido'
+      'presencial': ' Presencial',
+      'remoto': ' Remoto', 
+      'hibrido': ' Híbrido'
     };
     return modalidades[modalidade] || modalidade || "📍 Não informado";
   };
@@ -24,7 +24,7 @@ function CardVaga({ vaga }) {
   const getLocationIcon = (localizacao) => {
     if (!localizacao) return "📍";
     if (localizacao.toLowerCase().includes('sp') || localizacao.toLowerCase().includes('são paulo')) return "🏙️";
-    if (localizacao.toLowerCase().includes('rj') || localizacao.toLowerCase().includes('rio')) return "🌊";
+    if (localizacao.toLowerCase().includes('rj') || localizacao.toLowerCase().includes('rio')) return "";
     return "📍";
   };
 
@@ -86,7 +86,7 @@ function CardVaga({ vaga }) {
         <div className="job-content">
           <div className="salary-section">
             <p className="salary-range">
-              💰 <strong>{formatarSalario(vaga.salario)}</strong>
+               <strong>{formatarSalario(vaga.salario)}</strong>
             </p>
           </div>
 
@@ -96,7 +96,7 @@ function CardVaga({ vaga }) {
 
           {vaga.requisitos && (
             <div className="requirements-section">
-              <h4>📋 Requisitos</h4>
+              <h4> Requisitos</h4>
               <div className="requirements-text">
                 {vaga.requisitos}
               </div>
@@ -109,7 +109,7 @@ function CardVaga({ vaga }) {
       <div className="card-footer">
         <div className="job-footer">
           <span className={`job-status ${!isVagaAberta ? 'closed' : ''}`}>
-            {isVagaAberta ? '✅ Vaga Aberta' : '❌ Vaga Encerrada'}
+            {isVagaAberta ? ' Vaga Aberta' : '❌ Vaga Encerrada'}
           </span>
 
           <div className="job-action">
@@ -118,13 +118,13 @@ function CardVaga({ vaga }) {
               onClick={handleFazerInscricao}
               disabled={!isVagaAberta}
             >
-              📝 Fazer Inscrição
+               Fazer Inscrição
             </button>
             <button 
               className="info-button" 
               onClick={handleMaisInformacoes}
             >
-              🔍 Ver Detalhes
+               Ver Detalhes
             </button>
           </div>
         </div>

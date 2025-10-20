@@ -78,7 +78,7 @@ function ArtigosPage() {
                             className="btn-criar-artigo"
                             onClick={() => navigate('/novoartigo')}
                         >
-                            ✏️ Escrever Artigo
+                             Escrever Artigo
                         </button>
                     </div>
                 </div>
@@ -111,10 +111,6 @@ function ArtigosPage() {
                                 <a href="/artigos" className="menu-item active">
                                     <span className="icon">📰</span>
                                     Feed de Artigos
-                                </a>
-                                <a href="/meus-artigos" className="menu-item">
-                                    <span className="icon">📝</span>
-                                    Meus Artigos
                                 </a>
                                 <a href="/vagas" className="menu-item">
                                     <span className="icon">💼</span>

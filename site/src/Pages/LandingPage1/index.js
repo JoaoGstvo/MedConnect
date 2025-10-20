@@ -18,11 +18,6 @@ function LandingPage1() {
                     <img src="Images/Logo.png" alt="Logo Saúde Connect" className='floating' />
                 </div>
                 <div className='search-login'>
-                    <input 
-                        type="text" 
-                        placeholder="🔍 Pesquisar vagas..." 
-                        aria-label="Pesquisar vagas"
-                    />
                     <a href='/login' className='login-link'>
                         <button className='login-btn' aria-label="Fazer login">
                             Entrar
