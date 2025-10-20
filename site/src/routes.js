@@ -10,7 +10,6 @@ import VagasPage from './Pages/Vagas/index.js';
 import MinhasVagas from './Pages/Vagas/Minhas Vagas/index.js';
 import LandingPage1 from './Pages/LandingPage1/index.js';
 import DashboardEmpresaPage from './Pages/Dashboard Empresa/index.js';
-import DashboardCandidatoPage from './Pages/Dashboard Candidato/index.js';
 import MeuCurriculo from './Pages/PerfilProfissional/Curriculo/index.js';
 import MaisInformacoesPage from './Pages/Vagas/maisinformações/index.js';
 import InscricaoPage from './Pages/Vagas/inscrição/index.js';
@@ -50,7 +49,6 @@ export default function Index() {
                 <Route path="/vagas" element={<VagasPage />} />
                 <Route path="/inscricaovaga/:id" element={<InscricaoPage />} /> {/*tela de inscrição na vaga (ID)*/}
                 <Route path="/vaga/:id" element={<MaisInformacoesPage />} /> {/*tela de mais informações da vaga (ID)*/}
-                <Route path="/candidato" element={<DashboardCandidatoPage />} /> {/*dashboard do candidato*/} desenvolver depois
                 <Route path="/cardcandidato" element={<CardCandidato />} />
                 <Route path="/cardempresa" element={<CardEmpresa />} />
 

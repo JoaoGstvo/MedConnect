@@ -88,7 +88,7 @@ function VagasPage() {
             {/* Filtros */}
             <section className='filters-section'>
                 <div className='filters-container'>
-                    <h2>Buscar Vagas</h2>
+                    <h2 className='buscar-vagass'>Buscar Vagas</h2>
                     <div className='filters-grid'>
                         <input 
                             type="text" 
@@ -112,7 +112,7 @@ function VagasPage() {
                             onChange={handleFiltroChange}
                             className='filter-select'
                         >
-                            <option value="">📄 Todos os contratos</option>
+                            <option value=""> Todos os contratos</option>
                             <option value="CLT">CLT</option>
                             <option value="PJ">PJ</option>
                             <option value="Estágio">Estágio</option>

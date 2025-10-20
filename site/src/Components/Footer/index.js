@@ -14,9 +14,11 @@ function Footer() {
                 <div className="link-column">
                     <h2 className="title">Para Profissionais</h2>
                     <ul className="link-list">
+                        <li><a href="/">Inicio</a></li>
                         <li><a href="/vagas">Buscar Vagas</a></li>
                         <li><a href="/empresas">Buscar Empresas</a></li>
                         <li><a href="/artigos">Ver Artigos</a></li>
+                        
                     </ul>
                 </div>
 
@@ -24,6 +26,7 @@ function Footer() {
                     <h2 className="title">Suporte</h2>
                     <ul className="link-list">
                         <li><a href="/">suporte@plataformasaude.com</a></li>
+                        <li><a href="/faqsite">Fale Conosco</a></li>
                     </ul>
                 </div>
             </section>

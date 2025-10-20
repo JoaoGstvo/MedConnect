@@ -719,12 +719,12 @@
 
       .btn-edit {
         @include btn-secondary;
-        background: $warning-500;
+        background: $primary-500;
         color: white;
         padding: $spacing-2 $spacing-4;
 
         &:hover:not(:disabled) {
-          background: $warning-600;
+          background: $primary-600;
           transform: translateY(-1px);
         }
       }

@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 85vh;
+    min-height: 65vh;
     background: $gradient-secondary;
     color: white;
     text-align: center;
@@ -103,12 +103,12 @@
 
   .filters-section {
     flex: 1;
-    padding: $spacing-16 $spacing-6;
+    padding: $spacing-4 $spacing-4;
     background-color: white;
     position: relative;
 
     @include mobile-only {
-      padding: $spacing-12 $spacing-4;
+      padding: $spacing-6 $spacing-4;
     }
 
     &::before {
@@ -127,8 +127,11 @@
     .filters-container {
       max-width: 1200px;
       margin: 0 auto;
+      justify-content: center;
+      text-align: center;
 
       h2 {
+        justify-content: center;
         text-align: center;
         margin-bottom: $spacing-16;
         font-size: $font-size-4xl;

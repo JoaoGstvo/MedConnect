@@ -522,7 +522,7 @@ function MeuCurriculo() {
                                 onClick={handleSalvarCurriculo}
                                 disabled={salvando}
                             >
-                                {salvando ? 'Salvando...' : '💾 Salvar Currículo'}
+                                {salvando ? 'Salvando...' : ' Salvar Currículo'}
                             </button>
                             {curriculoExistente && (
                                 <p style={{textAlign: 'center', marginTop: '10px', color: '#666'}}>
@@ -545,8 +545,8 @@ function MeuCurriculo() {
                     </div>
 
                     <div className="sidebar-links">
-                        <a href="#" onClick={() => navigate('/minhasvagas')}>📋 Minhas Candidaturas</a>
-                        <a href="#" onClick={() => navigate('/candidato')}>📊 Dashboard</a>
+                        <a href="#" onClick={() => navigate('/minhasvagas')}> Minhas Candidaturas</a>
+                        <a href="#" onClick={() => navigate('/dashboardempresa')}> Dashboard (PARA EMPRESA)</a>
                     </div>
                 </aside>
             </div>

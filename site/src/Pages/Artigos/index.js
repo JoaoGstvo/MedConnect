@@ -188,7 +188,7 @@ function ArtigosPage() {
                                     <span className="icon"></span>
                                     Vagas
                                 </a>
-                                <a href="/curriculo" className="menu-item">
+                                <a href="/meucurriculo" className="menu-item">
                                     <span className="icon"></span>
                                     Meu Currículo
                                 </a>

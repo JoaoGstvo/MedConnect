@@ -18,14 +18,14 @@ function CardVaga({ vaga }) {
       'remoto': ' Remoto', 
       'hibrido': ' Híbrido'
     };
-    return modalidades[modalidade] || modalidade || "📍 Não informado";
+    return modalidades[modalidade] || modalidade || " Não informado";
   };
 
   const getLocationIcon = (localizacao) => {
-    if (!localizacao) return "📍";
-    if (localizacao.toLowerCase().includes('sp') || localizacao.toLowerCase().includes('são paulo')) return "🏙️";
+    if (!localizacao) return "";
+    if (localizacao.toLowerCase().includes('sp') || localizacao.toLowerCase().includes('são paulo')) return "";
     if (localizacao.toLowerCase().includes('rj') || localizacao.toLowerCase().includes('rio')) return "";
-    return "📍";
+    return "";
   };
 
   // Funções de navegação
@@ -62,7 +62,7 @@ function CardVaga({ vaga }) {
             <h3 className="job-title">{vaga.titulo || "Título não informado"}</h3>
             {vaga.empresa_nome && (
               <p className="company-name">
-                🏭 {vaga.empresa_nome}
+                 {vaga.empresa_nome}
               </p>
             )}
             <div className="job-meta">
