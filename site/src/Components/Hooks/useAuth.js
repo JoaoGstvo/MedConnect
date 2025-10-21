@@ -1,47 +1,58 @@
-// Hooks/useAuth.js - VERSÃO CORRIGIDA
-import { useState, useEffect } from 'react';
+// Hooks/useAuth.js - VERSÃO CORRIGIDA SEM LOOP
+import { useState, useEffect, useRef } from 'react';
 import { useCurrentUser } from './useCurrentUser';
 
 export const useAuth = () => {
   const { currentUser, loading, updateUser } = useCurrentUser();
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  // ⚡ Use ref para controlar se já validamos
+  const hasValidatedRef = useRef(false);
 
-  // Verificar e validar o usuário ao inicializar
+  // Verificar e validar o usuário ao inicializar - APENAS UMA VEZ
   useEffect(() => {
+    // ⚡ Prevenir múltiplas execuções
+    if (loading || hasValidatedRef.current) return;
+
     const initializeAuth = async () => {
+      console.log('🎯 Inicializando autenticação (APENAS UMA VEZ)...');
+      
       if (currentUser && currentUser.id_usuario) {
         try {
-          // Verificar se o usuário ainda existe no banco e atualizar dados
+          console.log('🔍 Validando usuário com ID:', currentUser.id_usuario);
+          
           const userType = currentUser.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
           const response = await fetch(`http://localhost:5000/api/${userType}/${currentUser.id_usuario}`);
           
           if (response.ok) {
             const updatedUser = await response.json();
-            // Mesclar dados atualizados mantendo a sessão
-            updateUser({
-              ...currentUser,
-              ...updatedUser,
-              // Garantir que campos essenciais não sejam perdidos
-              id_usuario: currentUser.id_usuario,
-              tipo_usuario: currentUser.tipo_usuario
-            });
+            console.log('✅ Usuário validado com sucesso:', updatedUser.email);
+            
+            // ⚡ Só atualiza se os dados forem diferentes
+            if (updatedUser.email !== currentUser.email) {
+              updateUser({
+                ...currentUser,
+                ...updatedUser,
+                id_usuario: currentUser.id_usuario,
+                tipo_usuario: currentUser.tipo_usuario
+              });
+            }
           } else {
-            // Usuário não existe mais no banco - fazer logout
-            console.warn('Usuário não encontrado no banco, fazendo logout...');
+            console.warn('❌ Usuário não encontrado no banco, fazendo logout...');
             updateUser(null);
           }
         } catch (error) {
-          console.error('Erro ao validar usuário:', error);
-          // Em caso de erro de rede, mantém o usuário logado
+          console.error('💥 Erro ao validar usuário:', error);
         }
       }
+      
+      // ⚡ Marcar como validado para prevenir loops
+      hasValidatedRef.current = true;
       setIsInitialized(true);
     };
 
-    if (!loading) {
-      initializeAuth();
-    }
-  }, [currentUser, loading, updateUser]);
+    initializeAuth();
+  }, [currentUser, loading, updateUser]); // ⚡ Dependências específicas
 
   const login = async (email, senha, tipo = 'profissional') => {
     try {
@@ -54,7 +65,6 @@ export const useAuth = () => {
       }
 
       console.log('🔐 Tentando login em:', endpoint);
-      console.log('📧 Email:', email);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -68,17 +78,16 @@ export const useAuth = () => {
 
       if (response.ok) {
         const userData = await response.json();
-        console.log('✅ Dados do usuário recebidos:', userData);
+        console.log('✅ Login bem-sucedido! Dados recebidos:', userData);
         
         if (userData) {
-          // Adicionar timestamp de login
           const userWithSession = {
             ...userData,
             loginTimestamp: Date.now(),
-            // Garantir que id_usuario esteja presente para ambos os tipos
             id_usuario: userData.id_usuario || userData.id_empresa
           };
           
+          console.log('💾 Salvando usuário no storage:', userWithSession.email);
           updateUser(userWithSession);
           return { success: true, data: userData };
         }
@@ -95,10 +104,9 @@ export const useAuth = () => {
 
   const logout = () => {
     console.log('🚪 Fazendo logout...');
+    // ⚡ Resetar o ref ao fazer logout
+    hasValidatedRef.current = false;
     updateUser(null);
-    // Limpar qualquer dado de sessão adicional
-    localStorage.removeItem('currentUser');
-    sessionStorage.clear();
   };
 
   const refreshUserData = async () => {
@@ -110,7 +118,8 @@ export const useAuth = () => {
       
       if (response.ok) {
         const updatedUser = await response.json();
-        // Mesclar dados atualizados mantendo a sessão
+        console.log('🔄 Dados do usuário atualizados:', updatedUser.email);
+        
         const mergedUser = {
           ...currentUser,
           ...updatedUser,
@@ -129,50 +138,12 @@ export const useAuth = () => {
     return null;
   };
 
-  const updateUserProfile = async (updates) => {
-    if (!currentUser?.id_usuario) return { success: false, error: 'Usuário não logado' };
-
-    try {
-      const userType = currentUser.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
-      const response = await fetch(`http://localhost:5000/api/${userType}/${currentUser.id_usuario}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updates)
-      });
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        // Atualizar dados locais
-        const mergedUser = {
-          ...currentUser,
-          ...updatedUser,
-          id_usuario: currentUser.id_usuario,
-          tipo_usuario: currentUser.tipo_usuario,
-          loginTimestamp: currentUser.loginTimestamp
-        };
-        
-        updateUser(mergedUser);
-        return { success: true, user: mergedUser };
-      } else {
-        const error = await response.json();
-        return { success: false, error: error.error };
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
-      return { success: false, error: 'Erro de conexão' };
-    }
-  };
-
   return {
     user: currentUser,
     isAuthenticated: !!currentUser,
     isLoading: loading || !isInitialized,
     login,
     logout,
-    refreshUserData,
-    updateUserProfile,
-    updateUser
+    refreshUserData
   };
 };

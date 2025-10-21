@@ -1,3 +1,4 @@
+// Pages/Login/index.js - VERSÃO CORRIGIDA
 import './index.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,7 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -32,9 +33,14 @@ function Login() {
     setMsg('');
 
     try {
+      console.log(' Iniciando processo de login...');
+      console.log(' Email:', email);
+      console.log(' Tipo de conta:', accountType);
+
       const result = await login(email, senha, accountType);
 
       if (result.success) {
+        console.log('✅ Login bem-sucedido!');
         toast.success('Login realizado com sucesso!', {
           autoClose: 2000,
           hideProgressBar: true
@@ -48,18 +54,20 @@ function Login() {
           } else {
             navigate('/vagas');
           }
-        }, 2000);
+        }, 1500);
       } else {
+        console.error('❌ Erro no login:', result.error);
         setMsg(result.error);
-        toast.error('Credenciais inválidas', {
-          autoClose: 3000,
+        toast.error(result.error || 'Credenciais inválidas', {
+          autoClose: 4000,
           hideProgressBar: true
         });
       }
     } catch (err) {
+      console.error('💥 Erro crítico no login:', err);
       setMsg('Erro de conexão com o servidor');
       toast.error('Erro de conexão', {
-        autoClose: 3000,
+        autoClose: 4000,
         hideProgressBar: true
       });
     } finally {
@@ -67,28 +75,20 @@ function Login() {
     }
   };
 
-  // Usuários demo para facilitar o login
-  const demoUsers = {
-    profissional: [
-      { email: 'joao@demo.com', senha: '123456', nome: 'João Silva' },
-      { email: 'maria@demo.com', senha: '123456', nome: 'Maria Santos' },
-      { email: 'pedro@demo.com', senha: '123456', nome: 'Pedro Oliveira' }
-    ],
-    empresa: [
-      { email: 'empresa@demo.com', senha: '123456', nome: 'HealthCorp' }
-    ]
-  };
-
-  const handleDemoLogin = (demoUser) => {
-    setEmail(demoUser.email);
-    setSenha(demoUser.senha);
+  const handleAccountTypeChange = (type) => {
+    console.log('🔄 Alterando tipo de conta para:', type);
+    setAccountType(type);
+    // Limpar campos ao mudar o tipo de conta
+    setEmail('');
+    setSenha('');
+    setMsg('');
   };
 
   return (
     <main className="login-page">
       <section className='form-container'>
         <div className='header'>
-          <img src="/Images/Logo.png" alt="Logo" className="logo" />
+          <img src="/Images/Logo.png" alt="Logo MedConnect" className="logo" />
           <h1>Bem-vindo de volta!</h1>
           <p className="welcome-text">Entre na sua conta para continuar</p>
         </div>
@@ -103,68 +103,55 @@ function Login() {
           <div className="account-type-options">
             <div
               className={`account-type-card ${accountType === 'profissional' ? 'selected' : ''}`}
-              onClick={() => setAccountType('profissional')}
+              onClick={() => handleAccountTypeChange('profissional')}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => e.key === 'Enter' && handleAccountTypeChange('profissional')}
             >
-              <div className="card-icon professional-icon">👨‍⚕️</div>
+              <div className="card-icon professional-icon"></div>
               <h3>Profissional</h3>
               <p>Busco oportunidades</p>
             </div>
 
             <div
               className={`account-type-card ${accountType === 'empresa' ? 'selected' : ''}`}
-              onClick={() => setAccountType('empresa')}
+              onClick={() => handleAccountTypeChange('empresa')}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => e.key === 'Enter' && handleAccountTypeChange('empresa')}
             >
-              <div className="card-icon company-icon">🏢</div>
+              <div className="card-icon company-icon"></div>
               <h3>Empresa</h3>
               <p>Contrato profissionais</p>
             </div>
           </div>
 
-          {/* Acesso Rápido - Demo Users */}
-          <div className="demo-access">
-            <h4>Acesso Rápido (Demo)</h4>
-            <div className="demo-users">
-              {demoUsers[accountType].map((demoUser, index) => (
-                <button
-                  key={index}
-                  className="demo-user-btn"
-                  onClick={() => handleDemoLogin(demoUser)}
-                  type="button"
-                >
-                  <span className="demo-avatar">
-                    {demoUser.nome.charAt(0)}
-                  </span>
-                  <span className="demo-info">
-                    <strong>{demoUser.nome}</strong>
-                    <small>{demoUser.email}</small>
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
           <form className='form' onSubmit={handleLogin}>
             <div className='input-field'>
-              <label>E-mail</label>
+              <label htmlFor="email">E-mail</label>
               <input
+                id="email"
                 type="email"
                 placeholder='seu@email.com'
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 disabled={loading}
                 required
+                autoComplete="email"
               />
             </div>
 
             <div className='input-field'>
-              <label>Senha</label>
+              <label htmlFor="senha">Senha</label>
               <input
+                id="senha"
                 type="password"
                 placeholder='Sua senha'
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
                 disabled={loading}
                 required
+                autoComplete="current-password"
               />
             </div>
 

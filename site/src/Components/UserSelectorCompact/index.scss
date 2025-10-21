@@ -16,10 +16,15 @@
     cursor: pointer;
     transition: all $transition-base;
     backdrop-filter: blur(10px);
+    font-family: $font-family-primary;
     
     &:hover {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    &:focus {
+      @include focus-visible;
     }
     
     .user-avatar {
@@ -86,6 +91,7 @@
     
     .dropdown-header {
       padding: $spacing-4;
+      border-bottom: 1px solid $gray-100;
       
       .user-info {
         @include flex-center;
@@ -100,12 +106,14 @@
             font-size: $font-size-sm;
             font-weight: $font-weight-semibold;
             margin-bottom: $spacing-1;
+            line-height: $line-height-tight;
           }
           
           span {
             color: $gray-600;
             font-size: $font-size-xs;
             margin-bottom: $spacing-1;
+            line-height: $line-height-tight;
           }
           
           small {
@@ -113,6 +121,7 @@
             font-size: $font-size-xs;
             font-weight: $font-weight-semibold;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
           }
         }
       }
@@ -120,14 +129,14 @@
     
     .dropdown-divider {
       height: 1px;
-      background: $gray-200;
-      margin: 0 $spacing-4;
+      background: $gray-100;
+      margin: 0;
     }
     
     .dropdown-menu {
       padding: $spacing-2 0;
       
-      button {
+      .menu-item {
         width: 100%;
         padding: $spacing-3 $spacing-4;
         border: none;
@@ -136,27 +145,33 @@
         cursor: pointer;
         font-size: $font-size-sm;
         color: $gray-700;
-        transition: background-color $transition-fast;
-        @include flex-center;
-        gap: $spacing-2;
+        transition: all $transition-fast;
+        font-family: $font-family-primary;
         
         &:hover {
           background: $gray-50;
+          color: $primary-600;
         }
         
         &:focus {
           @include focus-visible;
+          background: $gray-50;
+        }
+        
+        &:active {
+          background: $gray-100;
         }
       }
     }
     
     .dropdown-footer {
-      padding: $spacing-2 $spacing-4 $spacing-4;
+      padding: $spacing-3 $spacing-4;
+      border-top: 1px solid $gray-100;
       
       .logout-btn {
         width: 100%;
         padding: $spacing-2 $spacing-4;
-        background: rgba($error-500, 0.1);
+        background: rgba($error-500, 0.05);
         border: 1px solid rgba($error-500, 0.2);
         border-radius: $radius-lg;
         color: $error-600;
@@ -164,12 +179,20 @@
         font-weight: $font-weight-semibold;
         cursor: pointer;
         transition: all $transition-base;
-        @include flex-center;
-        gap: $spacing-2;
+        font-family: $font-family-primary;
         
         &:hover {
-          background: rgba($error-500, 0.2);
+          background: rgba($error-500, 0.1);
           border-color: rgba($error-500, 0.3);
+          transform: translateY(-1px);
+        }
+        
+        &:focus {
+          @include focus-visible;
+        }
+        
+        &:active {
+          transform: translateY(0);
         }
       }
     }
@@ -200,6 +223,8 @@
       margin: 0;
       border-radius: $radius-2xl $radius-2xl 0 0;
       animation: slideUp 0.3s ease;
+      max-height: 80vh;
+      overflow-y: auto;
     }
   }
 }
@@ -213,13 +238,82 @@
   }
 }
 
+// Estados de foco e acessibilidade
+.user-selector-compact {
+  .user-toggle:focus-visible {
+    outline: 2px solid $primary-500;
+    outline-offset: 2px;
+  }
+}
+
 // Acessibilidade
 @media (prefers-reduced-motion: reduce) {
   .user-selector-compact {
     .user-toggle,
-    .user-dropdown {
+    .user-dropdown,
+    .menu-item,
+    .logout-btn {
       transition: none;
       animation: none;
+    }
+  }
+}
+
+// Modo escuro
+@media (prefers-color-scheme: dark) {
+  .user-selector-compact {
+    .user-dropdown {
+      background: $gray-800;
+      border-color: $gray-700;
+      
+      .dropdown-header {
+        border-bottom-color: $gray-700;
+        
+        .user-info .user-details {
+          strong {
+            color: $gray-100;
+          }
+          
+          span {
+            color: $gray-400;
+          }
+          
+          small {
+            color: $primary-400;
+          }
+        }
+      }
+      
+      .dropdown-divider {
+        background: $gray-700;
+      }
+      
+      .dropdown-menu .menu-item {
+        color: $gray-300;
+        
+        &:hover {
+          background: $gray-700;
+          color: $primary-400;
+        }
+        
+        &:focus {
+          background: $gray-700;
+        }
+      }
+      
+      .dropdown-footer {
+        border-top-color: $gray-700;
+        
+        .logout-btn {
+          background: rgba($error-500, 0.1);
+          border-color: rgba($error-500, 0.3);
+          color: $error-400;
+          
+          &:hover {
+            background: rgba($error-500, 0.2);
+          }
+        }
+      }
     }
   }
 }

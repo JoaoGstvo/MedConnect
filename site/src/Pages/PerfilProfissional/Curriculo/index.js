@@ -58,17 +58,17 @@ function MeuCurriculo() {
             setCarregando(false);
             return;
         }
-        
+
         try {
             console.log('🌐 Buscando currículo na API...');
             const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${currentUser.id_usuario}`);
-            
+
             console.log('📊 Status da resposta:', response.status);
-            
+
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ Dados do currículo carregados:', data);
-                
+
                 if (data && Object.keys(data).length > 0) {
                     setCurriculoExistente(data);
                     setCurriculoData({
@@ -84,11 +84,11 @@ function MeuCurriculo() {
                         habilidades: data.habilidades || '',
                         idiomas: data.idiomas || ''
                     });
-                    
+
                     if (data.arquivo_url) {
                         setPdfUrl(data.arquivo_url);
                     }
-                    
+
                     calcularProgresso(data);
                 } else {
                     console.log('ℹ️ Nenhum currículo encontrado, usando dados do usuário');
@@ -118,7 +118,7 @@ function MeuCurriculo() {
 
     const calcularProgresso = (data) => {
         const campos = [
-            'nome_completo', 'email', 'telefone', 'objetivo', 
+            'nome_completo', 'email', 'telefone', 'objetivo',
             'resumo', 'formacao', 'experiencia', 'habilidades'
         ];
         const preenchidos = campos.filter(campo => data[campo] && data[campo].trim() !== '').length;
@@ -132,10 +132,10 @@ function MeuCurriculo() {
             ...prev,
             [name]: value
         }));
-        
+
         // Calcular progresso em tempo real
         setTimeout(() => {
-            calcularProgresso({...curriculoData, [name]: value});
+            calcularProgresso({ ...curriculoData, [name]: value });
         }, 100);
     };
 
@@ -149,10 +149,10 @@ function MeuCurriculo() {
         setSalvando(true);
         try {
             console.log('💾 Salvando currículo...', curriculoData);
-            
+
             let response;
             let resultado;
-            
+
             if (curriculoExistente && curriculoExistente.id_curriculo) {
                 // Atualizar currículo existente
                 console.log('🔄 Atualizando currículo existente:', curriculoExistente.id_curriculo);
@@ -179,16 +179,16 @@ function MeuCurriculo() {
             }
 
             console.log('📊 Status da resposta do salvamento:', response.status);
-            
+
             if (response.ok) {
                 resultado = await response.json();
                 console.log('✅ Currículo salvo com sucesso:', resultado);
-                
+
                 // Atualizar estado com o currículo salvo
                 setCurriculoExistente(resultado);
-                
+
                 alert('✅ Currículo salvo com sucesso!');
-                
+
                 // Recarregar dados para garantir sincronização
                 await carregarCurriculo();
             } else {
@@ -236,11 +236,11 @@ function MeuCurriculo() {
             if (response.ok) {
                 const resultado = await response.json();
                 console.log('✅ PDF enviado com sucesso:', resultado);
-                
+
                 if (resultado.arquivo_url) {
                     setPdfUrl(resultado.arquivo_url);
                 }
-                
+
                 alert('✅ Currículo PDF enviado com sucesso!');
                 await carregarCurriculo();
             } else {
@@ -287,12 +287,12 @@ function MeuCurriculo() {
 
             setCurriculoPDF(null);
             setPdfUrl(null);
-            
+
             const fileInput = document.getElementById('uploadPDF');
             if (fileInput) {
                 fileInput.value = '';
             }
-            
+
             alert('✅ Currículo PDF excluído com sucesso!');
         } catch (error) {
             console.error('💥 Erro ao excluir PDF:', error);
@@ -358,12 +358,12 @@ function MeuCurriculo() {
             <section className="curriculo-header">
                 <h1>Meu Currículo</h1>
                 <p>
-                    <strong>Atenção:</strong> quando você se candidata a uma vaga, a empresa recebe um link para visualizar o seu currículo online. 
+                    <strong>Atenção:</strong> quando você se candidata a uma vaga, a empresa recebe um link para visualizar o seu currículo online.
                     Tenha cuidado ao realizar modificações, pois todas as empresas terão acesso às alterações realizadas.
                 </p>
                 <div className="user-info-badge">
-                    👤 Logado como: <strong>{currentUser.nome}</strong> ({currentUser.email}) | 
-                    ID: {currentUser.id_usuario} | 
+                    👤 Logado como: <strong>{currentUser.nome}</strong> ({currentUser.email}) |
+                    ID: {currentUser.id_usuario} |
                     Tipo: {currentUser.tipo_usuario || 'candidato'}
                 </div>
             </section>
@@ -389,19 +389,19 @@ function MeuCurriculo() {
                                         </div>
                                     </div>
                                     <div className="pdf-actions">
-                                        <button 
+                                        <button
                                             className="btn-pdf visualizar"
                                             onClick={handleVisualizarPDF}
                                         >
                                             👁️ Visualizar
                                         </button>
-                                        <button 
+                                        <button
                                             className="btn-pdf download"
                                             onClick={handleDownloadPDF}
                                         >
                                             📥 Download
                                         </button>
-                                        <button 
+                                        <button
                                             className="btn-pdf excluir"
                                             onClick={handleExcluirPDF}
                                         >
@@ -444,38 +444,38 @@ function MeuCurriculo() {
                             <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="nome_completo"
-                                placeholder="Nome completo" 
+                                placeholder="Nome completo"
                                 value={curriculoData.nome_completo}
                                 onChange={handleInputChange}
                             />
-                            <input 
-                                type="email" 
+                            <input
+                                type="email"
                                 name="email"
-                                placeholder="E-mail" 
+                                placeholder="E-mail"
                                 value={curriculoData.email}
                                 onChange={handleInputChange}
                             />
-                            <input 
-                                type="tel" 
+                            <input
+                                type="tel"
                                 name="telefone"
-                                placeholder="Telefone" 
+                                placeholder="Telefone"
                                 value={curriculoData.telefone}
                                 onChange={handleInputChange}
                             />
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="endereco"
-                                placeholder="Endereço completo" 
+                                placeholder="Endereço completo"
                                 value={curriculoData.endereco}
                                 onChange={handleInputChange}
                             />
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="cidade"
-                                placeholder="Cidade - Estado" 
+                                placeholder="Cidade - Estado"
                                 value={curriculoData.cidade}
                                 onChange={handleInputChange}
                             />
@@ -489,14 +489,14 @@ function MeuCurriculo() {
                             <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="objetivo"
-                                placeholder="Cargo desejado" 
+                                placeholder="Cargo desejado"
                                 value={curriculoData.objetivo}
                                 onChange={handleInputChange}
                             />
-                            <textarea 
+                            <textarea
                                 name="resumo"
                                 placeholder="Resumo profissional e objetivos..."
                                 value={curriculoData.resumo}
@@ -513,7 +513,7 @@ function MeuCurriculo() {
                             <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
-                            <textarea 
+                            <textarea
                                 name="formacao"
                                 placeholder="Graduação, instituição, ano de conclusão..."
                                 value={curriculoData.formacao}
@@ -530,7 +530,7 @@ function MeuCurriculo() {
                             <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
-                            <textarea 
+                            <textarea
                                 name="experiencia"
                                 placeholder="Empresa, cargo, período, atividades..."
                                 value={curriculoData.experiencia}
@@ -547,7 +547,7 @@ function MeuCurriculo() {
                             <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
-                            <textarea 
+                            <textarea
                                 name="habilidades"
                                 placeholder="Habilidades técnicas, soft skills..."
                                 value={curriculoData.habilidades}
@@ -564,7 +564,7 @@ function MeuCurriculo() {
                             <span className="section-badge optional">Opcional</span>
                         </div>
                         <div className="section-body">
-                            <textarea 
+                            <textarea
                                 name="idiomas"
                                 placeholder="Idiomas e níveis de proficiência..."
                                 value={curriculoData.idiomas}
@@ -577,7 +577,7 @@ function MeuCurriculo() {
                     {/* Botão Salvar */}
                     <div className="section">
                         <div className="section-body">
-                            <button 
+                            <button
                                 className="edit-btn save-full"
                                 onClick={handleSalvarCurriculo}
                                 disabled={salvando}
@@ -597,42 +597,29 @@ function MeuCurriculo() {
                 {/* Sidebar */}
                 <aside className="curriculo-sidebar">
                     <div className="sidebar-card">
-                        <h3>📊 Preenchimento do currículo</h3>
+                        <h3> Preenchimento do currículo</h3>
                         <p>Complete seu currículo para aumentar suas chances!</p>
                         <div className="progress-container">
                             <div className="progress-bar">
-                                <div 
-                                    className="progress" 
+                                <div
+                                    className="progress"
                                     style={{ width: `${progresso}%` }}
                                 ></div>
                             </div>
                             <span className="progress-text">{progresso}% completo</span>
                         </div>
-
-                        <div className="progress-tips">
-                            <h4>💡 Dicas:</h4>
-                            <ul>
-                                <li>✅ Preencha todos os campos obrigatórios</li>
-                                <li>📝 Seja específico em experiências</li>
-                                <li>🎯 Destaque suas principais habilidades</li>
-                                <li>📄 Adicione um PDF para impressionar</li>
-                            </ul>
-                        </div>
                     </div>
 
                     <div className="sidebar-links">
-                        <h4>🚀 Ações Rápidas</h4>
-                        <a href="#" onClick={() => navigate('/minhasvagas')}>
-                            📋 Minhas Candidaturas
+                        <h4> Ações Rápidas</h4>
+                        <a href="" onClick={() => navigate('/minhasvagas')}>
+                            Minhas Candidaturas
                         </a>
-                        <a href="#" onClick={() => navigate('/vagas')}>
-                            🔍 Buscar Vagas
-                        </a>
-                        <a href="#" onClick={() => navigate('/profissionalprofile')}>
-                            👤 Meu Perfil
+                        <a href="" onClick={() => navigate('/vagas')}>
+                            Buscar Vagas
                         </a>
                         {currentUser?.tipo_usuario === 'empresa' && (
-                            <a href="#" onClick={() => navigate('/dashboardempresa')}>
+                            <a href="" onClick={() => navigate('/dashboardempresa')}>
                                 🏢 Dashboard Empresa
                             </a>
                         )}

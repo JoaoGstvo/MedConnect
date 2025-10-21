@@ -1,4 +1,4 @@
-// Components/UserSelectorCompact/index.js - VERSÃO ATUALIZADA
+// Components/UserSelectorCompact/index.js - VERSÃO PROFISSIONAL
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../Hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ function UserSelectorCompact() {
   }, []);
 
   const handleLogout = () => {
-    console.log('🚪 Fazendo logout...');
+    console.log('Fazendo logout...');
     logout();
     setIsOpen(false);
     navigate('/');
@@ -50,6 +50,28 @@ function UserSelectorCompact() {
 
   const getUserType = () => {
     return user?.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional';
+  };
+
+  const getMenuItems = () => {
+    const baseItems = [
+      { path: '/configuracoes', label: 'Configurações' }
+    ];
+
+    if (user?.tipo_usuario === 'empresa') {
+      return [
+        { path: '/dashboardempresa', label: 'Dashboard Empresa' },
+        { path: '/minhasvagas', label: 'Minhas Vagas' },
+        { path: '/empresas', label: 'Gerenciar Empresa' },
+        ...baseItems
+      ];
+    } else {
+      return [
+        { path: '/meucurriculo', label: 'Meu Currículo' },
+        { path: '/minhasvagas', label: 'Minhas Candidaturas' },
+        { path: '/profissionalprofile', label: 'Meu Perfil' },
+        ...baseItems
+      ];
+    }
   };
 
   return (
@@ -101,56 +123,16 @@ function UserSelectorCompact() {
           <div className="dropdown-divider" role="separator"></div>
 
           <div className="dropdown-menu">
-            {user?.tipo_usuario === 'empresa' ? (
-              <>
-                <button 
-                  onClick={() => handleNavigation('/dashboardempresa')}
-                  role="menuitem"
-                >
-                  🏢 Dashboard Empresa
-                </button>
-                <button 
-                  onClick={() => handleNavigation('/minhasvagas')}
-                  role="menuitem"
-                >
-                  📋 Minhas Vagas
-                </button>
-                <button 
-                  onClick={() => handleNavigation('/empresas')}
-                  role="menuitem"
-                >
-                  👥 Gerenciar Empresa
-                </button>
-              </>
-            ) : (
-              <>
-                <button 
-                  onClick={() => handleNavigation('/meucurriculo')}
-                  role="menuitem"
-                >
-                  📄 Meu Currículo
-                </button>
-                <button 
-                  onClick={() => handleNavigation('/minhasvagas')}
-                  role="menuitem"
-                >
-                  📋 Minhas Candidaturas
-                </button>
-                <button 
-                  onClick={() => handleNavigation('/profissionalprofile')}
-                  role="menuitem"
-                >
-                  👤 Meu Perfil
-                </button>
-              </>
-            )}
-
-            <button 
-              onClick={() => handleNavigation('/configuracoes')}
-              role="menuitem"
-            >
-              ⚙️ Configurações
-            </button>
+            {getMenuItems().map((item, index) => (
+              <button 
+                key={index}
+                onClick={() => handleNavigation(item.path)}
+                role="menuitem"
+                className="menu-item"
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
 
           <div className="dropdown-divider" role="separator"></div>
@@ -161,7 +143,7 @@ function UserSelectorCompact() {
               className="logout-btn"
               role="menuitem"
             >
-              🚪 Sair
+              Sair da Conta
             </button>
           </div>
         </div>

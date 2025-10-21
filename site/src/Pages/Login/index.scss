@@ -97,7 +97,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: $spacing-3;
-        margin-bottom: $spacing-6;
+        margin-bottom: $spacing-8; // Aumentado para compensar remoção do demo
 
         @include mobile-only {
           grid-template-columns: 1fr;
@@ -158,77 +158,6 @@
             font-size: $font-size-xs;
             margin: 0;
             line-height: $line-height-tight;
-          }
-        }
-      }
-
-      .demo-access {
-        margin-bottom: $spacing-6;
-        padding: $spacing-4;
-        background: $gray-50;
-        border-radius: $radius-lg;
-        border: 1px solid $gray-200;
-
-        h4 {
-          color: $gray-700;
-          font-size: $font-size-sm;
-          margin-bottom: $spacing-3;
-          text-align: center;
-          font-weight: $font-weight-medium;
-        }
-
-        .demo-users {
-          display: flex;
-          flex-direction: column;
-          gap: $spacing-2;
-
-          .demo-user-btn {
-            @include flex-between;
-            padding: $spacing-3;
-            background: white;
-            border: 1px solid $gray-300;
-            border-radius: $radius-lg;
-            cursor: pointer;
-            transition: all $transition-fast;
-            width: 100%;
-
-            &:hover {
-              background: $gray-100;
-              border-color: $primary-300;
-              transform: translateY(-1px);
-            }
-
-            .demo-avatar {
-              width: 32px;
-              height: 32px;
-              border-radius: $radius-full;
-              background: $gradient-primary;
-              @include flex-center;
-              color: white;
-              font-weight: $font-weight-semibold;
-              font-size: $font-size-sm;
-              flex-shrink: 0;
-            }
-
-            .demo-info {
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              flex: 1;
-              margin: 0 $spacing-3;
-
-              strong {
-                color: $gray-800;
-                font-size: $font-size-sm;
-                font-weight: $font-weight-semibold;
-                margin-bottom: 2px;
-              }
-
-              small {
-                color: $gray-600;
-                font-size: $font-size-xs;
-              }
-            }
           }
         }
       }
@@ -414,7 +343,6 @@
 
     .form-container {
       .account-type-card,
-      .demo-user-btn,
       .login-button {
         &:hover {
           transform: none;

@@ -74,18 +74,6 @@ function Header() {
                     </a>
                 </div>
 
-                {/* Barra de pesquisa - Desktop */}
-                <form className="search-bar" onSubmit={handleSearch}>
-                    <input 
-                        type="text" 
-                        placeholder="Pesquisar vagas, empresas..." 
-                        aria-label="Buscar vagas e empresas"
-                    />
-                    <button type="submit" className="search-btn" aria-label="Buscar">
-                        🔍
-                    </button>
-                </form>
-
                 {/* Navegação */}
                 <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`} aria-label="Navegação principal">
                     <div className='nav-links-group'>

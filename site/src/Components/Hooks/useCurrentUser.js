@@ -1,9 +1,8 @@
-// Hooks/useCurrentUser.js
+// Hooks/useCurrentUser.js - VERSÃO SIMPLIFICADA
 import { useState, useEffect } from 'react';
 
-// Chave para armazenamento local
-const USER_STORAGE_KEY = 'currentUser';
-const SESSION_TIMEOUT = 7 * 24 * 60 * 60 * 1000; // 7 dias em milissegundos
+const USER_STORAGE_KEY = 'currentUser_v3'; // ⬅️ NOVA CHAVE
+const SESSION_TIMEOUT = 7 * 24 * 60 * 60 * 1000;
 
 export const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -14,20 +13,23 @@ export const useCurrentUser = () => {
       try {
         const storedUser = localStorage.getItem(USER_STORAGE_KEY);
         
-        if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          
-          // Verificar se a sessão expirou
-          if (userData.loginTimestamp && (Date.now() - userData.loginTimestamp) > SESSION_TIMEOUT) {
-            console.log('Sessão expirada');
-            localStorage.removeItem(USER_STORAGE_KEY);
-            setCurrentUser(null);
-          } else {
-            setCurrentUser(userData);
-          }
+        if (!storedUser) {
+          setCurrentUser(null);
+          setLoading(false);
+          return;
+        }
+
+        const userData = JSON.parse(storedUser);
+
+        // Verificação de sessão
+        if (!userData.loginTimestamp || (Date.now() - userData.loginTimestamp) > SESSION_TIMEOUT) {
+          localStorage.removeItem(USER_STORAGE_KEY);
+          setCurrentUser(null);
+        } else {
+          setCurrentUser(userData);
         }
       } catch (error) {
-        console.error('Erro ao carregar usuário do localStorage:', error);
+        console.error('Erro ao carregar usuário:', error);
         localStorage.removeItem(USER_STORAGE_KEY);
         setCurrentUser(null);
       } finally {
@@ -40,33 +42,26 @@ export const useCurrentUser = () => {
 
   const updateUser = (userData) => {
     try {
-      setCurrentUser(userData);
-      
       if (userData) {
-        // Adicionar timestamp se não existir
         const userWithTimestamp = {
           ...userData,
-          loginTimestamp: userData.loginTimestamp || Date.now()
+          loginTimestamp: Date.now()
         };
+        
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userWithTimestamp));
+        setCurrentUser(userWithTimestamp);
       } else {
         localStorage.removeItem(USER_STORAGE_KEY);
+        setCurrentUser(null);
       }
     } catch (error) {
-      console.error('Erro ao atualizar usuário no localStorage:', error);
+      console.error('Erro ao atualizar usuário:', error);
     }
-  };
-
-  // Função para verificar se a sessão está ativa
-  const isSessionActive = () => {
-    if (!currentUser?.loginTimestamp) return false;
-    return (Date.now() - currentUser.loginTimestamp) < SESSION_TIMEOUT;
   };
 
   return {
     currentUser,
     loading,
-    updateUser,
-    isSessionActive
+    updateUser
   };
 };
