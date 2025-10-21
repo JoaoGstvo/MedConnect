@@ -394,3 +394,40 @@
     }
   }
 }
+
+// Adicione ao final do seu Landing Page SCSS
+.user-welcome {
+  margin-top: $spacing-4;
+  padding: $spacing-3;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $radius-lg;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  
+  small {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: $font-size-sm;
+    
+    a {
+      color: white;
+      text-decoration: underline;
+      
+      &:hover {
+        color: #e6f7ff;
+      }
+    }
+  }
+}
+
+.user-info-badge {
+  background: rgba($primary-500, 0.1);
+  padding: $spacing-2;
+  border-radius: $radius-md;
+  border-left: 3px solid $primary-500;
+  margin-top: $spacing-3;
+  
+  small {
+    color: $primary-600;
+    font-size: $font-size-xs;
+  }
+}

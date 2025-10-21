@@ -7,6 +7,7 @@ import Footer from "../../Components/Footer";
 import CardVaga from '../../Components/CardVaga';
 import CardEmpresa from '../../Components/CardEmpresa';
 import MapaEmpresas from '../../Components/MapaEmpresas';
+import { useCurrentUser } from '../../Components/Hooks/useCurrentUser';
 
 function LandingPage() {
   const [vagas, setVagas] = useState([]);
@@ -14,6 +15,7 @@ function LandingPage() {
   const [loadingVagas, setLoadingVagas] = useState(true);
   const [loadingEmpresas, setLoadingEmpresas] = useState(true);
   const sectionRefs = useRef([]);
+  const { currentUser } = useCurrentUser();
 
   // Buscar vagas do backend
   useEffect(() => {
@@ -85,9 +87,14 @@ function LandingPage() {
         <div className="title">
           <h1>Conectando Profissionais da Saúde às Melhores Oportunidades</h1>
           <p>
-            Nossa plataforma é especializada em aproximar empresas, clínicas e hospitais
-            de profissionais da área da saúde. Aqui você encontra as vagas, talentos e
-            empresas que fazem a diferença.
+            {currentUser ? (
+              <>
+                Bem-vindo de volta, <strong>{currentUser.nome}</strong>! 
+                Encontre as melhores oportunidades que combinam com seu perfil.
+              </>
+            ) : (
+              "Nossa plataforma é especializada em aproximar empresas, clínicas e hospitais de profissionais da área da saúde. Aqui você encontra as vagas, talentos e empresas que fazem a diferença."
+            )}
           </p>
         </div>
         <div className="buttons">
@@ -97,14 +104,37 @@ function LandingPage() {
           <Link to="/vagas">
             <button className="btn-secondary">Ver Vagas</button>
           </Link>
+          {!currentUser && (
+            <Link to="/cadastro">
+              <button className="btn-secondary" style={{ background: 'transparent', border: '2px solid rgba(255, 255, 255, 0.3)' }}>
+                Criar Conta
+              </button>
+            </Link>
+          )}
         </div>
+
+        {currentUser && (
+          <div className="user-welcome">
+            <small>
+              Logado como: <strong>{currentUser.nome}</strong> ({currentUser.email}) • 
+              <Link to="/meucurriculo" style={{marginLeft: '8px', color: 'white', textDecoration: 'underline' }}>
+                Meu Perfil
+              </Link>
+            </small>
+          </div>
+        )}
       </section>
 
       {/* Vagas em Destaque */}
       <section className="section" ref={addToRefs}>
         <div className="section-header">
           <h2>Vagas em Destaque</h2>
-          <p>Encontre oportunidades que combinam com seu perfil</p>
+          <p>
+            {currentUser 
+              ? `Encontre oportunidades para ${currentUser.nome}`
+              : "Encontre oportunidades que combinam com seu perfil"
+            }
+          </p>
         </div>
         <div className="container">
           <div className="cards-grid">
@@ -118,12 +148,14 @@ function LandingPage() {
                 <CardVaga 
                   key={vaga.id_vaga} 
                   vaga={vaga}
-                  showActions={true} // Garante que os botões sejam mostrados
+                  showActions={true}
                 />
               ))
             ) : (
               <div className="empty-state">
-                <p>Nenhuma vaga disponível no momento</p>
+                <div className="empty-icon">📋</div>
+                <h3>Nenhuma vaga disponível</h3>
+                <p>No momento não há vagas em destaque</p>
                 <Link to="/vagas">
                   <button className="btn-outline">Ver todas as vagas</button>
                 </Link>
@@ -162,7 +194,9 @@ function LandingPage() {
               ))
             ) : (
               <div className="empty-state">
-                <p>Nenhuma empresa cadastrada no momento</p>
+                <div className="empty-icon">🏢</div>
+                <h3>Nenhuma empresa cadastrada</h3>
+                <p>Em breve teremos empresas parceiras</p>
                 <Link to="/empresas">
                   <button className="btn-outline">Explorar empresas</button>
                 </Link>
@@ -193,15 +227,38 @@ function LandingPage() {
       {/* CTA Section */}
       <section className="cta-section" ref={addToRefs}>
         <div className="cta-content">
-          <h2>Pronto para encontrar sua próxima oportunidade?</h2>
-          <p>Junte-se a milhares de profissionais da saúde que já encontraram seu lugar ideal</p>
+          <h2>
+            {currentUser 
+              ? `Pronto para a próxima oportunidade, ${currentUser.nome}?`
+              : "Pronto para encontrar sua próxima oportunidade?"
+            }
+          </h2>
+          <p>
+            {currentUser
+              ? "Continue explorando para encontrar a vaga perfeita para sua carreira"
+              : "Junte-se a milhares de profissionais da saúde que já encontraram seu lugar ideal"
+            }
+          </p>
           <div className="cta-buttons">
-            <Link to="/cadastro">
-              <button className="btn-primary">Criar Conta</button>
-            </Link>
-            <Link to="/vagas">
-              <button className="btn-outline">Explorar Vagas</button>
-            </Link>
+            {currentUser ? (
+              <>
+                <Link to="/vagas">
+                  <button className="btn-primary">Explorar Mais Vagas</button>
+                </Link>
+                <Link to="/meucurriculo">
+                  <button className="btn-outline">Atualizar Meu Perfil</button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/cadastro">
+                  <button className="btn-primary">Criar Conta</button>
+                </Link>
+                <Link to="/vagas">
+                  <button className="btn-outline">Explorar Vagas</button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>

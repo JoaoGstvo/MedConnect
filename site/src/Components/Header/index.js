@@ -1,6 +1,8 @@
+// Components/Header/index.js
 import './index.scss';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import UserSelectorCompact from '../UserSelectorCompact';
 
 function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -82,9 +84,7 @@ function Header() {
                     </div>
 
                     <div className='nav-links-group profile'>
-                        <a href="/meucurriculo" className={`nav-link ${isActiveLink('/meucurriculo')}`}>
-                            <span>Meu Perfil</span>
-                        </a>
+                        <UserSelectorCompact />
                     </div>
                 </div>
 
