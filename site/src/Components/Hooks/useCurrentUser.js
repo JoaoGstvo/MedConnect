@@ -1,4 +1,4 @@
-// hooks/useCurrentUser.js
+// Hooks/useCurrentUser.js
 import { useState, useEffect } from 'react';
 
 // Chave para armazenamento local

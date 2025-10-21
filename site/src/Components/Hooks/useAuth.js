@@ -1,4 +1,4 @@
-// hooks/useAuth.js
+// Hooks/useAuth.js - VERSÃO CORRIGIDA
 import { useState, useEffect } from 'react';
 import { useCurrentUser } from './useCurrentUser';
 
@@ -46,15 +46,15 @@ export const useAuth = () => {
   const login = async (email, senha, tipo = 'profissional') => {
     try {
       let endpoint = '';
-      let userKey = '';
       
       if (tipo === 'empresa') {
         endpoint = 'http://localhost:5000/api/empresas/login';
-        userKey = 'empresa';
       } else {
         endpoint = 'http://localhost:5000/api/profissionais/login';
-        userKey = 'user';
       }
+
+      console.log('🔐 Tentando login em:', endpoint);
+      console.log('📧 Email:', email);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -64,36 +64,41 @@ export const useAuth = () => {
         body: JSON.stringify({ email, senha })
       });
 
+      console.log('📊 Status da resposta:', response.status);
+
       if (response.ok) {
-        const data = await response.json();
-        const userData = data[userKey];
+        const userData = await response.json();
+        console.log('✅ Dados do usuário recebidos:', userData);
         
         if (userData) {
           // Adicionar timestamp de login
           const userWithSession = {
             ...userData,
             loginTimestamp: Date.now(),
-            // Garantir que id_usuario esteja presente
+            // Garantir que id_usuario esteja presente para ambos os tipos
             id_usuario: userData.id_usuario || userData.id_empresa
           };
           
           updateUser(userWithSession);
-          return { success: true, data };
+          return { success: true, data: userData };
         }
       } else {
         const error = await response.json();
-        return { success: false, error: error.error };
+        console.error('❌ Erro na resposta:', error);
+        return { success: false, error: error.error || 'Credenciais inválidas' };
       }
     } catch (error) {
-      console.error('Erro no login:', error);
-      return { success: false, error: 'Erro de conexão' };
+      console.error('💥 Erro no login:', error);
+      return { success: false, error: 'Erro de conexão com o servidor' };
     }
   };
 
   const logout = () => {
+    console.log('🚪 Fazendo logout...');
     updateUser(null);
-    // Limpar qualquer dado de sessão adicional se necessário
-    localStorage.removeItem('userSession');
+    // Limpar qualquer dado de sessão adicional
+    localStorage.removeItem('currentUser');
+    sessionStorage.clear();
   };
 
   const refreshUserData = async () => {

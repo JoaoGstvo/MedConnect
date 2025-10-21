@@ -1,42 +1,43 @@
 // Components/Header/index.scss
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .header-page {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: $z-fixed;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
+  transition: all $transition-base;
+  height: $header-height;
 
   &.scrolled {
     background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-bottom-color: rgba(58, 155, 220, 0.1);
+    box-shadow: $shadow-lg;
+    border-bottom-color: rgba($primary-500, 0.1);
   }
 
   .navigation-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-between;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
-    height: 70px;
+    padding: 0 $spacing-5;
+    height: 100%;
 
     .logo-section {
       flex-shrink: 0;
 
       a {
-        display: flex;
-        align-items: center;
+        @include flex-center;
         text-decoration: none;
 
         img {
           height: 40px;
           width: auto;
-          transition: transform 0.3s ease;
+          transition: transform $transition-base;
         }
 
         &:hover img {
@@ -46,82 +47,81 @@
     }
 
     .search-bar {
-      display: flex;
-      align-items: center;
+      @include flex-center;
       flex: 1;
       max-width: 500px;
-      margin: 0 40px;
+      margin: 0 $spacing-8;
 
       input {
         flex: 1;
-        padding: 12px 20px;
-        border: 2px solid rgba(58, 155, 220, 0.2);
-        border-radius: 25px 0 0 25px;
+        padding: $spacing-3 $spacing-5;
+        border: 2px solid rgba($primary-500, 0.2);
+        border-radius: $radius-full 0 0 $radius-full;
         background: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
-        transition: all 0.3s ease;
+        font-size: $font-size-sm;
+        transition: all $transition-base;
+        @include input-base;
 
         &:focus {
-          outline: none;
-          border-color: #3a9bdc;
+          border-color: $primary-500;
           background: white;
-          box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
+          box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
         }
 
         &::placeholder {
-          color: rgba(44, 62, 80, 0.6);
+          color: rgba($gray-600, 0.6);
         }
       }
 
       .search-btn {
-        padding: 12px 20px;
-        background: linear-gradient(135deg, #3a9bdc, #2181ee);
+        padding: $spacing-3 $spacing-5;
+        background: $gradient-primary;
         border: none;
-        border-radius: 0 25px 25px 0;
+        border-radius: 0 $radius-full $radius-full 0;
         color: white;
         cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 16px;
+        transition: all $transition-base;
+        font-size: $font-size-base;
+        @include flex-center;
 
         &:hover {
-          background: linear-gradient(135deg, #2181ee, #1865c0);
+          background: $gradient-secondary;
           transform: translateY(-1px);
         }
       }
     }
 
     .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 30px;
+      @include flex-center;
+      gap: $spacing-6;
 
       .nav-links-group {
-        display: flex;
-        align-items: center;
-        gap: 25px;
+        @include flex-center;
+        gap: $spacing-5;
 
         &.profile {
-          margin-left: 20px;
-          padding-left: 20px;
-          border-left: 1px solid rgba(58, 155, 220, 0.2);
+          margin-left: $spacing-4;
+          padding-left: $spacing-4;
+          border-left: 1px solid rgba($primary-500, 0.2);
         }
 
         .nav-link {
           text-decoration: none;
-          color: #2c3e50;
-          font-weight: 500;
-          font-size: 15px;
-          padding: 8px 0;
+          color: $gray-700;
+          font-weight: $font-weight-medium;
+          font-size: $font-size-sm;
+          padding: $spacing-2 0;
           position: relative;
-          transition: all 0.3s ease;
+          transition: all $transition-base;
           white-space: nowrap;
 
           &:hover {
-            color: #3a9bdc;
+            color: $primary-600;
           }
 
           &.active {
-            color: #3a9bdc;
+            color: $primary-600;
+            font-weight: $font-weight-semibold;
 
             &::after {
               content: '';
@@ -130,64 +130,62 @@
               left: 0;
               right: 0;
               height: 2px;
-              background: linear-gradient(90deg, #3a9bdc, #2181ee);
+              background: $gradient-primary;
               border-radius: 1px;
             }
           }
         }
 
         .user-section {
-          display: flex;
-          align-items: center;
-          gap: 15px;
+          @include flex-center;
+          gap: $spacing-3;
 
           .user-welcome-mobile {
             display: none;
-            font-size: 14px;
-            color: #2c3e50;
+            font-size: $font-size-sm;
+            color: $gray-700;
 
             strong {
-              color: #3a9bdc;
+              color: $primary-600;
             }
           }
         }
 
         .auth-buttons {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+          @include flex-center;
+          gap: $spacing-3;
 
           .login-btn, .signup-btn {
-            padding: 10px 20px;
+            padding: $spacing-2 $spacing-4;
             border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
+            border-radius: $radius-full;
+            font-weight: $font-weight-semibold;
+            font-size: $font-size-sm;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all $transition-base;
             white-space: nowrap;
           }
 
           .login-btn {
             background: transparent;
-            color: #3a9bdc;
-            border: 2px solid #3a9bdc;
+            color: $primary-600;
+            border: 2px solid $primary-600;
 
             &:hover {
-              background: #3a9bdc;
+              background: $primary-600;
               color: white;
               transform: translateY(-1px);
             }
           }
 
           .signup-btn {
-            background: linear-gradient(135deg, #3a9bdc, #2181ee);
+            background: $gradient-primary;
             color: white;
 
             &:hover {
-              background: linear-gradient(135deg, #2181ee, #1865c0);
+              background: $gradient-secondary;
               transform: translateY(-1px);
-              box-shadow: 0 4px 12px rgba(58, 155, 220, 0.3);
+              box-shadow: $shadow-md;
             }
           }
         }
@@ -196,7 +194,7 @@
 
     .menu-toggle {
       display: none;
-      flex-direction: column;
+      @include flex-column;
       width: 24px;
       height: 24px;
       cursor: pointer;
@@ -206,9 +204,9 @@
         display: block;
         height: 2px;
         width: 100%;
-        background: #2c3e50;
+        background: $gray-700;
         margin: 3px 0;
-        transition: all 0.3s ease;
+        transition: all $transition-base;
         transform-origin: center;
       }
 
@@ -230,44 +228,25 @@
 
   .menu-overlay {
     position: fixed;
-    top: 70px;
+    top: $header-height;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    z-index: $z-modal-backdrop;
   }
 }
 
 // Responsividade
-@media (max-width: 1024px) {
+@include mobile-only {
   .header-page {
     .navigation-container {
-      .search-bar {
-        max-width: 300px;
-        margin: 0 20px;
-      }
-
-      .nav-links {
-        gap: 20px;
-
-        .nav-links-group {
-          gap: 15px;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .header-page {
-    .navigation-container {
-      padding: 0 15px;
+      padding: 0 $spacing-3;
       height: 60px;
 
       .logo-section {
         a img {
-          height: 35px;
+          height: 32px;
         }
       }
 
@@ -282,11 +261,11 @@
         width: 280px;
         height: calc(100vh - 60px);
         background: white;
-        flex-direction: column;
+        @include flex-column;
         align-items: flex-start;
-        padding: 30px 25px;
-        transition: left 0.3s ease;
-        box-shadow: 5px 0 20px rgba(0, 0, 0, 0.1);
+        padding: $spacing-6 $spacing-5;
+        transition: left $transition-base;
+        box-shadow: $shadow-xl;
         overflow-y: auto;
 
         &.active {
@@ -294,7 +273,7 @@
         }
 
         .nav-links-group {
-          flex-direction: column;
+          @include flex-column;
           align-items: flex-start;
           gap: 0;
           width: 100%;
@@ -303,16 +282,16 @@
             margin-left: 0;
             padding-left: 0;
             border-left: none;
-            border-top: 1px solid rgba(58, 155, 220, 0.2);
-            padding-top: 20px;
-            margin-top: 20px;
+            border-top: 1px solid rgba($primary-500, 0.2);
+            padding-top: $spacing-4;
+            margin-top: $spacing-4;
           }
 
           .nav-link {
-            padding: 15px 0;
+            padding: $spacing-3 0;
             width: 100%;
-            font-size: 16px;
-            border-bottom: 1px solid rgba(58, 155, 220, 0.1);
+            font-size: $font-size-base;
+            border-bottom: 1px solid rgba($primary-500, 0.1);
 
             &:last-child {
               border-bottom: none;
@@ -320,26 +299,26 @@
           }
 
           .user-section {
-            flex-direction: column;
+            @include flex-column;
             align-items: flex-start;
-            gap: 10px;
+            gap: $spacing-2;
             width: 100%;
 
             .user-welcome-mobile {
               display: block;
-              padding: 10px 0;
-              font-size: 16px;
+              padding: $spacing-2 0;
+              font-size: $font-size-base;
             }
           }
 
           .auth-buttons {
-            flex-direction: column;
+            @include flex-column;
             width: 100%;
-            gap: 10px;
+            gap: $spacing-2;
 
             .login-btn, .signup-btn {
               width: 100%;
-              padding: 12px 20px;
+              padding: $spacing-3 $spacing-4;
               text-align: center;
             }
           }
@@ -347,7 +326,7 @@
       }
 
       .menu-toggle {
-        display: flex;
+        @include flex-center;
       }
     }
 
@@ -357,25 +336,25 @@
   }
 }
 
-@media (max-width: 480px) {
+@include mobile-only {
   .header-page {
     .navigation-container {
-      padding: 0 12px;
+      padding: 0 $spacing-2;
 
       .logo-section {
         a img {
-          height: 30px;
+          height: 28px;
         }
       }
 
       .nav-links {
         width: 100%;
-        padding: 20px;
+        padding: $spacing-4;
 
         .nav-links-group {
           .nav-link {
-            font-size: 15px;
-            padding: 12px 0;
+            font-size: $font-size-sm;
+            padding: $spacing-2 0;
           }
         }
       }
@@ -397,7 +376,7 @@
 @media (prefers-contrast: high) {
   .header-page {
     background: white;
-    border-bottom: 2px solid #2c3e50;
+    border-bottom: 2px solid $gray-800;
 
     &.scrolled {
       background: white;
@@ -406,11 +385,11 @@
 
     .nav-links .nav-links-group .nav-link {
       &.active {
-        font-weight: bold;
+        font-weight: $font-weight-bold;
         
         &::after {
           height: 3px;
-          background: #2c3e50;
+          background: $gray-800;
         }
       }
     }

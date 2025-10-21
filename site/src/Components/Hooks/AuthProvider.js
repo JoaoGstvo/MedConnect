@@ -1,4 +1,4 @@
-// components/AuthProvider.js
+// Components/AuthProvider.js
 import { createContext, useContext, useEffect } from 'react';
 import { useAuth } from './useAuth';
 

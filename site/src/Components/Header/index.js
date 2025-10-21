@@ -1,4 +1,4 @@
-// Components/Header/index.js
+// Components/Header/index.js - VERSÃO ATUALIZADA
 import './index.scss';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -54,29 +54,40 @@ function Header() {
         setIsMenuOpen(false);
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        // Implementar lógica de busca
+        console.log('🔍 Buscando...');
+    };
+
     return (
         <header className={`header-page ${isScrolled ? 'scrolled' : ''}`}>
             <div className='navigation-container'>
                 {/* Logo */}
                 <div className='logo-section'>
-                    <a href="/" onClick={(e) => { e.preventDefault(); handleNavigation('/'); }}>
-                        <img src="/Images/Logo.png" alt="Logo Saúde Connect" />
+                    <a 
+                        href="/" 
+                        onClick={(e) => { e.preventDefault(); handleNavigation('/'); }}
+                        aria-label="Página inicial"
+                    >
+                        <img src="/Images/Logo.png" alt="Logo MedConnect" />
                     </a>
                 </div>
 
                 {/* Barra de pesquisa - Desktop */}
-                <div className="search-bar">
+                <form className="search-bar" onSubmit={handleSearch}>
                     <input 
                         type="text" 
                         placeholder="Pesquisar vagas, empresas..." 
+                        aria-label="Buscar vagas e empresas"
                     />
-                    <button type="button" className="search-btn">
+                    <button type="submit" className="search-btn" aria-label="Buscar">
                         🔍
                     </button>
-                </div>
+                </form>
 
                 {/* Navegação */}
-                <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+                <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`} aria-label="Navegação principal">
                     <div className='nav-links-group'>
                         <a 
                             href="/" 
@@ -164,18 +175,19 @@ function Header() {
                             </div>
                         )}
                     </div>
-                </div>
+                </nav>
 
                 {/* Menu Mobile */}
-                <div 
+                <button 
                     className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
                     onClick={toggleMenu}
-                    aria-label="Toggle menu"
+                    aria-label="Alternar menu"
+                    aria-expanded={isMenuOpen}
                 >
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </button>
             </div>
 
             {/* Overlay para mobile */}
@@ -183,6 +195,7 @@ function Header() {
                 <div 
                     className="menu-overlay"
                     onClick={() => setIsMenuOpen(false)}
+                    aria-hidden="true"
                 ></div>
             )}
         </header>
