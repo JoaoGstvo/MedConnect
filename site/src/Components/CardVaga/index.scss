@@ -1,3 +1,4 @@
+// Components/CardVaga/index.scss
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
 
@@ -6,33 +7,15 @@
   padding: $spacing-6;
   display: flex;
   flex-direction: column;
-  position: relative;
+  height: 100%;
+  transition: all $transition-base;
   border: 1px solid $gray-200;
+  position: relative;
   overflow: hidden;
-  height: fit-content;
-  min-height: 320px;
-  @include fade-in;
-  animation: fadeInUp 0.4s ease-out;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: $gradient-primary;
-    transform: scaleX(0);
-    transition: transform $transition-base;
-  }
 
   &:hover {
     transform: translateY(-4px);
     box-shadow: $shadow-xl;
-
-    &::before {
-      transform: scaleX(1);
-    }
   }
 
   .job-header {
@@ -42,34 +25,32 @@
     margin-bottom: $spacing-4;
 
     .company-logo {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border-radius: $radius-lg;
       object-fit: cover;
       border: 1px solid $gray-200;
       background: $gray-50;
       flex-shrink: 0;
-      transition: all $transition-base;
     }
 
     .header-info {
       flex: 1;
-      min-width: 0;
       
       .job-title {
-        font-size: $font-size-xl;
+        font-size: $font-size-lg;
         color: $gray-900;
         margin-bottom: $spacing-1;
-        font-weight: $font-weight-bold;
+        font-weight: $font-weight-semibold;
         line-height: $line-height-tight;
         @include text-truncate-lines(2);
       }
 
       .company-name {
         color: $primary-600;
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-        margin: 0 0 $spacing-2 0;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-2;
       }
 
       .job-meta {
@@ -81,12 +62,12 @@
           background: rgba($primary-500, 0.08);
           padding: $spacing-1 $spacing-2;
           border-radius: $radius-full;
-          border: 1px solid $gray-200;
+          border: 1px solid rgba($primary-500, 0.2);
           
           .meta-text {
             color: $primary-600;
             font-size: $font-size-xs;
-            font-weight: $font-weight-semibold;
+            font-weight: $font-weight-medium;
           }
         }
       }
@@ -100,9 +81,6 @@
     gap: $spacing-4;
 
     .salary-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       padding: $spacing-3;
       background: rgba($primary-500, 0.05);
       border-radius: $radius-lg;
@@ -110,8 +88,8 @@
 
       .salary-range {
         color: $gray-900;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
         margin: 0;
       }
     }
@@ -123,26 +101,6 @@
         line-height: $line-height-normal;
         margin: 0;
         @include text-truncate-lines(3);
-      }
-    }
-
-    .requirements-section {
-      h4 {
-        color: $gray-900;
-        font-size: $font-size-sm;
-        margin-bottom: $spacing-2;
-        font-weight: $font-weight-semibold;
-      }
-
-      .requirements-text {
-        color: $gray-600;
-        font-size: $font-size-xs;
-        line-height: $line-height-snug;
-        background: $gray-50;
-        padding: $spacing-2;
-        border-radius: $radius-md;
-        border-left: 2px solid $primary-500;
-        @include text-truncate-lines(2);
       }
     }
   }
@@ -162,44 +120,31 @@
     }
 
     .job-status {
-      @include status-badge($primary-500, white);
-      padding: $spacing-1 $spacing-3;
+      @include status-badge($success-500, white);
+      font-size: $font-size-xs;
+      padding: $spacing-1 $spacing-2;
       
-      &.closed {
-        @include status-badge($error-500, white);
+      &:not([class*="bg-"]) {
+        background: $success-500;
+        color: white;
       }
     }
 
     .job-action {
       display: flex;
       gap: $spacing-2;
+      align-items: center;
 
       @include mobile-only {
-        width: 100%;
-      }
-
-      @media (max-width: 480px) {
-        flex-direction: column;
+        justify-content: space-between;
       }
 
       .apply-button {
         @include btn-primary;
-        padding: $spacing-2 $spacing-5;
-        border-radius: $radius-lg;
+        padding: $spacing-2 $spacing-4;
         font-size: $font-size-sm;
         min-width: 120px;
-
-        @include mobile-only {
-          flex: 1;
-        }
-
-        @media (max-width: 480px) {
-          width: 100%;
-        }
-
-        &:hover:not(:disabled) {
-          transform: translateY(-1px);
-        }
+        text-decoration: none;
 
         &:disabled {
           background: $gray-400;
@@ -211,162 +156,22 @@
       .info-button {
         @include btn-secondary;
         padding: $spacing-2 $spacing-4;
-        border-radius: $radius-lg;
         font-size: $font-size-sm;
-        background: transparent;
-        border: 1px solid $gray-300;
-        color: $gray-600;
-
-        @include mobile-only {
-          flex: 1;
-        }
-
-        @media (max-width: 480px) {
-          width: 100%;
-        }
-
-        &:hover:not(:disabled) {
-          background: $gray-50;
-          border-color: $primary-500;
-          color: $primary-600;
-          transform: translateY(-1px);
-        }
       }
     }
   }
 }
 
-/* Estados especiais */
-.job-card {
-  &.featured {
-    border: 2px solid $primary-500;
-    
-    &::before {
-      transform: scaleX(1);
-      height: 4px;
-      background: $gradient-secondary;
-    }
-  }
-
-  &.urgent {
-    border-left: 4px solid $error-500;
-    
-    .job-status {
-      @include status-badge($error-500, white);
-    }
-  }
-
-  &.remote {
-    border-left: 4px solid $success-500;
-    
-    .job-status {
-      @include status-badge($success-500, white);
-    }
-  }
-}
-
-/* Responsividade */
+// Responsividade
 @include mobile-only {
   .job-card {
     padding: $spacing-4;
-    min-height: 300px;
 
     .job-header {
       .company-logo {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
       }
-
-      .header-info {
-        .job-title {
-          font-size: $font-size-lg;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .job-card {
-    padding: $spacing-3;
-    min-height: 280px;
-
-    .job-header {
-      .header-info {
-        .job-title {
-          font-size: $font-size-base;
-        }
-        
-        .company-name {
-          font-size: $font-size-sm;
-        }
-      }
-    }
-
-    .job-content {
-      .salary-section {
-        padding: $spacing-2;
-        
-        .salary-range {
-          font-size: $font-size-base;
-        }
-      }
-    }
-  }
-}
-
-/* Animações */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY($spacing-4);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Acessibilidade */
-@media (prefers-reduced-motion: reduce) {
-  .job-card {
-    animation: none;
-    transition: none;
-    
-    &:hover {
-      transform: none;
-    }
-  }
-}
-
-/* Efeitos modernos adicionais */
-.job-card {
-  .job-header {
-    .company-logo {
-      &:hover {
-        transform: scale(1.05);
-        box-shadow: $shadow-md;
-      }
-    }
-  }
-
-  .salary-section {
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba($primary-500, 0.1), transparent);
-      transition: left $transition-slow;
-    }
-    
-    &:hover::before {
-      left: 100%;
     }
   }
 }

@@ -1,3 +1,4 @@
+// Pages/Vagas/inscrição/index.js - VERSÃO FINAL
 import './index.scss';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -19,23 +20,24 @@ function InscricaoPage() {
     const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login');
-            return;
-        }
-
         const fetchData = async () => {
             try {
+                // Buscar dados da vaga
                 const responseVaga = await fetch(`http://localhost:5000/api/vagas/${id}`);
                 if (responseVaga.ok) {
                     const dataVaga = await responseVaga.json();
                     setVaga(dataVaga);
+                } else {
+                    console.error('Vaga não encontrada');
                 }
 
-                const responseCurriculo = await fetch(`http://localhost:5000/api/curriculos/usuario/${user.id_usuario}`);
-                if (responseCurriculo.ok) {
-                    const dataCurriculo = await responseCurriculo.json();
-                    setCurriculo(dataCurriculo);
+                // Buscar currículo do usuário
+                if (user?.id_usuario) {
+                    const responseCurriculo = await fetch(`http://localhost:5000/api/curriculos/usuario/${user.id_usuario}`);
+                    if (responseCurriculo.ok) {
+                        const dataCurriculo = await responseCurriculo.json();
+                        setCurriculo(dataCurriculo);
+                    }
                 }
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
@@ -45,7 +47,7 @@ function InscricaoPage() {
         };
 
         fetchData();
-    }, [id, isAuthenticated, navigate, user]);
+    }, [id, user]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -59,7 +61,7 @@ function InscricaoPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!isAuthenticated) {
+        if (!isAuthenticated || !user) {
             alert('Você precisa estar logado para se inscrever em vagas.');
             navigate('/login');
             return;
@@ -68,24 +70,7 @@ function InscricaoPage() {
         setEnviando(true);
 
         try {
-            let curriculoPdfUrl = null;
-
-            if (curriculoPDF) {
-                const formData = new FormData();
-                formData.append('curriculo_pdf', curriculoPDF);
-                formData.append('id_usuario', user.id_usuario);
-
-                const uploadResponse = await fetch('http://localhost:5000/api/curriculos/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (uploadResponse.ok) {
-                    const uploadResult = await uploadResponse.json();
-                    curriculoPdfUrl = uploadResult.arquivo_url;
-                }
-            }
-
+            // Fazer inscrição
             const inscricaoResponse = await fetch('http://localhost:5000/api/inscricoes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -103,12 +88,9 @@ function InscricaoPage() {
 
             const resultado = await inscricaoResponse.json();
             
-            let mensagemSucesso = ' Inscrição realizada com sucesso!';
+            let mensagemSucesso = 'Inscrição realizada com sucesso!';
             if (resultado.dados_curriculo_incluidos) {
-                mensagemSucesso += '\n Seus dados do currículo foram incluídos automaticamente!';
-            }
-            if (curriculoPdfUrl) {
-                mensagemSucesso += '\n📎 Currículo em PDF anexado com sucesso!';
+                mensagemSucesso += '\nSeus dados do currículo foram incluídos automaticamente!';
             }
 
             alert(mensagemSucesso);
@@ -130,20 +112,21 @@ function InscricaoPage() {
         setEtapa(1);
     };
 
-    if (loading) return <div className="loading-page">Carregando...</div>;
-    if (!vaga) return <div className="error-page">Vaga não encontrada</div>;
-
-    if (!isAuthenticated) {
+    if (loading) {
         return (
             <main className='inscricaopage'>
                 <Header />
-                <div className="auth-required">
-                    <h2>Autenticação Necessária</h2>
-                    <p>Você precisa estar logado para se inscrever em vagas.</p>
-                    <button onClick={() => navigate('/login')} className="btn-primary">
-                        Fazer Login
-                    </button>
-                </div>
+                <div className="loading-page">Carregando...</div>
+                <Footer />
+            </main>
+        );
+    }
+
+    if (!vaga) {
+        return (
+            <main className='inscricaopage'>
+                <Header />
+                <div className="error-page">Vaga não encontrada</div>
                 <Footer />
             </main>
         );
@@ -177,6 +160,7 @@ function InscricaoPage() {
             <section className='section'>
                 <div className='container'>
                     <div className='inscricao-grid'>
+                        {/* Sidebar com detalhes da vaga */}
                         <div className='vaga-sidebar'>
                             <div className='vaga-card'>
                                 <h3>📋 Detalhes da Vaga</h3>
@@ -211,6 +195,7 @@ function InscricaoPage() {
                             </div>
                         </div>
 
+                        {/* Formulário de inscrição */}
                         <div className='form-container'>
                             {etapa === 1 ? (
                                 <div className='etapa-revisao'>
@@ -275,90 +260,18 @@ function InscricaoPage() {
                                                         <div className='info-value'>{curriculo.resumo}</div>
                                                     </div>
                                                 )}
-
-                                                {curriculo.formacao && (
-                                                    <div className='info-group full-width'>
-                                                        <label>Formação Acadêmica</label>
-                                                        <div className='info-value'>{curriculo.formacao}</div>
-                                                    </div>
-                                                )}
-
-                                                {curriculo.experiencia && (
-                                                    <div className='info-group full-width'>
-                                                        <label>Experiência Profissional</label>
-                                                        <div className='info-value'>{curriculo.experiencia}</div>
-                                                    </div>
-                                                )}
-
-                                                {curriculo.habilidades && (
-                                                    <div className='info-group full-width'>
-                                                        <label>Habilidades</label>
-                                                        <div className='info-value'>{curriculo.habilidades}</div>
-                                                    </div>
-                                                )}
-
-                                                {curriculo.idiomas && (
-                                                    <div className='info-group full-width'>
-                                                        <label>Idiomas</label>
-                                                        <div className='info-value'>{curriculo.idiomas}</div>
-                                                    </div>
-                                                )}
                                             </div>
 
                                             <div className='editar-curriculo'>
-                                                <a href="/meucurriculo" className='btn-link'>
-                                                     Editar meu currículo
-                                                </a>
+                                                <button 
+                                                    onClick={() => navigate('/meucurriculo')}
+                                                    className='btn-link'
+                                                >
+                                                    Editar meu currículo
+                                                </button>
                                             </div>
                                         </div>
                                     )}
-
-                                    <div className='upload-section'>
-                                        <h3>📎 Anexar Currículo em PDF (Opcional)</h3>
-                                        <p>
-                                            Você pode enviar um currículo em PDF para complementar sua candidatura. 
-                                            Este arquivo será enviado junto com seus dados.
-                                        </p>
-                                        
-                                        <div className='upload-area'>
-                                            {curriculoPDF ? (
-                                                <div className='file-selected'>
-                                                    <div className='file-info'>
-                                                        <span className='file-icon'>📄</span>
-                                                        <div className='file-details'>
-                                                            <strong>{curriculoPDF.name}</strong>
-                                                            <span>{(curriculoPDF.size / 1024 / 1024).toFixed(2)} MB</span>
-                                                        </div>
-                                                    </div>
-                                                    <button 
-                                                        type='button' 
-                                                        className='btn-remove'
-                                                        onClick={() => setCurriculoPDF(null)}
-                                                    >
-                                                        🗑️
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className='upload-placeholder'>
-                                                    <input
-                                                        type="file"
-                                                        id="curriculoPDF"
-                                                        accept=".pdf"
-                                                        onChange={handleFileChange}
-                                                        className='file-input'
-                                                    />
-                                                    <label htmlFor="curriculoPDF" className='upload-label'>
-                                                        <div className='upload-icon'>📤</div>
-                                                        <div className='upload-text'>
-                                                            <strong>Clique para selecionar um arquivo PDF</strong>
-                                                            <span>ou arraste e solte aqui</span>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <small>Tamanho máximo: 5MB • Formato: PDF</small>
-                                    </div>
 
                                     <div className='actions'>
                                         <button 
@@ -398,11 +311,6 @@ function InscricaoPage() {
                                                 : ' Apenas informações básicas'
                                             }
                                         </div>
-                                        {curriculoPDF && (
-                                            <div className='resumo-item'>
-                                                <strong>Arquivo anexado:</strong> {curriculoPDF.name}
-                                            </div>
-                                        )}
                                     </div>
 
                                     <div className='confirmacao-aviso'>

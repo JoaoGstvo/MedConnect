@@ -1,3 +1,4 @@
+// Pages/Vagas/index.scss - VERSÃO CORRIGIDA
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
 
@@ -43,25 +44,11 @@
       z-index: 1;
     }
 
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.03" points="0,1000 1000,0 1000,1000"/></svg>');
-      background-size: cover;
-      z-index: 1;
-    }
-
     .hero-content {
       max-width: 900px;
       margin-bottom: $spacing-16;
       position: relative;
       z-index: 2;
-      @include fade-in;
-      animation: fadeInUp 0.8s ease-out;
 
       h1 {
         font-size: $font-size-5xl;
@@ -69,18 +56,9 @@
         margin-bottom: $spacing-6;
         line-height: $line-height-tight;
         text-shadow: $shadow-2xl;
-        background: linear-gradient(135deg, #ffffff 0%, #e6f7ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
 
         @include mobile-only {
           font-size: $font-size-3xl;
-        }
-
-        @supports not (-webkit-background-clip: text) {
-          color: white;
-          text-shadow: $shadow-2xl;
         }
       }
 
@@ -92,9 +70,21 @@
         max-width: 700px;
         margin: 0 auto;
         text-shadow: $shadow-base;
-        color: rgba(255, 255, 255, 0.95);
 
         @include mobile-only {
+          font-size: $font-size-lg;
+        }
+      }
+
+      .user-welcome {
+        margin-top: $spacing-4;
+        padding: $spacing-3;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $radius-lg;
+        backdrop-filter: blur(10px);
+        
+        p {
+          margin: 0;
           font-size: $font-size-lg;
         }
       }
@@ -103,7 +93,7 @@
 
   .filters-section {
     flex: 1;
-    padding: $spacing-4 $spacing-4;
+    padding: $spacing-8 $spacing-4;
     background-color: white;
     position: relative;
 
@@ -119,22 +109,17 @@
       right: 0;
       height: 4px;
       background: $gradient-primary;
-      opacity: 1;
-      transform: scaleX(1);
-      transition: all $transition-slow;
     }
 
     .filters-container {
       max-width: 1200px;
       margin: 0 auto;
-      justify-content: center;
       text-align: center;
 
       h2 {
-        justify-content: center;
         text-align: center;
-        margin-bottom: $spacing-16;
-        font-size: $font-size-4xl;
+        margin-bottom: $spacing-8;
+        font-size: $font-size-3xl;
         font-weight: $font-weight-bold;
         color: $primary-600;
         position: relative;
@@ -142,8 +127,8 @@
         padding-bottom: $spacing-4;
 
         @include mobile-only {
-          font-size: $font-size-3xl;
-          margin-bottom: $spacing-8;
+          font-size: $font-size-2xl;
+          margin-bottom: $spacing-6;
         }
 
         &::after {
@@ -154,18 +139,13 @@
           margin: $spacing-4 auto 0;
           background: $gradient-primary;
           border-radius: $radius-sm;
-          transition: width $transition-base;
-        }
-
-        &:hover::after {
-          width: 120px;
         }
       }
 
       .filters-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
-        gap: $spacing-6;
+        gap: $spacing-4;
         max-width: 900px;
         margin: 0 auto;
 
@@ -178,20 +158,13 @@
       .filter-input,
       .filter-select {
         @include input-base;
-        padding: $spacing-4 $spacing-6;
+        padding: $spacing-3 $spacing-4;
         border: 2px solid $gray-200;
         background: $gray-50;
-        box-shadow: $shadow-base;
 
         &:focus {
           border-color: $primary-500;
-          box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
           background: white;
-          transform: translateY(-2px);
-        }
-
-        &::placeholder {
-          color: $gray-600;
         }
       }
 
@@ -200,47 +173,18 @@
         justify-content: space-between;
         align-items: center;
         max-width: 900px;
-        margin: $spacing-8 auto 0;
-        padding-top: $spacing-8;
+        margin: $spacing-6 auto 0;
+        padding-top: $spacing-6;
         border-top: 1px solid $gray-200;
 
         @include mobile-only {
           flex-direction: column;
-          gap: $spacing-6;
-          text-align: center;
+          gap: $spacing-4;
         }
 
         .btn-limpar {
           @include btn-secondary;
-          padding: $spacing-3 $spacing-8;
-          border-radius: $radius-full;
-          border: 2px solid $gray-300;
-          background: transparent;
-          color: $gray-600;
-          position: relative;
-          overflow: hidden;
-
-          &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba($primary-500, 0.1), transparent);
-            transition: left $transition-slow;
-          }
-
-          &:hover:not(:disabled) {
-            background: rgba($primary-500, 0.05);
-            color: $primary-600;
-            border-color: $primary-500;
-            transform: translateY(-2px);
-
-            &::before {
-              left: 100%;
-            }
-          }
+          padding: $spacing-2 $spacing-6;
         }
 
         .results-count {
@@ -254,203 +198,93 @@
 
   .vagas-section {
     flex: 1;
-    padding: $spacing-20 $spacing-6;
+    padding: $spacing-12 $spacing-6;
     background-color: $gray-50;
-    position: relative;
 
     @include mobile-only {
-      padding: $spacing-12 $spacing-4;
+      padding: $spacing-8 $spacing-4;
     }
 
     .container {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
       max-width: 1300px;
       margin: 0 auto;
 
       .section-title {
         text-align: center;
-        margin-bottom: $spacing-16;
+        margin-bottom: $spacing-12;
 
         @include mobile-only {
           margin-bottom: $spacing-8;
         }
 
         h2 {
-          font-size: $font-size-4xl;
+          font-size: $font-size-3xl;
           font-weight: $font-weight-bold;
           color: $primary-600;
-          position: relative;
-          display: inline-block;
-          padding-bottom: $spacing-4;
 
           @include mobile-only {
-            font-size: $font-size-3xl;
-          }
-
-          &::after {
-            content: "";
-            display: block;
-            width: 80px;
-            height: 4px;
-            margin: $spacing-4 auto 0;
-            background: $gradient-primary;
-            border-radius: $radius-sm;
-            transition: width $transition-base;
-          }
-
-          &:hover::after {
-            width: 120px;
+            font-size: $font-size-2xl;
           }
 
           .vagas-count {
             color: $primary-800;
-            font-weight: $font-weight-extrabold;
           }
         }
       }
 
       .vagas-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: $spacing-8;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: $spacing-6;
         width: 100%;
 
         @include mobile-only {
           grid-template-columns: 1fr;
-          gap: $spacing-6;
-        }
-
-        & > * {
-          @include card-base;
-          border: 1px solid $gray-200;
-          position: relative;
-          overflow: hidden;
-
-          &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: $gradient-primary;
-            transform: scaleX(0);
-            transition: transform $transition-base;
-          }
-
-          &:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: $shadow-xl;
-
-            &::before {
-              transform: scaleX(1);
-            }
-          }
+          gap: $spacing-4;
         }
       }
 
       .loading {
         text-align: center;
-        padding: $spacing-20 $spacing-6;
+        padding: $spacing-16;
         color: $gray-600;
 
         .spinner {
-          @include loading-spinner(60px, $primary-600);
-          margin: 0 auto $spacing-8;
+          @include loading-spinner(40px, $primary-600);
+          margin: 0 auto $spacing-4;
         }
 
         p {
           font-size: $font-size-lg;
-          font-weight: $font-weight-medium;
         }
       }
 
       .no-vagas {
         @include card-base;
         text-align: center;
-        padding: $spacing-20 $spacing-10;
+        padding: $spacing-12;
         border: 1px solid $gray-200;
-        transition: all $transition-base;
-        position: relative;
-        max-width: 600px;
-        margin: 0 auto;
-
-        @include mobile-only {
-          padding: $spacing-12 $spacing-6;
-        }
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 4px;
-          background: $gradient-primary;
-          transform: scaleX(1);
-        }
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: $shadow-xl;
-        }
 
         .no-vagas-icon {
-          font-size: $font-size-5xl;
-          margin-bottom: $spacing-8;
+          font-size: $font-size-4xl;
+          margin-bottom: $spacing-6;
           color: $gray-400;
-          opacity: 0.7;
         }
 
         h3 {
           color: $gray-900;
-          margin-bottom: $spacing-4;
-          font-size: $font-size-2xl;
-          font-weight: $font-weight-semibold;
+          margin-bottom: $spacing-3;
+          font-size: $font-size-xl;
         }
 
         p {
           color: $gray-600;
-          margin-bottom: $spacing-8;
-          font-size: $font-size-lg;
-          line-height: $line-height-relaxed;
+          margin-bottom: $spacing-6;
         }
 
         .btn-primary {
           @include btn-primary;
-          padding: $spacing-3 $spacing-8;
-          font-size: $font-size-lg;
-          font-weight: $font-weight-semibold;
-          border-radius: $radius-full;
-          box-shadow: $shadow-lg;
-          position: relative;
-          overflow: hidden;
-
-          &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left $transition-slow;
-          }
-
-          &:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: $shadow-xl;
-
-            &::before {
-              left: 100%;
-            }
-          }
-
-          &:active:not(:disabled) {
-            transform: translateY(0);
-          }
+          padding: $spacing-3 $spacing-6;
         }
       }
     }
@@ -460,67 +294,17 @@
     background: rgba($error-500, 0.1);
     border: 1px solid rgba($error-500, 0.2);
     color: $error-600;
-    padding: $spacing-6;
+    padding: $spacing-4;
     border-radius: $radius-lg;
     text-align: center;
-    margin-bottom: $spacing-8;
+    margin-bottom: $spacing-6;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    transition: all $transition-base;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: $gradient-error;
-      border-radius: $radius-lg $radius-lg 0 0;
-    }
 
     p {
       margin: 0;
       font-weight: $font-weight-semibold;
-      font-size: $font-size-base;
-    }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY($spacing-8);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .fade-in {
-    @include fade-in;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-    
-    .hero-content {
-      animation: none !important;
     }
   }
 }

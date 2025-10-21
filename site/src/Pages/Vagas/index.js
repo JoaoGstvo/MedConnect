@@ -1,3 +1,4 @@
+// Pages/Vagas/index.js - VERSÃO FINAL
 import './index.scss';
 import { useState, useEffect } from 'react';
 import Header from "../../Components/Header";
@@ -22,7 +23,6 @@ function VagasPage() {
             try {
                 setLoading(true);
                 setError(null);
-                console.log('Buscando vagas da API...');
                 
                 const response = await fetch('http://localhost:5000/api/vagas');
                 
@@ -31,7 +31,6 @@ function VagasPage() {
                 }
                 
                 const data = await response.json();
-                console.log('Vagas carregadas da API:', data);
                 setVagas(data);
             } catch (error) {
                 console.error('Erro ao buscar vagas:', error);
@@ -82,7 +81,7 @@ function VagasPage() {
                 <div className='hero-content'>
                     <h1>Encontre Sua Vaga na Área da Saúde</h1>
                     <p>Conectamos profissionais qualificados às melhores oportunidades</p>
-                    {isAuthenticated && (
+                    {isAuthenticated && user && (
                         <div className="user-welcome">
                             <p>Olá, <strong>{user.nome}</strong>! 👋</p>
                         </div>
@@ -92,7 +91,7 @@ function VagasPage() {
 
             <section className='filters-section'>
                 <div className='filters-container'>
-                    <h2 className='buscar-vagass'>Buscar Vagas</h2>
+                    <h2>Buscar Vagas</h2>
                     <div className='filters-grid'>
                         <input 
                             type="text" 
@@ -116,7 +115,7 @@ function VagasPage() {
                             onChange={handleFiltroChange}
                             className='filter-select'
                         >
-                            <option value=""> Todos os contratos</option>
+                            <option value="">Todos os contratos</option>
                             <option value="CLT">CLT</option>
                             <option value="PJ">PJ</option>
                             <option value="Estágio">Estágio</option>
@@ -136,10 +135,12 @@ function VagasPage() {
 
             <section className='vagas-section'>
                 <div className='container'>
-                    <h2 className='section-title'>
-                        Vagas Disponíveis 
-                        <span className='vagas-count'> ({vagasFiltradas.length})</span>
-                    </h2>
+                    <div className='section-title'>
+                        <h2>
+                            Vagas Disponíveis 
+                            <span className='vagas-count'> ({vagasFiltradas.length})</span>
+                        </h2>
+                    </div>
                     
                     {error && (
                         <div className="error-message">

@@ -1,48 +1,11 @@
-import { useState } from 'react';
+// Components/CardVaga/index.js - VERSÃO FINAL
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../Components/Hooks/useAuth';
+import { useAuth } from '../Hooks/useAuth';
+import './index.scss';
 
 function CardVaga({ vaga }) {
-    const [salvando, setSalvando] = useState(false);
-    const [estaSalva, setEstaSalva] = useState(false);
     const navigate = useNavigate();
-    
-    const { user, isAuthenticated } = useAuth();
-
-    const handleSalvarVaga = async () => {
-        if (!isAuthenticated) {
-            alert('Você precisa estar logado para salvar vagas.');
-            navigate('/login');
-            return;
-        }
-
-        setSalvando(true);
-        try {
-            const response = await fetch('http://localhost:5000/api/vagas/salvar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_usuario: user.id_usuario,
-                    id_vaga: vaga.id_vaga
-                })
-            });
-
-            if (response.ok) {
-                setEstaSalva(true);
-                alert('Vaga salva com sucesso!');
-            } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Erro ao salvar vaga');
-            }
-        } catch (error) {
-            console.error('Erro ao salvar vaga:', error);
-            alert(`Erro: ${error.message}`);
-        } finally {
-            setSalvando(false);
-        }
-    };
+    const { isAuthenticated } = useAuth();
 
     const handleCandidatar = () => {
         if (!isAuthenticated) {
@@ -50,29 +13,61 @@ function CardVaga({ vaga }) {
             navigate('/login');
             return;
         }
-        
         navigate(`/inscricaovaga/${vaga.id_vaga}`);
     };
 
     return (
-        <div className="card-vaga">
-            {/* Conteúdo do card vaga */}
+        <div className="job-card">
+            <div className="job-header">
+                <img 
+                    src={vaga.empresa_logo || '/Images/company-placeholder.png'} 
+                    alt={vaga.empresa_nome} 
+                    className="company-logo"
+                />
+                <div className="header-info">
+                    <h3 className="job-title">{vaga.titulo}</h3>
+                    <p className="company-name">{vaga.empresa_nome}</p>
+                    <div className="job-meta">
+                        <span className="meta-tag">
+                            <span className="meta-text">{vaga.localizacao}</span>
+                        </span>
+                        <span className="meta-tag">
+                            <span className="meta-text">{vaga.modalidade}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
             
-            <div className="card-actions">
-                <button 
-                    onClick={handleCandidatar}
-                    className="btn-candidatar"
-                >
-                     Candidatar-se
-                </button>
+            <div className="job-content">
+                <div className="salary-section">
+                    <span className="salary-range">{vaga.salario || 'Salário a combinar'}</span>
+                </div>
+                <div className="job-description">
+                    <p>{vaga.descricao?.substring(0, 150)}...</p>
+                </div>
+            </div>
+            
+            <div className="job-footer">
+                <div className="job-status">
+                    {vaga.status === 'aberta' ? '🟢 Aberta' : '🔴 Fechada'}
+                </div>
                 
-                <button 
-                    onClick={handleSalvarVaga}
-                    disabled={salvando || estaSalva}
-                    className={`btn-salvar ${estaSalva ? 'saved' : ''}`}
-                >
-                    {salvando ? 'Salvando...' : estaSalva ? '✅ Salva' : '💾 Salvar'}
-                </button>
+                <div className="job-action">
+                    <button 
+                        onClick={handleCandidatar}
+                        disabled={vaga.status !== 'aberta'}
+                        className="apply-button"
+                    >
+                        {vaga.status === 'aberta' ? 'Candidatar-se' : 'Vaga Fechada'}
+                    </button>
+                    
+                    <button 
+                        onClick={() => navigate(`/vaga/${vaga.id_vaga}`)}
+                        className="info-button"
+                    >
+                        Ver Detalhes
+                    </button>
+                </div>
             </div>
         </div>
     );

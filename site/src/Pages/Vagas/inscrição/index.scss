@@ -1,10 +1,11 @@
+// Pages/Vagas/inscrição/index.scss
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
 
 .inscricaopage {
     min-height: 100vh;
-   
     font-family: $font-family-primary;
+    background-color: $gray-50;
 
     .hero-section {
         background: $gradient-secondary;
@@ -106,15 +107,15 @@
     .vaga-sidebar {
         .vaga-card {
             @include card-base;
-            padding: $spacing-8;
+            padding: $spacing-6;
             border: 1px solid $gray-200;
             position: sticky;
             top: $spacing-8;
 
             h3 {
                 color: $gray-800;
-                font-size: $font-size-xl;
-                margin-bottom: $spacing-6;
+                font-size: $font-size-lg;
+                margin-bottom: $spacing-4;
                 @include flex-center;
                 gap: $spacing-2;
                 justify-content: flex-start;
@@ -123,7 +124,7 @@
             .vaga-info {
                 h2 {
                     color: $gray-800;
-                    font-size: $font-size-2xl;
+                    font-size: $font-size-xl;
                     margin-bottom: $spacing-2;
                     font-weight: $font-weight-semibold;
                 }
@@ -131,8 +132,8 @@
                 .empresa {
                     color: $primary-600;
                     font-weight: $font-weight-semibold;
-                    font-size: $font-size-lg;
-                    margin-bottom: $spacing-6;
+                    font-size: $font-size-base;
+                    margin-bottom: $spacing-4;
                 }
             }
 
@@ -140,7 +141,7 @@
                 .detail-item {
                     @include flex-center;
                     gap: $spacing-2;
-                    padding: $spacing-3 0;
+                    padding: $spacing-2 0;
                     border-bottom: 1px solid $gray-100;
                     justify-content: flex-start;
 
@@ -149,25 +150,26 @@
                     }
 
                     .icon {
-                        font-size: $font-size-lg;
+                        font-size: $font-size-base;
                         color: $gray-600;
                     }
 
                     span:last-child {
                         color: $gray-700;
+                        font-size: $font-size-sm;
                     }
                 }
             }
 
             .vaga-descricao {
-                margin-top: $spacing-6;
-                padding-top: $spacing-6;
+                margin-top: $spacing-4;
+                padding-top: $spacing-4;
                 border-top: 1px solid $gray-200;
 
                 h4 {
                     color: $gray-800;
-                    margin-bottom: $spacing-3;
-                    font-size: $font-size-lg;
+                    margin-bottom: $spacing-2;
+                    font-size: $font-size-base;
                 }
 
                 p {
@@ -181,38 +183,38 @@
 
     .form-container {
         @include card-base;
-        padding: $spacing-10;
+        padding: $spacing-8;
         border: 1px solid $gray-200;
 
         .etapa-revisao, .etapa-confirmacao {
             h2 {
                 color: $gray-800;
-                font-size: $font-size-3xl;
+                font-size: $font-size-2xl;
                 margin-bottom: $spacing-2;
                 font-weight: $font-weight-semibold;
             }
 
             .subtitulo {
                 color: $gray-600;
-                margin-bottom: $spacing-8;
-                font-size: $font-size-lg;
+                margin-bottom: $spacing-6;
+                font-size: $font-size-base;
             }
         }
 
         .opcao-curriculo {
             background: $gray-50;
-            padding: $spacing-6;
+            padding: $spacing-4;
             border-radius: $radius-lg;
             border: 1px solid $gray-200;
-            margin-bottom: $spacing-8;
+            margin-bottom: $spacing-6;
 
             .checkbox-container {
                 @include flex-center;
                 gap: $spacing-2;
                 cursor: pointer;
-                font-weight: $font-weight-semibold;
+                font-weight: $font-weight-medium;
                 color: $gray-800;
-                margin-bottom: $spacing-2;
+                margin-bottom: $spacing-1;
                 justify-content: flex-start;
 
                 input {
@@ -254,16 +256,18 @@
             small {
                 color: $gray-600;
                 font-size: $font-size-sm;
+                display: block;
+                margin-top: $spacing-1;
             }
         }
 
         .dados-curriculo {
-            margin-bottom: $spacing-8;
+            margin-bottom: $spacing-6;
 
             h3 {
                 color: $gray-800;
-                font-size: $font-size-xl;
-                margin-bottom: $spacing-6;
+                font-size: $font-size-lg;
+                margin-bottom: $spacing-4;
                 @include flex-center;
                 gap: $spacing-2;
                 justify-content: flex-start;
@@ -272,8 +276,8 @@
             .info-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: $spacing-4;
-                margin-bottom: $spacing-6;
+                gap: $spacing-3;
+                margin-bottom: $spacing-4;
 
                 @include mobile-only {
                     grid-template-columns: 1fr;
@@ -289,18 +293,22 @@
                         color: $gray-600;
                         font-size: $font-size-xs;
                         font-weight: $font-weight-semibold;
-                        margin-bottom: $spacing-2;
+                        margin-bottom: $spacing-1;
                         text-transform: uppercase;
                         letter-spacing: 0.5px;
                     }
 
                     .info-value {
                         background: $gray-50;
-                        padding: $spacing-3 $spacing-4;
-                        border-radius: $radius-lg;
+                        padding: $spacing-2 $spacing-3;
+                        border-radius: $radius-md;
                         border: 1px solid $gray-200;
                         color: $gray-800;
                         line-height: $line-height-normal;
+                        font-size: $font-size-sm;
+                        min-height: 44px;
+                        display: flex;
+                        align-items: center;
                     }
                 }
             }
@@ -311,11 +319,12 @@
                 .btn-link {
                     @include btn-ghost;
                     color: $primary-600;
-                    font-weight: $font-weight-semibold;
+                    font-weight: $font-weight-medium;
                     @include flex-center;
                     gap: $spacing-2;
-                    padding: $spacing-2 $spacing-4;
+                    padding: $spacing-2 $spacing-3;
                     border-radius: $radius-md;
+                    font-size: $font-size-sm;
 
                     &:hover:not(:disabled) {
                         background: $gray-50;
@@ -324,134 +333,17 @@
             }
         }
 
-        .upload-section {
-            background: $primary-50;
-            padding: $spacing-6;
-            border-radius: $radius-lg;
-            border: 1px solid $primary-200;
-            margin-bottom: $spacing-8;
-
-            h3 {
-                color: $primary-700;
-                font-size: $font-size-lg;
-                margin-bottom: $spacing-3;
-                @include flex-center;
-                gap: $spacing-2;
-                justify-content: flex-start;
-            }
-
-            p {
-                color: $primary-800;
-                margin-bottom: $spacing-6;
-                font-size: $font-size-sm;
-                line-height: $line-height-relaxed;
-            }
-
-            .upload-area {
-                .file-selected {
-                    @include flex-between;
-                    background: white;
-                    padding: $spacing-4;
-                    border-radius: $radius-lg;
-                    border: 2px dashed $success-500;
-
-                    .file-info {
-                        @include flex-center;
-                        gap: $spacing-4;
-
-                        .file-icon {
-                            font-size: $font-size-3xl;
-                            color: $success-500;
-                        }
-
-                        .file-details {
-                            display: flex;
-                            flex-direction: column;
-
-                            strong {
-                                color: $gray-800;
-                            }
-
-                            span {
-                                color: $gray-600;
-                                font-size: $font-size-xs;
-                            }
-                        }
-                    }
-
-                    .btn-remove {
-                        @include btn-ghost;
-                        background: $error-50;
-                        border: 1px solid $error-200;
-                        color: $error-600;
-                        padding: $spacing-2;
-
-                        &:hover:not(:disabled) {
-                            background: $error-200;
-                        }
-                    }
-                }
-
-                .upload-placeholder {
-                    .file-input {
-                        display: none;
-                    }
-
-                    .upload-label {
-                        display: block;
-                        background: white;
-                        padding: $spacing-8;
-                        border-radius: $radius-lg;
-                        border: 2px dashed $gray-300;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all $transition-base;
-
-                        &:hover {
-                            border-color: $primary-500;
-                            background: $gray-50;
-                        }
-
-                        .upload-icon {
-                            font-size: $font-size-4xl;
-                            margin-bottom: $spacing-4;
-                            color: $gray-400;
-                        }
-
-                        .upload-text {
-                            display: flex;
-                            flex-direction: column;
-                            gap: $spacing-1;
-
-                            strong {
-                                color: $gray-800;
-                            }
-
-                            span {
-                                color: $gray-600;
-                                font-size: $font-size-sm;
-                            }
-                        }
-                    }
-                }
-            }
-
-            small {
-                color: $gray-600;
-                font-size: $font-size-xs;
-            }
-        }
-
         .resumo-candidatura {
             background: $gray-50;
-            padding: $spacing-6;
+            padding: $spacing-4;
             border-radius: $radius-lg;
             border: 1px solid $gray-200;
-            margin-bottom: $spacing-8;
+            margin-bottom: $spacing-6;
 
             .resumo-item {
-                padding: $spacing-3 0;
+                padding: $spacing-2 0;
                 border-bottom: 1px solid $gray-200;
+                font-size: $font-size-sm;
 
                 &:last-child {
                     border-bottom: none;
@@ -460,32 +352,29 @@
                 strong {
                     color: $gray-800;
                 }
-
-                &:last-child {
-                    color: $primary-600;
-                    font-weight: $font-weight-semibold;
-                }
             }
         }
 
         .confirmacao-aviso {
             @include flex-center;
             align-items: flex-start;
-            gap: $spacing-4;
+            gap: $spacing-3;
             background: $warning-50;
-            padding: $spacing-6;
+            padding: $spacing-4;
             border-radius: $radius-lg;
             border: 1px solid $warning-300;
-            margin-bottom: $spacing-8;
+            margin-bottom: $spacing-6;
 
             .aviso-icon {
-                font-size: $font-size-2xl;
+                font-size: $font-size-lg;
                 color: $warning-600;
+                flex-shrink: 0;
             }
 
             .aviso-text {
                 color: $warning-800;
                 line-height: $line-height-relaxed;
+                font-size: $font-size-sm;
 
                 strong {
                     color: $warning-800;
@@ -495,7 +384,7 @@
 
         .actions {
             display: flex;
-            gap: $spacing-4;
+            gap: $spacing-3;
             justify-content: space-between;
 
             @include mobile-only {
@@ -504,11 +393,12 @@
 
             button {
                 @include btn-base;
-                padding: $spacing-4 $spacing-8;
+                padding: $spacing-3 $spacing-6;
                 border-radius: $radius-lg;
                 font-weight: $font-weight-semibold;
                 @include flex-center;
                 gap: $spacing-2;
+                font-size: $font-size-sm;
 
                 &:disabled {
                     opacity: 0.6;
@@ -519,8 +409,7 @@
                     @include btn-primary;
 
                     &:hover:not(:disabled) {
-                        transform: translateY(-2px);
-                        box-shadow: $shadow-xl;
+                        transform: translateY(-1px);
                     }
                 }
 
@@ -529,7 +418,6 @@
 
                     &:hover:not(:disabled) {
                         transform: translateY(-1px);
-                        box-shadow: $shadow-md;
                     }
                 }
             }
@@ -545,6 +433,7 @@
 
     .spinner {
         @include loading-spinner(16px, white);
+        margin-right: $spacing-2;
     }
 }
 
@@ -563,37 +452,10 @@
                     font-size: $font-size-lg;
                 }
             }
-
-            .progress-steps {
-                .step {
-                    span {
-                        font-size: $font-size-xs;
-                        text-align: center;
-                        line-height: $line-height-tight;
-                        width: 80px;
-                        word-wrap: break-word;
-                        hyphens: auto;
-                    }
-                }
-            }
         }
 
         .form-container {
             padding: $spacing-6;
-        }
-    }
-}
-
-// Acessibilidade
-@media (prefers-reduced-motion: reduce) {
-    .inscricaopage {
-        * {
-            transition-duration: 0.01ms !important;
-            animation-duration: 0.01ms !important;
-        }
-        
-        .form-container .actions button:hover:not(:disabled) {
-            transform: none;
         }
     }
 }

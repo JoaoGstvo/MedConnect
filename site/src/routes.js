@@ -28,63 +28,58 @@ export default function Index() {
         <BrowserRouter>
             <Routes>
                 {/* Rotas públicas */}
-                <Route path="/inicial" element={<LandingPage1 />} />  {/*pagina 1*/}
-                <Route path="/" element={<LandingPage />} /> {/*pagina principal*/}
-                <Route path="/cadastro" element={<Signup />} /> {/*cadastro geral*/}
-                <Route path="/login" element={<Login />} /> {/*login geral*/}
-                <Route path="/senha" element={<EsqueceuSenha />} /> {/*esqueceu a senha*/}
-                <Route path="/artigos" element={<Artigos />} /> {/*tela de artigos*/}
-                <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} /> {/*tela de artigo criado com sucesso*/}
-                <Route path="/empresas" element={<EmpresaPage />} /> {/*tela de empresas*/}
-                <Route path="/vagas" element={<VagasPage />} /> {/*tela de vagas*/}
-                <Route path="/informacoesvaga" element={<MaisInformacoesPage />} /> {/*tela de mais informações da vaga*/}
-                <Route path="/faqsite" element={<ContatoPage />} /> {/*suporte site*/}
-                <Route path="/vaga/:id" element={<MaisInformacoesPage />} /> {/*tela de mais informações da vaga (ID)*/}
+                <Route path="/inicial" element={<LandingPage1 />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/cadastro" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/senha" element={<EsqueceuSenha />} />
+                <Route path="/artigos" element={<Artigos />} />
+                <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} />
+                <Route path="/empresas" element={<EmpresaPage />} />
+                <Route path="/vagas" element={<VagasPage />} />
+                <Route path="/informacoesvaga" element={<MaisInformacoesPage />} />
+                <Route path="/faqsite" element={<ContatoPage />} />
+                <Route path="/vaga/:id" element={<MaisInformacoesPage />} />
                 <Route path="/cardcandidato" element={<CardCandidato />} />
                 <Route path="/cardempresa" element={<CardEmpresa />} />
 
-                {/* Rotas protegidas - requerem autenticação */}
+                {/* Rotas protegidas */}
                 <Route path="/minhasvagas" element={
                     <ProtectedRoute>
                         <MinhasVagas />
                     </ProtectedRoute>
-                } /> {/*tela de vagas do candidato*/}
+                } />
 
                 <Route path="/novoartigo" element={
                     <ProtectedRoute>
                         <NovoArtigoPage />
                     </ProtectedRoute>
-                } /> {/*tela de criação de artigos*/}
+                } />
 
-                <Route path="/inscricaovaga" element={
-                    <ProtectedRoute>
-                        <InscricaoPage />
-                    </ProtectedRoute>
-                } /> {/*tela de inscrição na vaga*/}
-
+                {/* ✅ APENAS UMA ROTA para inscricaovaga - COM :id */}
                 <Route path="/inscricaovaga/:id" element={
                     <ProtectedRoute>
                         <InscricaoPage />
                     </ProtectedRoute>
-                } /> {/*tela de inscrição na vaga (ID)*/}
+                } />
 
                 <Route path="/inscricaovagasucesso" element={
                     <ProtectedRoute>
                         <InscricaoSucessoPage />
                     </ProtectedRoute>
-                } /> {/*tela de inscrição na vaga com sucesso*/}
+                } />
 
                 <Route path="/dashboardempresa" element={
                     <ProtectedRoute>
                         <DashboardEmpresaPage />
                     </ProtectedRoute>
-                } /> {/*dashboard da empresa*/}
+                } />
 
                 <Route path="/meucurriculo" element={
                     <ProtectedRoute>
                         <MeuCurriculo />
                     </ProtectedRoute>
-                } /> {/*tela do curriculo do candidato*/}
+                } />
 
                 <Route path="/contatoprofissional" element={
                     <ProtectedRoute>
