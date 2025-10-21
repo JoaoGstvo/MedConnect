@@ -1,4 +1,4 @@
-// Components/UserSelectorCompact/index.js - VERSÃO PROFISSIONAL
+// Components/UserSelectorCompact/index.js - VERSÃO SIMPLIFICADA
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../Hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -53,23 +53,16 @@ function UserSelectorCompact() {
   };
 
   const getMenuItems = () => {
-    const baseItems = [
-      { path: '/configuracoes', label: 'Configurações' }
-    ];
-
     if (user?.tipo_usuario === 'empresa') {
+      // Para empresas: APENAS Dashboard Empresa
       return [
-        { path: '/dashboardempresa', label: 'Dashboard Empresa' },
-        { path: '/minhasvagas', label: 'Minhas Vagas' },
-        { path: '/empresas', label: 'Gerenciar Empresa' },
-        ...baseItems
+        { path: '/dashboardempresa', label: 'Dashboard Empresa' }
       ];
     } else {
+      // Para profissionais
       return [
         { path: '/meucurriculo', label: 'Meu Currículo' },
         { path: '/minhasvagas', label: 'Minhas Candidaturas' },
-        { path: '/profissionalprofile', label: 'Meu Perfil' },
-        ...baseItems
       ];
     }
   };

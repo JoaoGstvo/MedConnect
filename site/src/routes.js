@@ -43,20 +43,7 @@ export default function Index() {
                 <Route path="/cardcandidato" element={<CardCandidato />} />
                 <Route path="/cardempresa" element={<CardEmpresa />} />
 
-                {/* Rotas protegidas */}
-                <Route path="/minhasvagas" element={
-                    <ProtectedRoute>
-                        <MinhasVagas />
-                    </ProtectedRoute>
-                } />
-
-                <Route path="/novoartigo" element={
-                    <ProtectedRoute>
-                        <NovoArtigoPage />
-                    </ProtectedRoute>
-                } />
-
-                {/* ✅ APENAS UMA ROTA para inscricaovaga - COM :id */}
+                {/* Rota de inscrição */}
                 <Route path="/inscricaovaga/:id" element={
                     <ProtectedRoute>
                         <InscricaoPage />
@@ -69,9 +56,23 @@ export default function Index() {
                     </ProtectedRoute>
                 } />
 
+                {/* Dashboard empresa */}
                 <Route path="/dashboardempresa" element={
                     <ProtectedRoute>
                         <DashboardEmpresaPage />
+                    </ProtectedRoute>
+                } />
+
+                {/* Rotas protegidas para profissionais */}
+                <Route path="/minhasvagas" element={
+                    <ProtectedRoute>
+                        <MinhasVagas />
+                    </ProtectedRoute>
+                } />
+
+                <Route path="/novoartigo" element={
+                    <ProtectedRoute>
+                        <NovoArtigoPage />
                     </ProtectedRoute>
                 } />
 
@@ -92,6 +93,8 @@ export default function Index() {
                         <MensagemSucessoPage />
                     </ProtectedRoute>
                 } />
+
+                {/* Rota de fallback */}
             </Routes>
         </BrowserRouter>
     )

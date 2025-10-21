@@ -1,149 +1,134 @@
-// Hooks/useAuth.js - VERSÃO CORRIGIDA SEM LOOP
-import { useState, useEffect, useRef } from 'react';
-import { useCurrentUser } from './useCurrentUser';
+// Components/Hooks/useAuth.js
+import { useState, useEffect } from 'react';
 
 export const useAuth = () => {
-  const { currentUser, loading, updateUser } = useCurrentUser();
-  const [isInitialized, setIsInitialized] = useState(false);
-  
-  // ⚡ Use ref para controlar se já validamos
-  const hasValidatedRef = useRef(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Verificar e validar o usuário ao inicializar - APENAS UMA VEZ
   useEffect(() => {
-    // ⚡ Prevenir múltiplas execuções
-    if (loading || hasValidatedRef.current) return;
+    console.log('🔄 useAuth: Iniciando verificação do localStorage');
+    
+    const userData = localStorage.getItem('user');
+    const empresaData = localStorage.getItem('empresaLogada');
+    
+    console.log('📦 Dados no localStorage:', {
+      userData: userData ? 'PRESENTE' : 'AUSENTE',
+      empresaData: empresaData ? 'PRESENTE' : 'AUSENTE'
+    });
 
-    const initializeAuth = async () => {
-      console.log('🎯 Inicializando autenticação (APENAS UMA VEZ)...');
-      
-      if (currentUser && currentUser.id_usuario) {
-        try {
-          console.log('🔍 Validando usuário com ID:', currentUser.id_usuario);
-          
-          const userType = currentUser.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
-          const response = await fetch(`http://localhost:5000/api/${userType}/${currentUser.id_usuario}`);
-          
-          if (response.ok) {
-            const updatedUser = await response.json();
-            console.log('✅ Usuário validado com sucesso:', updatedUser.email);
-            
-            // ⚡ Só atualiza se os dados forem diferentes
-            if (updatedUser.email !== currentUser.email) {
-              updateUser({
-                ...currentUser,
-                ...updatedUser,
-                id_usuario: currentUser.id_usuario,
-                tipo_usuario: currentUser.tipo_usuario
-              });
-            }
-          } else {
-            console.warn('❌ Usuário não encontrado no banco, fazendo logout...');
-            updateUser(null);
-          }
-        } catch (error) {
-          console.error('💥 Erro ao validar usuário:', error);
-        }
+    if (empresaData) {
+      try {
+        const empresa = JSON.parse(empresaData);
+        console.log('🏢 useAuth: Empresa detectada:', empresa.nome);
+        console.log('🏢 Tipo do usuário empresa:', empresa.tipo_usuario);
+        
+        const empresaComTipo = {
+          ...empresa,
+          tipo_usuario: 'empresa'
+        };
+        
+        setUser(empresaComTipo);
+      } catch (error) {
+        console.error('❌ useAuth: Erro ao parsear dados da empresa:', error);
+        localStorage.removeItem('empresaLogada');
       }
-      
-      // ⚡ Marcar como validado para prevenir loops
-      hasValidatedRef.current = true;
-      setIsInitialized(true);
-    };
+    } else if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        console.log('👤 useAuth: Usuário profissional detectado:', user.email);
+        console.log('👤 Tipo do usuário profissional:', user.tipo_usuario);
+        
+        const userComTipo = {
+          ...user,
+          tipo_usuario: user.tipo_usuario || 'profissional'
+        };
+        
+        setUser(userComTipo);
+      } catch (error) {
+        console.error('❌ useAuth: Erro ao parsear dados do usuário:', error);
+        localStorage.removeItem('user');
+      }
+    } else {
+      console.log('🔍 useAuth: Nenhum usuário autenticado encontrado');
+    }
+    
+    setLoading(false);
+  }, []);
 
-    initializeAuth();
-  }, [currentUser, loading, updateUser]); // ⚡ Dependências específicas
-
-  const login = async (email, senha, tipo = 'profissional') => {
+  const login = async (email, senha, accountType) => {
     try {
-      let endpoint = '';
+      setLoading(true);
       
-      if (tipo === 'empresa') {
-        endpoint = 'http://localhost:5000/api/empresas/login';
-      } else {
-        endpoint = 'http://localhost:5000/api/profissionais/login';
-      }
+      const endpoint = accountType === 'empresa' 
+        ? 'http://localhost:5000/api/empresas/login'
+        : 'http://localhost:5000/api/profissionais/login';
 
-      console.log('🔐 Tentando login em:', endpoint);
+      console.log('🔐 useAuth: Tentando login em:', endpoint);
+      console.log('🔐 Tipo de conta:', accountType);
 
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
       });
 
-      console.log('📊 Status da resposta:', response.status);
+      console.log('📊 useAuth: Status da resposta:', response.status);
 
-      if (response.ok) {
-        const userData = await response.json();
-        console.log('✅ Login bem-sucedido! Dados recebidos:', userData);
-        
-        if (userData) {
-          const userWithSession = {
-            ...userData,
-            loginTimestamp: Date.now(),
-            id_usuario: userData.id_usuario || userData.id_empresa
-          };
-          
-          console.log('💾 Salvando usuário no storage:', userWithSession.email);
-          updateUser(userWithSession);
-          return { success: true, data: userData };
-        }
-      } else {
-        const error = await response.json();
-        console.error('❌ Erro na resposta:', error);
-        return { success: false, error: error.error || 'Credenciais inválidas' };
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.log('❌ useAuth: Erro na resposta:', errorData);
+        return { success: false, error: errorData.error || 'Credenciais inválidas' };
       }
+
+      const userData = await response.json();
+      console.log('✅ useAuth: Login bem-sucedido! Dados:', userData);
+
+      const userComTipo = {
+        ...userData,
+        tipo_usuario: accountType === 'empresa' ? 'empresa' : 'profissional',
+        id_usuario: userData.id_usuario || userData.id_empresa
+      };
+
+      console.log('👤 useAuth: Dados estruturados:', userComTipo);
+
+      if (accountType === 'empresa') {
+        localStorage.setItem('empresaLogada', JSON.stringify(userComTipo));
+        localStorage.removeItem('user');
+        console.log('💾 useAuth: Empresa salva no localStorage');
+      } else {
+        localStorage.setItem('user', JSON.stringify(userComTipo));
+        localStorage.removeItem('empresaLogada');
+        console.log('💾 useAuth: Profissional salvo no localStorage');
+      }
+      
+      setUser(userComTipo);
+      return { success: true, data: userComTipo };
+
     } catch (error) {
-      console.error('💥 Erro no login:', error);
-      return { success: false, error: 'Erro de conexão com o servidor' };
+      console.error('💥 useAuth: Erro no login:', error);
+      return { success: false, error: 'Erro de conexão' };
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = () => {
-    console.log('🚪 Fazendo logout...');
-    // ⚡ Resetar o ref ao fazer logout
-    hasValidatedRef.current = false;
-    updateUser(null);
-  };
-
-  const refreshUserData = async () => {
-    if (!currentUser?.id_usuario) return null;
-
-    try {
-      const userType = currentUser.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
-      const response = await fetch(`http://localhost:5000/api/${userType}/${currentUser.id_usuario}`);
-      
-      if (response.ok) {
-        const updatedUser = await response.json();
-        console.log('🔄 Dados do usuário atualizados:', updatedUser.email);
-        
-        const mergedUser = {
-          ...currentUser,
-          ...updatedUser,
-          id_usuario: currentUser.id_usuario,
-          tipo_usuario: currentUser.tipo_usuario,
-          loginTimestamp: currentUser.loginTimestamp
-        };
-        
-        updateUser(mergedUser);
-        return mergedUser;
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar dados do usuário:', error);
-    }
+    console.log('🚪 useAuth: Fazendo logout - LIMPANDO LOCALSTORAGE');
     
-    return null;
+    localStorage.removeItem('user');
+    localStorage.removeItem('empresaLogada');
+    localStorage.removeItem('token');
+    localStorage.removeItem('tipoUsuario');
+    
+    setUser(null);
+    console.log('✅ useAuth: Logout concluído');
   };
 
   return {
-    user: currentUser,
-    isAuthenticated: !!currentUser,
-    isLoading: loading || !isInitialized,
+    user,
+    isAuthenticated: !!user,
+    isLoading: loading,
     login,
-    logout,
-    refreshUserData
+    logout
   };
 };

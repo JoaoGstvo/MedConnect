@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../Components/Header/index.js'; // Importando o Header
 import './index.scss';
+
 const DashboardEmpresa = () => {
   const [empresa, setEmpresa] = useState(null);
   const [vagas, setVagas] = useState([]);
@@ -28,9 +31,8 @@ const DashboardEmpresa = () => {
     email: '',
     endereco: '',
     descricao: '',
-    logo: ''
+    logo_url: ''
   });
-  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Dados do formulário de nova vaga
   const [novaVaga, setNovaVaga] = useState({
@@ -42,29 +44,60 @@ const DashboardEmpresa = () => {
     modalidade: 'presencial'
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const empresaLogada = localStorage.getItem('empresaLogada');
-    if (empresaLogada) {
-      const empresaData = JSON.parse(empresaLogada);
-      setEmpresa(empresaData);
-      carregarVagas(empresaData.id_empresa);
-      // Preencher dados do perfil
-      setDadosPerfil({
-        nome: empresaData.nome || '',
-        cnpj: empresaData.cnpj || '',
-        email: empresaData.email || '',
-        endereco: empresaData.endereco || '',
-        descricao: empresaData.descricao || '',
-        logo: empresaData.logo || ''
-      });
-    }
+    verificarAutenticacao();
   }, []);
 
   useEffect(() => {
-    if (vagas.length > 0) {
-      calcularEstatisticas();
-    }
+    calcularEstatisticas();
   }, [vagas, candidaturas]);
+
+  const verificarAutenticacao = () => {
+    const empresaLogada = localStorage.getItem('empresaLogada');
+    const userData = localStorage.getItem('user');
+    
+    console.log('🔍 Verificando autenticação...');
+    
+    if (empresaLogada) {
+      try {
+        const empresaData = JSON.parse(empresaLogada);
+        console.log('🏢 Empresa encontrada:', empresaData.nome);
+        setEmpresa(empresaData);
+        carregarVagas(empresaData.id_empresa);
+        setDadosPerfil({
+          nome: empresaData.nome || '',
+          cnpj: empresaData.cnpj || '',
+          email: empresaData.email || '',
+          endereco: empresaData.endereco || '',
+          descricao: empresaData.descricao || '',
+          logo_url: empresaData.logo_url || ''
+        });
+      } catch (error) {
+        console.error('Erro ao parsear dados da empresa:', error);
+        navigate('/login');
+      }
+    } else if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.tipo_usuario === 'empresa') {
+          console.log('👤 Usuário empresa encontrado:', user.nome);
+          setEmpresa(user);
+          carregarVagas(user.id_empresa);
+        } else {
+          console.log('❌ Usuário não é empresa');
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Erro ao parsear dados do usuário:', error);
+        navigate('/login');
+      }
+    } else {
+      console.log('❌ Nenhuma autenticação encontrada');
+      navigate('/login');
+    }
+  };
 
   const calcularEstatisticas = () => {
     const totalVagas = vagas.length;
@@ -80,8 +113,10 @@ const DashboardEmpresa = () => {
 
   const carregarVagas = async (idEmpresa) => {
     try {
-      setLoading(true); 
+      setLoading(true);
       setError('');
+      console.log(`📡 Carregando vagas para empresa ID: ${idEmpresa}`);
+      
       const response = await fetch(`http://localhost:5000/api/vagas/empresa/${idEmpresa}`);
       
       if (!response.ok) {
@@ -89,6 +124,7 @@ const DashboardEmpresa = () => {
       }
       
       const vagasData = await response.json();
+      console.log(`✅ ${vagasData.length} vagas carregadas`);
       setVagas(vagasData);
     } catch (error) {
       console.error('Erro ao carregar vagas:', error);
@@ -101,10 +137,14 @@ const DashboardEmpresa = () => {
   const carregarCandidaturas = async (idVaga = null) => {
     try {
       setLoading(true);
-      let url = 'http://localhost:5000/api/inscricoes/vaga/';
+      setError('');
       
       if (idVaga) {
-        url += idVaga;
+        // Carrega candidaturas de uma vaga específica
+        const response = await fetch(`http://localhost:5000/api/inscricoes/vaga/${idVaga}`);
+        if (!response.ok) throw new Error('Erro ao carregar candidaturas');
+        const candidaturasData = await response.json();
+        setCandidaturas(candidaturasData);
       } else {
         // Carrega todas as candidaturas da empresa
         const todasCandidaturas = [];
@@ -112,21 +152,14 @@ const DashboardEmpresa = () => {
           const response = await fetch(`http://localhost:5000/api/inscricoes/vaga/${vaga.id_vaga}`);
           if (response.ok) {
             const candidaturasVaga = await response.json();
-            todasCandidaturas.push(...candidaturasVaga);
+            todasCandidaturas.push(...candidaturasVaga.map(c => ({
+              ...c,
+              vaga_titulo: vaga.titulo
+            })));
           }
         }
         setCandidaturas(todasCandidaturas);
-        return;
       }
-      
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Erro ${response.status}: ${response.statusText}`);
-      }
-      
-      const candidaturasData = await response.json();
-      setCandidaturas(candidaturasData);
     } catch (error) {
       console.error('Erro ao carregar candidaturas:', error);
       setError('Erro ao carregar candidaturas: ' + error.message);
@@ -135,7 +168,6 @@ const DashboardEmpresa = () => {
     }
   };
 
-  // Nova função para carregar currículo do candidato
   const carregarCurriculo = async (idUsuario) => {
     try {
       setLoadingCurriculo(true);
@@ -144,7 +176,6 @@ const DashboardEmpresa = () => {
       const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${idUsuario}`);
       
       if (!response.ok) {
-        // Se não encontrar currículo, criar um objeto vazio
         if (response.status === 404) {
           setCurriculoCandidato({
             nome_completo: 'Currículo não disponível',
@@ -169,8 +200,6 @@ const DashboardEmpresa = () => {
     } catch (error) {
       console.error('Erro ao carregar currículo:', error);
       setError('Erro ao carregar currículo: ' + error.message);
-      
-      // Currículo padrão em caso de erro
       setCurriculoCandidato({
         nome_completo: 'Erro ao carregar currículo',
         email: '',
@@ -192,106 +221,6 @@ const DashboardEmpresa = () => {
   const verCurriculoCandidato = async (candidatura) => {
     setShowCurriculoModal(true);
     await carregarCurriculo(candidatura.id_usuario);
-  };
-
-  // Função para fazer upload da logo
-  const handleUploadLogo = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    // Validar tipo de arquivo
-    if (!file.type.startsWith('image/')) {
-      setError('Por favor, selecione um arquivo de imagem válido.');
-      return;
-    }
-
-    // Validar tamanho do arquivo (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('A imagem deve ter no máximo 5MB.');
-      return;
-    }
-
-    try {
-      setUploadingLogo(true);
-      setError('');
-
-      // Converter imagem para Base64
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64String = reader.result;
-
-        try {
-          const response = await fetch(`http://localhost:5000/api/empresas/${empresa.id_empresa}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...dadosPerfil,
-              logo: base64String
-            }),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `Erro ${response.status}`);
-          }
-
-          const empresaAtualizada = await response.json();
-          setEmpresa(empresaAtualizada);
-          setDadosPerfil({
-            ...dadosPerfil,
-            logo: base64String
-          });
-          localStorage.setItem('empresaLogada', JSON.stringify(empresaAtualizada));
-          
-        } catch (error) {
-          console.error('Erro ao atualizar logo:', error);
-          setError('Erro ao atualizar logo: ' + error.message);
-        } finally {
-          setUploadingLogo(false);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error('Erro no upload da logo:', error);
-      setError('Erro no upload da logo: ' + error.message);
-      setUploadingLogo(false);
-    }
-  };
-
-  // Função para salvar alterações do perfil
-  const salvarPerfil = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      setError('');
-
-      const response = await fetch(`http://localhost:5000/api/empresas/${empresa.id_empresa}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dadosPerfil),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Erro ${response.status}`);
-      }
-
-      const empresaAtualizada = await response.json();
-      setEmpresa(empresaAtualizada);
-      localStorage.setItem('empresaLogada', JSON.stringify(empresaAtualizada));
-      setEditandoPerfil(false);
-      
-    } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
-      setError('Erro ao atualizar perfil: ' + error.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const criarVaga = async (e) => {
@@ -322,6 +251,7 @@ const DashboardEmpresa = () => {
       setEditingVaga(null);
       resetFormVaga();
       
+      console.log('✅ Vaga criada com sucesso:', vagaCriada.titulo);
     } catch (error) {
       console.error('Erro ao criar vaga:', error);
       setError('Erro ao criar vaga: ' + error.message);
@@ -355,6 +285,7 @@ const DashboardEmpresa = () => {
       setEditingVaga(null);
       resetFormVaga();
       
+      console.log('✅ Vaga atualizada com sucesso:', vagaAtualizada.titulo);
     } catch (error) {
       console.error('Erro ao editar vaga:', error);
       setError('Erro ao editar vaga: ' + error.message);
@@ -382,6 +313,7 @@ const DashboardEmpresa = () => {
       }
 
       setVagas(vagas.filter(v => v.id_vaga !== idVaga));
+      console.log('🗑️ Vaga excluída com sucesso');
       
     } catch (error) {
       console.error('Erro ao excluir vaga:', error);
@@ -409,6 +341,8 @@ const DashboardEmpresa = () => {
       setCandidaturas(candidaturas.map(c => 
         c.id_candidatura === idCandidatura ? candidaturaAtualizada : c
       ));
+      
+      console.log(`✅ Status da candidatura atualizado para: ${novoStatus}`);
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
       setError('Erro ao atualizar status: ' + error.message);
@@ -439,37 +373,34 @@ const DashboardEmpresa = () => {
     });
   };
 
-  const handleLogin = async (e) => {
+  const salvarPerfil = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    const senha = formData.get('senha');
-
     try {
       setLoading(true);
       setError('');
-      
-      const response = await fetch('http://localhost:5000/api/empresas/login', {
-        method: 'POST',
+
+      const response = await fetch(`http://localhost:5000/api/empresas/${empresa.id_empresa}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, senha }),
+        body: JSON.stringify(dadosPerfil),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Credenciais inválidas');
+        throw new Error(errorData.error || `Erro ${response.status}`);
       }
 
-      const data = await response.json();
-      setEmpresa(data.empresa);
-      localStorage.setItem('empresaLogada', JSON.stringify(data.empresa));
-      carregarVagas(data.empresa.id_empresa);
+      const empresaAtualizada = await response.json();
+      setEmpresa(empresaAtualizada);
+      localStorage.setItem('empresaLogada', JSON.stringify(empresaAtualizada));
+      setEditandoPerfil(false);
       
+      console.log('✅ Perfil atualizado com sucesso');
     } catch (error) {
-      console.error('Erro no login:', error);
-      setError(error.message);
+      console.error('Erro ao atualizar perfil:', error);
+      setError('Erro ao atualizar perfil: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -477,47 +408,9 @@ const DashboardEmpresa = () => {
 
   if (!empresa) {
     return (
-      <div className="dashboard-empresa login-page">
-        <div className="login-container">
-          <div className="login-card">
-            <div className="login-header">
-              <h2>Acesse sua Conta</h2>
-              <p>Entre no dashboard da sua empresa</p>
-            </div>
-            
-            {error && <div className="error-message">{error}</div>}
-            {loading && <div className="loading">Carregando...</div>}
-            
-            <form onSubmit={handleLogin} className="login-form">
-              <div className="input-group">
-                <input 
-                  type="email" 
-                  name="email" 
-                  placeholder="Email" 
-                  required 
-                  defaultValue="empresa@demo.com"
-                />
-              </div>
-              
-              <div className="input-group">
-                <input 
-                  type="password" 
-                  name="senha" 
-                  placeholder="Senha" 
-                  required 
-                  defaultValue="demo123"
-                />
-              </div>
-              
-              <button type="submit" disabled={loading} className="btn-login">
-                {loading ? 'Entrando...' : 'Entrar na Conta'}
-              </button>
-              
-              <div className="demo-credentials">
-                <p><strong>Demo:</strong> empresa@demo.com / demo123</p>
-              </div>
-            </form>
-          </div>
+      <div className="dashboard-empresa">
+        <div className="loading-container">
+          <div className="loading">Carregando...</div>
         </div>
       </div>
     );
@@ -525,24 +418,19 @@ const DashboardEmpresa = () => {
 
   return (
     <div className="dashboard-empresa">
-      {/* Header */}
+      {/* ✅ HEADER ADICIONADO AQUI */}
+      <Header />
+      
+      {/* Header do Dashboard (mantido para informações da empresa) */}
       <header className="dashboard-header">
         <div className="header-content">
           <div className="empresa-info">
             <h1>Dashboard - {empresa.nome}</h1>
-            <p>{empresa.descricao}</p>
+            <p>{empresa.descricao || 'Bem-vindo ao seu dashboard'}</p>
           </div>
-          <button 
-            className="logout-btn"
-            onClick={() => {
-              localStorage.removeItem('empresaLogada');
-              setEmpresa(null);
-              setVagas([]);
-              setCandidaturas([]);
-            }}
-          >
-            Sair
-          </button>
+          <div className="header-actions">
+            <span className="empresa-status">👑 Conta Empresa</span>
+          </div>
         </div>
       </header>
 
@@ -553,22 +441,19 @@ const DashboardEmpresa = () => {
             className={`nav-tab ${activeTab === 'vagas' ? 'active' : ''}`}
             onClick={() => setActiveTab('vagas')}
           >
-             Minhas Vagas
+            Minhas Vagas
           </button>
           <button 
             className={`nav-tab ${activeTab === 'candidaturas' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('candidaturas');
-              carregarCandidaturas();
-            }}
+            onClick={() => carregarCandidaturas()}
           >
-             Candidaturas
+            Candidaturas
           </button>
           <button 
             className={`nav-tab ${activeTab === 'perfil' ? 'active' : ''}`}
             onClick={() => setActiveTab('perfil')}
           >
-             Perfil da Empresa
+            Perfil da Empresa
           </button>
         </div>
       </nav>
@@ -576,7 +461,15 @@ const DashboardEmpresa = () => {
       {/* Main Content */}
       <main className="dashboard-main">
         <div className="container">
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <div className="error-message">
+              {error}
+              <button onClick={() => setError('')} style={{marginLeft: '10px', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer'}}>
+                ×
+              </button>
+            </div>
+          )}
+          
           {loading && <div className="loading">Carregando...</div>}
 
           {/* Estatísticas Rápidas */}
@@ -592,7 +485,7 @@ const DashboardEmpresa = () => {
               <div className="stat-icon">👥</div>
               <div className="stat-info">
                 <h3>{stats.totalCandidaturas}</h3>
-                <p>Total de Candidaturas</p>
+                <p>Total Candidaturas</p>
               </div>
             </div>
             <div className="stat-card">
@@ -758,14 +651,14 @@ const DashboardEmpresa = () => {
                       <p className="vaga-descricao">{vaga.descricao}</p>
                       
                       <div className="vaga-detalhes">
-                        <span className="detalhe localizacao"> {vaga.localizacao}</span>
-                        <span className="detalhe modalidade"> {vaga.modalidade}</span>
-                        {vaga.salario && <span className="detalhe salario"> {vaga.salario}</span>}
+                        <span className="detalhe localizacao">📍 {vaga.localizacao}</span>
+                        <span className="detalhe modalidade">🏢 {vaga.modalidade}</span>
+                        {vaga.salario && <span className="detalhe salario">💰 {vaga.salario}</span>}
                       </div>
                       
                       <div className="vaga-footer">
                         <div className="vaga-info">
-                          <span className="vaga-data">Publicada em {new Date(vaga.data_publicacao).toLocaleDateString()}</span>
+                          <span className="vaga-data">Publicada em {new Date(vaga.data_publicacao).toLocaleDateString('pt-BR')}</span>
                           <span className="vaga-candidaturas">
                             {vaga.total_candidaturas || 0} candidatura(s)
                           </span>
@@ -860,12 +753,12 @@ const DashboardEmpresa = () => {
                           {candidatura.candidato_nome?.charAt(0) || 'U'}
                         </div>
                         <div className="candidato-detalhes">
-                          <h4>{candidatura.candidato_nome}</h4>
-                          <p>{candidatura.candidato_email}</p>
+                          <h4>{candidatura.candidato_nome || 'Candidato'}</h4>
+                          <p>{candidatura.candidato_email || 'Email não disponível'}</p>
                           <div className="candidatura-meta">
-                            <span className="vaga-titulo">Vaga: {candidatura.vaga_titulo}</span>
+                            <span className="vaga-titulo">Vaga: {candidatura.vaga_titulo || 'Vaga não encontrada'}</span>
                             <span className="candidatura-data">
-                              Candidatou-se em {new Date(candidatura.data_candidatura).toLocaleDateString()}
+                              Candidatou-se em {new Date(candidatura.data_candidatura).toLocaleDateString('pt-BR')}
                             </span>
                           </div>
                         </div>
@@ -922,8 +815,8 @@ const DashboardEmpresa = () => {
                 <div className="empresa-profile">
                   <div className="profile-header">
                     <div className="empresa-avatar">
-                      {empresa.logo ? (
-                        <img src={empresa.logo} alt={`Logo ${empresa.nome}`} className="logo-empresa" />
+                      {empresa.logo_url ? (
+                        <img src={empresa.logo_url} alt={`Logo ${empresa.nome}`} className="logo-empresa" />
                       ) : (
                         <div className="empresa-avatar-inicial">
                           {empresa.nome?.charAt(0) || 'E'}
@@ -959,35 +852,6 @@ const DashboardEmpresa = () => {
                 // Edição do Perfil
                 <div className="empresa-profile">
                   <form onSubmit={salvarPerfil} className="perfil-form">
-                    <div className="form-group">
-                      <label>Logo da Empresa</label>
-                      <div className="logo-upload-container">
-                        <div className="logo-preview">
-                          {dadosPerfil.logo ? (
-                            <img src={dadosPerfil.logo} alt="Preview logo" />
-                          ) : (
-                            <div className="logo-placeholder">
-                              <span>📷</span>
-                              <p>Nenhuma logo selecionada</p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="upload-controls">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleUploadLogo}
-                            className="file-input"
-                            id="logo-upload"
-                          />
-                          <label htmlFor="logo-upload" className="btn-upload">
-                            {uploadingLogo ? '📤 Enviando...' : '📷 Escolher Logo'}
-                          </label>
-                          <p className="upload-hint">PNG, JPG até 5MB</p>
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="form-row">
                       <div className="form-group">
                         <label>Nome da Empresa *</label>
@@ -1081,7 +945,63 @@ const DashboardEmpresa = () => {
                 <div className="loading">Carregando currículo...</div>
               ) : curriculoCandidato ? (
                 <div className="curriculo-detalhes">
-                  {/* ... (código do modal de currículo permanece igual) ... */}
+                  <div className="curriculo-section">
+                    <h4>👤 Informações Pessoais</h4>
+                    <div className="curriculo-grid">
+                      <div className="info-item">
+                        <strong>Nome Completo</strong>
+                        <span>{curriculoCandidato.nome_completo}</span>
+                      </div>
+                      <div className="info-item">
+                        <strong>Email</strong>
+                        <span>{curriculoCandidato.email}</span>
+                      </div>
+                      <div className="info-item">
+                        <strong>Telefone</strong>
+                        <span>{curriculoCandidato.telefone}</span>
+                      </div>
+                      <div className="info-item">
+                        <strong>Endereço</strong>
+                        <span>{curriculoCandidato.endereco}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="curriculo-section">
+                    <h4>🎯 Objetivo Profissional</h4>
+                    <div className="text-content">
+                      <p>{curriculoCandidato.objetivo}</p>
+                    </div>
+                  </div>
+
+                  {curriculoCandidato.formacao && (
+                    <div className="curriculo-section">
+                      <h4>🎓 Formação Acadêmica</h4>
+                      <div className="text-content">
+                        <p>{curriculoCandidato.formacao}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {curriculoCandidato.experiencia && (
+                    <div className="curriculo-section">
+                      <h4>💼 Experiência Profissional</h4>
+                      <div className="text-content">
+                        <p>{curriculoCandidato.experiencia}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {curriculoCandidato.habilidades && (
+                    <div className="curriculo-section">
+                      <h4>🛠️ Habilidades</h4>
+                      <div className="skills-grid">
+                        {curriculoCandidato.habilidades.split(',').map((skill, index) => (
+                          <span key={index} className="skill-tag">{skill.trim()}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="error-message">
