@@ -5,7 +5,7 @@ import {
   getProfissionaisController,
   getProfissionalByIdController,
   updateProfissionalController,
-  loginProfissionalController  // ADICIONE ESTA IMPORT
+  loginProfissionalController
 } from "./Controller/profissionalController.js";
 
 import {
@@ -66,13 +66,12 @@ router.post("/profissionais", registerProfissionalController);
 router.get("/profissionais", getProfissionaisController);
 router.get("/profissionais/:id", getProfissionalByIdController);
 router.put("/profissionais/:id", updateProfissionalController);
-router.post("/profissionais/login", loginProfissionalController); // NOVA ROTA
+router.post("/profissionais/login", loginProfissionalController);
 
 // ----------------- CURRÍCULOS -----------------
 router.post("/curriculos", createCurriculoController);
 router.get("/curriculos/usuario/:id_usuario", getCurriculoByUsuarioController);
 router.put("/curriculos/:id_curriculo", updateCurriculoController);
-router.post("/curriculos/salvar", createCurriculoController);
 
 // ----------------- EMPRESAS -----------------
 router.get("/empresas", getEmpresasController);
@@ -106,6 +105,7 @@ router.get("/vagas/empresa/:id_empresa", getVagasByEmpresaController);
 router.get("/vagas/salvas/:id_usuario", getVagasSalvasController);
 router.post("/vagas/salvar", salvarVagaController);
 router.post("/vagas/remover-salva", removerVagaSalvaController);
+router.get("/vagas/search", searchVagasController);
 
 // ----------------- INSCRIÇÕES -----------------
 router.post("/inscricoes", registerInscricaoController);

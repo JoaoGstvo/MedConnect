@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import CardVaga from '../../Components/CardVaga';
+import { useAuth } from '../../Components/Hooks/useAuth';
 
 function VagasPage() {
     const [vagas, setVagas] = useState([]);
@@ -13,8 +14,9 @@ function VagasPage() {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    const { user, isAuthenticated } = useAuth();
 
-    // Buscar vagas da API
     useEffect(() => {
         const fetchVagas = async () => {
             try {
@@ -50,7 +52,6 @@ function VagasPage() {
         }));
     };
 
-    // Filtrar vagas localmente
     const vagasFiltradas = vagas.filter(vaga => {
         const matchPesquisa = !filtros.pesquisa || 
             vaga.titulo?.toLowerCase().includes(filtros.pesquisa.toLowerCase()) ||
@@ -77,15 +78,18 @@ function VagasPage() {
         <main className='vagaspage'>
             <Header />
 
-            {/* Hero Section */}
             <section className='hero-section'>
                 <div className='hero-content'>
                     <h1>Encontre Sua Vaga na Área da Saúde</h1>
                     <p>Conectamos profissionais qualificados às melhores oportunidades</p>
+                    {isAuthenticated && (
+                        <div className="user-welcome">
+                            <p>Olá, <strong>{user.nome}</strong>! 👋</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
-            {/* Filtros */}
             <section className='filters-section'>
                 <div className='filters-container'>
                     <h2 className='buscar-vagass'>Buscar Vagas</h2>
@@ -130,7 +134,6 @@ function VagasPage() {
                 </div>
             </section>
 
-            {/* Lista de Vagas */}
             <section className='vagas-section'>
                 <div className='container'>
                     <h2 className='section-title'>

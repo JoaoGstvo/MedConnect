@@ -1,7 +1,7 @@
 import './index.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useCurrentUser } from '../../Components/Hooks/useCurrentUser';
+import { useAuth } from '../../Components/Hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { loginUser } = useCurrentUser();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -32,7 +32,7 @@ function Login() {
     setMsg('');
 
     try {
-      const result = await loginUser(email, senha);
+      const result = await login(email, senha, accountType);
 
       if (result.success) {
         toast.success('Login realizado com sucesso!', {
@@ -43,10 +43,10 @@ function Login() {
         // Redirecionar após sucesso
         setTimeout(() => {
           // Redirecionar baseado no tipo de usuário
-          if (result.data.tipo_usuario === 'empresa') {
+          if (accountType === 'empresa') {
             navigate('/dashboardempresa');
           } else {
-            navigate('/meucurriculo');
+            navigate('/vagas');
           }
         }, 2000);
       } else {
@@ -67,11 +67,30 @@ function Login() {
     }
   };
 
+  // Usuários demo para facilitar o login
+  const demoUsers = {
+    profissional: [
+      { email: 'joao@demo.com', senha: '123456', nome: 'João Silva' },
+      { email: 'maria@demo.com', senha: '123456', nome: 'Maria Santos' },
+      { email: 'pedro@demo.com', senha: '123456', nome: 'Pedro Oliveira' }
+    ],
+    empresa: [
+      { email: 'empresa@demo.com', senha: '123456', nome: 'HealthCorp' }
+    ]
+  };
+
+  const handleDemoLogin = (demoUser) => {
+    setEmail(demoUser.email);
+    setSenha(demoUser.senha);
+  };
+
   return (
     <main className="login-page">
       <section className='form-container'>
         <div className='header'>
-          <img src="/Images/Logo.png" alt="Logo" />
+          <img src="/Images/Logo.png" alt="Logo" className="logo" />
+          <h1>Bem-vindo de volta!</h1>
+          <p className="welcome-text">Entre na sua conta para continuar</p>
         </div>
 
         <div className="divider"></div>
@@ -80,12 +99,13 @@ function Login() {
           <h2>Fazer Login</h2>
           <p className='form-description'>Selecione o tipo de conta e digite suas credenciais</p>
 
+          {/* Seletor de Tipo de Conta */}
           <div className="account-type-options">
             <div
               className={`account-type-card ${accountType === 'profissional' ? 'selected' : ''}`}
               onClick={() => setAccountType('profissional')}
             >
-              <div className="card-icon professional-icon"></div>
+              <div className="card-icon professional-icon">👨‍⚕️</div>
               <h3>Profissional</h3>
               <p>Busco oportunidades</p>
             </div>
@@ -94,37 +114,62 @@ function Login() {
               className={`account-type-card ${accountType === 'empresa' ? 'selected' : ''}`}
               onClick={() => setAccountType('empresa')}
             >
-              <div className="card-icon company-icon"></div>
+              <div className="card-icon company-icon">🏢</div>
               <h3>Empresa</h3>
               <p>Contrato profissionais</p>
             </div>
           </div>
 
+          {/* Acesso Rápido - Demo Users */}
+          <div className="demo-access">
+            <h4>Acesso Rápido (Demo)</h4>
+            <div className="demo-users">
+              {demoUsers[accountType].map((demoUser, index) => (
+                <button
+                  key={index}
+                  className="demo-user-btn"
+                  onClick={() => handleDemoLogin(demoUser)}
+                  type="button"
+                >
+                  <span className="demo-avatar">
+                    {demoUser.nome.charAt(0)}
+                  </span>
+                  <span className="demo-info">
+                    <strong>{demoUser.nome}</strong>
+                    <small>{demoUser.email}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <form className='form' onSubmit={handleLogin}>
             <div className='input-field'>
-              <span>E-mail</span>
+              <label>E-mail</label>
               <input
                 type="email"
                 placeholder='seu@email.com'
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 disabled={loading}
+                required
               />
             </div>
 
             <div className='input-field'>
-              <span>Senha</span>
+              <label>Senha</label>
               <input
                 type="password"
                 placeholder='Sua senha'
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
                 disabled={loading}
+                required
               />
             </div>
 
-            <div className='remember-me'>
-              <label>
+            <div className='form-options'>
+              <label className="remember-me">
                 <input
                   type="checkbox"
                   checked={rememberMe}
@@ -141,13 +186,20 @@ function Login() {
               className={`login-button ${loading ? 'loading' : ''}`}
               disabled={loading}
             >
-              {loading ? '' : `Entrar como ${accountType === 'profissional' ? 'Profissional' : 'Empresa'}`}
+              {loading ? (
+                <>
+                  <div className="spinner"></div>
+                  Entrando...
+                </>
+              ) : (
+                `Entrar como ${accountType === 'profissional' ? 'Profissional' : 'Empresa'}`
+              )}
             </button>
 
             {msg && (
-              <p className={`login-msg ${msg.includes('Erro') ? 'error' : 'success'}`}>
+              <div className={`message ${msg.includes('Erro') ? 'error' : 'success'}`}>
                 {msg}
-              </p>
+              </div>
             )}
 
             <div className="signup-redirect">

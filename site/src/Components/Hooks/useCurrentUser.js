@@ -1,79 +1,72 @@
+// hooks/useCurrentUser.js
 import { useState, useEffect } from 'react';
+
+// Chave para armazenamento local
+const USER_STORAGE_KEY = 'currentUser';
+const SESSION_TIMEOUT = 7 * 24 * 60 * 60 * 1000; // 7 dias em milissegundos
 
 export const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = localStorage.getItem('currentUser');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    }
-    setLoading(false);
+    const loadUserFromStorage = () => {
+      try {
+        const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+        
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          
+          // Verificar se a sessão expirou
+          if (userData.loginTimestamp && (Date.now() - userData.loginTimestamp) > SESSION_TIMEOUT) {
+            console.log('Sessão expirada');
+            localStorage.removeItem(USER_STORAGE_KEY);
+            setCurrentUser(null);
+          } else {
+            setCurrentUser(userData);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar usuário do localStorage:', error);
+        localStorage.removeItem(USER_STORAGE_KEY);
+        setCurrentUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserFromStorage();
   }, []);
 
   const updateUser = (userData) => {
-    setCurrentUser(userData);
-    if (userData) {
-      localStorage.setItem('currentUser', JSON.stringify(userData));
-    } else {
-      localStorage.removeItem('currentUser');
-    }
-  };
-
-  const loginUser = async (email, senha) => {
     try {
-      setLoading(true);
+      setCurrentUser(userData);
       
-      // Tentar login como profissional
-      let response = await fetch('http://localhost:5000/api/profissionais/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, senha })
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        updateUser(userData);
-        return { success: true, data: userData };
+      if (userData) {
+        // Adicionar timestamp se não existir
+        const userWithTimestamp = {
+          ...userData,
+          loginTimestamp: userData.loginTimestamp || Date.now()
+        };
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userWithTimestamp));
       } else {
-        // Se não for profissional, tentar como empresa
-        response = await fetch('http://localhost:5000/api/empresas/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, senha })
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          updateUser(userData);
-          return { success: true, data: userData };
-        } else {
-          const errorData = await response.json();
-          return { success: false, error: errorData.error || 'Credenciais inválidas' };
-        }
+        localStorage.removeItem(USER_STORAGE_KEY);
       }
     } catch (error) {
-      console.error('Erro no login:', error);
-      return { success: false, error: 'Erro de conexão com o servidor' };
-    } finally {
-      setLoading(false);
+      console.error('Erro ao atualizar usuário no localStorage:', error);
     }
   };
 
-  const logout = () => {
-    updateUser(null);
+  // Função para verificar se a sessão está ativa
+  const isSessionActive = () => {
+    if (!currentUser?.loginTimestamp) return false;
+    return (Date.now() - currentUser.loginTimestamp) < SESSION_TIMEOUT;
   };
 
   return {
     currentUser,
     loading,
     updateUser,
-    loginUser,
-    logout
+    isSessionActive
   };
 };

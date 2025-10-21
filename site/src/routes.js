@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './Components/Hooks/ProtectedRoute';
 
 import Login from './Pages/Login/index.js';
 import LandingPage from './Pages/LandingPage/index.js'
@@ -22,39 +23,80 @@ import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
 import CardCandidato from './Components/CardCandidato/index.js';
 import CardEmpresa from './Components/CardEmpresa/index.js';
 
-
 export default function Index() {
     return (
         <BrowserRouter>
             <Routes>
+                {/* Rotas públicas */}
                 <Route path="/inicial" element={<LandingPage1 />} />  {/*pagina 1*/}
                 <Route path="/" element={<LandingPage />} /> {/*pagina principal*/}
                 <Route path="/cadastro" element={<Signup />} /> {/*cadastro geral*/}
                 <Route path="/login" element={<Login />} /> {/*login geral*/}
                 <Route path="/senha" element={<EsqueceuSenha />} /> {/*esqueceu a senha*/}
                 <Route path="/artigos" element={<Artigos />} /> {/*tela de artigos*/}
-                <Route path="/novoartigo" element={<NovoArtigoPage />} /> {/*tela de criação de artigos*/}
                 <Route path="/artigopublicado" element={<ArtigoPublicadoPage />} /> {/*tela de artigo criado com sucesso*/}
                 <Route path="/empresas" element={<EmpresaPage />} /> {/*tela de empresas*/}
                 <Route path="/vagas" element={<VagasPage />} /> {/*tela de vagas*/}
-                <Route path="/minhasvagas" element={<MinhasVagas />} /> {/*tela de vagas do candidato*/}
                 <Route path="/informacoesvaga" element={<MaisInformacoesPage />} /> {/*tela de mais informações da vaga*/}
-                <Route path="/inscricaovaga" element={<InscricaoPage />} /> {/*tela de inscrição na vaga*/}
-                <Route path="/inscricaovagasucesso" element={<InscricaoSucessoPage />} /> {/*tela de inscrição na vaga com sucesso*/}
-                <Route path="/dashboardempresa" element={<DashboardEmpresaPage />} /> {/*dashboard da empresa*/}
-                <Route path="/meucurriculo" element={<MeuCurriculo />} /> {/*tela do curriculo do candidato*/}
-                <Route path="/contatoprofissional" element={<ContatoProfissionalPage />} />
-                <Route path="/mensagemenviadaprofissional" element={<MensagemSucessoPage />} />
                 <Route path="/faqsite" element={<ContatoPage />} /> {/*suporte site*/}
-                <Route path="/vagas" element={<VagasPage />} />
-                <Route path="/inscricaovaga/:id" element={<InscricaoPage />} /> {/*tela de inscrição na vaga (ID)*/}
                 <Route path="/vaga/:id" element={<MaisInformacoesPage />} /> {/*tela de mais informações da vaga (ID)*/}
                 <Route path="/cardcandidato" element={<CardCandidato />} />
                 <Route path="/cardempresa" element={<CardEmpresa />} />
 
+                {/* Rotas protegidas - requerem autenticação */}
+                <Route path="/minhasvagas" element={
+                    <ProtectedRoute>
+                        <MinhasVagas />
+                    </ProtectedRoute>
+                } /> {/*tela de vagas do candidato*/}
 
+                <Route path="/novoartigo" element={
+                    <ProtectedRoute>
+                        <NovoArtigoPage />
+                    </ProtectedRoute>
+                } /> {/*tela de criação de artigos*/}
 
+                <Route path="/inscricaovaga" element={
+                    <ProtectedRoute>
+                        <InscricaoPage />
+                    </ProtectedRoute>
+                } /> {/*tela de inscrição na vaga*/}
 
+                <Route path="/inscricaovaga/:id" element={
+                    <ProtectedRoute>
+                        <InscricaoPage />
+                    </ProtectedRoute>
+                } /> {/*tela de inscrição na vaga (ID)*/}
+
+                <Route path="/inscricaovagasucesso" element={
+                    <ProtectedRoute>
+                        <InscricaoSucessoPage />
+                    </ProtectedRoute>
+                } /> {/*tela de inscrição na vaga com sucesso*/}
+
+                <Route path="/dashboardempresa" element={
+                    <ProtectedRoute>
+                        <DashboardEmpresaPage />
+                    </ProtectedRoute>
+                } /> {/*dashboard da empresa*/}
+
+                <Route path="/meucurriculo" element={
+                    <ProtectedRoute>
+                        <MeuCurriculo />
+                    </ProtectedRoute>
+                } /> {/*tela do curriculo do candidato*/}
+
+                <Route path="/contatoprofissional" element={
+                    <ProtectedRoute>
+                        <ContatoProfissionalPage />
+                    </ProtectedRoute>
+                } />
+
+                <Route path="/mensagemenviadaprofissional" element={
+                    <ProtectedRoute>
+                        <MensagemSucessoPage />
+                    </ProtectedRoute>
+                } />
             </Routes>
         </BrowserRouter>
     )

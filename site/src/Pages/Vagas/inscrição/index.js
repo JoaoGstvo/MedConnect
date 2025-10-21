@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
+import { useAuth } from '../../../Components/Hooks/useAuth';
 
 function InscricaoPage() {
     const { id } = useParams();
@@ -11,22 +12,27 @@ function InscricaoPage() {
     const [curriculo, setCurriculo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [enviando, setEnviando] = useState(false);
-    const [etapa, setEtapa] = useState(1); // 1: Revisão, 2: Confirmação
+    const [etapa, setEtapa] = useState(1);
     const [usarCurriculoSalvo, setUsarCurriculoSalvo] = useState(true);
     const [curriculoPDF, setCurriculoPDF] = useState(null);
+    
+    const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+
         const fetchData = async () => {
             try {
-                // Buscar vaga
                 const responseVaga = await fetch(`http://localhost:5000/api/vagas/${id}`);
                 if (responseVaga.ok) {
                     const dataVaga = await responseVaga.json();
                     setVaga(dataVaga);
                 }
 
-                // Buscar currículo do usuário
-                const responseCurriculo = await fetch(`http://localhost:5000/api/curriculos/usuario/1`);
+                const responseCurriculo = await fetch(`http://localhost:5000/api/curriculos/usuario/${user.id_usuario}`);
                 if (responseCurriculo.ok) {
                     const dataCurriculo = await responseCurriculo.json();
                     setCurriculo(dataCurriculo);
@@ -39,7 +45,7 @@ function InscricaoPage() {
         };
 
         fetchData();
-    }, [id]);
+    }, [id, isAuthenticated, navigate, user]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -52,16 +58,22 @@ function InscricaoPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!isAuthenticated) {
+            alert('Você precisa estar logado para se inscrever em vagas.');
+            navigate('/login');
+            return;
+        }
+
         setEnviando(true);
 
         try {
             let curriculoPdfUrl = null;
 
-            // Se o usuário enviou um novo PDF, faz o upload
             if (curriculoPDF) {
                 const formData = new FormData();
                 formData.append('curriculo_pdf', curriculoPDF);
-                formData.append('id_usuario', 1);
+                formData.append('id_usuario', user.id_usuario);
 
                 const uploadResponse = await fetch('http://localhost:5000/api/curriculos/upload', {
                     method: 'POST',
@@ -74,13 +86,12 @@ function InscricaoPage() {
                 }
             }
 
-            // Fazer a inscrição
             const inscricaoResponse = await fetch('http://localhost:5000/api/inscricoes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     id_vaga: parseInt(id),
-                    id_usuario: 1,
+                    id_usuario: user.id_usuario,
                     usar_curriculo_salvo: usarCurriculoSalvo
                 })
             });
@@ -101,7 +112,7 @@ function InscricaoPage() {
             }
 
             alert(mensagemSucesso);
-            navigate('/minhas-vagas');
+            navigate('/minhasvagas');
             
         } catch (error) {
             console.error('Erro:', error);
@@ -122,18 +133,32 @@ function InscricaoPage() {
     if (loading) return <div className="loading-page">Carregando...</div>;
     if (!vaga) return <div className="error-page">Vaga não encontrada</div>;
 
+    if (!isAuthenticated) {
+        return (
+            <main className='inscricaopage'>
+                <Header />
+                <div className="auth-required">
+                    <h2>Autenticação Necessária</h2>
+                    <p>Você precisa estar logado para se inscrever em vagas.</p>
+                    <button onClick={() => navigate('/login')} className="btn-primary">
+                        Fazer Login
+                    </button>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
+
     return (
         <main className='inscricaopage'>
             <Header />
 
-            {/* Cabeçalho */}
             <section className='hero-section'>
                 <div className='container'>
                     <div className='hero-content'>
                         <h1>Inscreva-se na Vaga</h1>
                         <p>Revise seus dados e confirme sua candidatura</p>
                         
-                        {/* Progresso */}
                         <div className='progress-steps'>
                             <div className={`step ${etapa >= 1 ? 'active' : ''}`}>
                                 <div className='step-number'>1</div>
@@ -152,7 +177,6 @@ function InscricaoPage() {
             <section className='section'>
                 <div className='container'>
                     <div className='inscricao-grid'>
-                        {/* Coluna da Esquerda - Informações da Vaga */}
                         <div className='vaga-sidebar'>
                             <div className='vaga-card'>
                                 <h3>📋 Detalhes da Vaga</h3>
@@ -187,17 +211,14 @@ function InscricaoPage() {
                             </div>
                         </div>
 
-                        {/* Coluna da Direita - Formulário */}
                         <div className='form-container'>
                             {etapa === 1 ? (
-                                /* ETAPA 1: REVISÃO DE DADOS */
                                 <div className='etapa-revisao'>
                                     <h2>📄 Seus Dados de Candidatura</h2>
                                     <p className='subtitulo'>
                                         Revise as informações que serão enviadas para a empresa
                                     </p>
 
-                                    {/* Opção de usar currículo salvo */}
                                     <div className='opcao-curriculo'>
                                         <label className='checkbox-container'>
                                             <input
@@ -216,7 +237,6 @@ function InscricaoPage() {
                                         </small>
                                     </div>
 
-                                    {/* Dados do Currículo (se disponível e selecionado) */}
                                     {usarCurriculoSalvo && curriculo && (
                                         <div className='dados-curriculo'>
                                             <h3>📋 Dados do seu Currículo</h3>
@@ -293,7 +313,6 @@ function InscricaoPage() {
                                         </div>
                                     )}
 
-                                    {/* Upload de PDF adicional */}
                                     <div className='upload-section'>
                                         <h3>📎 Anexar Currículo em PDF (Opcional)</h3>
                                         <p>
@@ -341,7 +360,6 @@ function InscricaoPage() {
                                         <small>Tamanho máximo: 5MB • Formato: PDF</small>
                                     </div>
 
-                                    {/* Ações */}
                                     <div className='actions'>
                                         <button 
                                             type="button" 
@@ -360,7 +378,6 @@ function InscricaoPage() {
                                     </div>
                                 </div>
                             ) : (
-                                /* ETAPA 2: CONFIRMAÇÃO */
                                 <div className='etapa-confirmacao'>
                                     <h2>✅ Confirmar Candidatura</h2>
                                     <p className='subtitulo'>

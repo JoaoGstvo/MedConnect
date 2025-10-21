@@ -3,21 +3,28 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
+import { useAuth } from '../../../Components/Hooks/useAuth';
 
 function MinhasVagas() {
     const [inscricoes, setInscricoes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cancelando, setCancelando] = useState(null);
     const navigate = useNavigate();
+    
+    const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+        
         fetchMinhasInscricoes();
-    }, []);
+    }, [isAuthenticated, navigate, user]);
 
     const fetchMinhasInscricoes = async () => {
         try {
-            // Buscar inscrições do usuário demo (ID 1)
-            const response = await fetch('http://localhost:5000/api/inscricoes/usuario/1');
+            const response = await fetch(`http://localhost:5000/api/inscricoes/usuario/${user.id_usuario}`);
             
             if (response.ok) {
                 const data = await response.json();
@@ -73,7 +80,6 @@ function MinhasVagas() {
             });
 
             if (response.ok) {
-                // Atualiza o status localmente
                 setInscricoes(prev => 
                     prev.map(insc => 
                         insc.id_candidatura === idCandidatura 
@@ -112,9 +118,24 @@ function MinhasVagas() {
         });
     };
 
-    // Filtra apenas inscrições não canceladas para exibição principal
     const inscricoesAtivas = inscricoes.filter(insc => insc.status !== 'cancelado');
     const hasInscricoes = inscricoesAtivas.length > 0;
+
+    if (!isAuthenticated) {
+        return (
+            <main className="minhasvagas-page">
+                <Header />
+                <div className="auth-required">
+                    <h2>Autenticação Necessária</h2>
+                    <p>Você precisa estar logado para ver suas candidaturas.</p>
+                    <button onClick={() => navigate('/login')} className="btn-primary">
+                        Fazer Login
+                    </button>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
 
     return (
         <main className="minhasvagas-page">
@@ -124,6 +145,12 @@ function MinhasVagas() {
                 <div className="title">
                     <h1>Minhas Candidaturas</h1>
                     <p>Acompanhe o andamento de todos os seus processos seletivos</p>
+                    
+                    {isAuthenticated && (
+                        <div className="user-info">
+                            <p>Bem-vindo(a), <strong>{user.nome}</strong>!</p>
+                        </div>
+                    )}
                     
                     {hasInscricoes && (
                         <div className="stats">
@@ -233,7 +260,6 @@ function MinhasVagas() {
                         </div>
                     )}
 
-                    {/* Seção de histórico de cancelados (opcional) */}
                     {inscricoes.some(insc => insc.status === 'cancelado') && (
                         <div className="historico-section">
                             <h3>Histórico de Candidaturas Canceladas</h3>
