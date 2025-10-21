@@ -1,34 +1,48 @@
-import * as profissionalRepository from '../Repository/profissionalRepository.js';
+import {
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  getUserByEmail,
+  loginProfissional
+} from "../Repository/profissionalRepository.js";
 
-export async function registerProfissionalController(req, res) {
+export const registerProfissionalController = async (req, res) => {
   try {
-    const { nome, email, senha, tipo_usuario } = req.body;
-    
-    const existingUser = await profissionalRepository.getUserByEmail(email);
+    const { nome, email, senha, tipo_usuario = 'candidato' } = req.body;
+
+    if (!nome || !email || !senha) {
+      return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
+    }
+
+    // Verificar se usuário já existe
+    const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ error: 'Email já cadastrado' });
     }
-    
-    const user = await profissionalRepository.createUser(nome, email, senha, tipo_usuario);
+
+    const user = await createUser(nome, email, senha, tipo_usuario);
     res.status(201).json(user);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro no registerProfissionalController:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-}
+};
 
-export async function getProfissionaisController(req, res) {
+export const getProfissionaisController = async (req, res) => {
   try {
-    const users = await profissionalRepository.getUsers();
+    const users = await getUsers();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro no getProfissionaisController:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-}
+};
 
-export async function getProfissionalByIdController(req, res) {
+export const getProfissionalByIdController = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await profissionalRepository.getUserById(id);
+    const user = await getUserById(id);
     
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
@@ -36,50 +50,60 @@ export async function getProfissionalByIdController(req, res) {
     
     res.json(user);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro no getProfissionalByIdController:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-}
+};
 
-export async function updateProfissionalController(req, res) {
+export const updateProfissionalController = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
     
-    const user = await profissionalRepository.updateUser(id, updates);
-    res.json(user);
+    const updatedUser = await updateUser(id, updates);
+    res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro no updateProfissionalController:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-}
+};
 
-// profissionalController.js
-export async function loginProfissionalController(req, res) {
+// CONTROLLER DE LOGIN - ADICIONE ESTA FUNÇÃO
+export const loginProfissionalController = async (req, res) => {
   try {
     const { email, senha } = req.body;
-
+    
+    console.log('Tentativa de login profissional:', email);
+    
     if (!email || !senha) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    const user = await profissionalRepository.getUserByEmail(email);
-
+    // Buscar usuário pelo email
+    const user = await getUserByEmail(email);
+    
     if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ error: 'Usuário não encontrado' });
     }
 
-    // Comparação de senha em texto (não seguro - apenas para exemplo)
+    // Verificar senha (em produção, usar bcrypt)
     if (user.senha !== senha) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ error: 'Senha incorreta' });
     }
 
-    // Remove a senha do objeto de retorno
-    const { senha: _, ...userWithoutPassword } = user;
+    // Retornar dados do usuário (sem a senha)
+    const userData = {
+      id_usuario: user.id_usuario,
+      nome: user.nome,
+      email: user.email,
+      tipo_usuario: user.tipo_usuario || 'candidato',
+      data_cadastro: user.data_cadastro
+    };
 
-    res.json({
-      message: 'Login realizado com sucesso',
-      user: userWithoutPassword
-    });
+    console.log('Login bem-sucedido:', userData);
+    res.json(userData);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erro no login:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-}
+};

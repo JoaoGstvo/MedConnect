@@ -34,25 +34,20 @@
     font-weight: 600;
     font-size: 14px;
     
-    &.small {
-      width: 24px;
-      height: 24px;
-      font-size: 12px;
+    &.large {
+      width: 48px;
+      height: 48px;
+      font-size: 18px;
     }
   }
 
   .user-name {
     font-weight: 500;
     font-size: 14px;
-    max-width: 100px;
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .dropdown-arrow {
-    font-size: 10px;
-    transition: transform 0.3s ease;
   }
 
   .user-dropdown {
@@ -67,62 +62,40 @@
     z-index: 1000;
     overflow: hidden;
     
-    .dropdown-header {
-      padding: 16px;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      font-weight: 600;
-      color: #2d3748;
-      font-size: 14px;
-    }
-
-    .users-list {
-      max-height: 300px;
-      overflow-y: auto;
+    .user-info-panel {
+      padding: 20px;
+      background: linear-gradient(135deg, #3a9bdc, #2181ee);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       
-      .user-option {
+      .user-details {
         display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        width: 100%;
-        border: none;
-        background: none;
-        cursor: pointer;
-        transition: background 0.2s ease;
+        flex-direction: column;
         
-        &:hover {
-          background: #f7fafc;
+        .user-name {
+          font-weight: 600;
+          font-size: 16px;
+          color: white;
+          max-width: 180px;
         }
         
-        &.active {
-          background: #edf2f7;
+        .user-email {
+          font-size: 14px;
+          opacity: 0.9;
         }
         
-        .user-details {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          flex: 1;
-          
-          .user-name {
-            font-weight: 500;
-            color: #2d3748;
-            font-size: 14px;
-            max-width: 180px;
-          }
-          
-          .user-email {
-            font-size: 12px;
-            color: #718096;
-          }
+        .user-type {
+          font-size: 12px;
+          opacity: 0.8;
+          margin-top: 4px;
         }
       }
     }
 
     .dropdown-actions {
       padding: 12px 16px;
-      border-top: 1px solid #e2e8f0;
       
       .logout-btn {
         width: 100%;
@@ -161,11 +134,76 @@
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(33, 129, 238, 0.3);
       }
+    }
+  }
 
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
+  /* Modal de Login */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  .login-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    
+    h3 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #2c3e50;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      
+      &:focus {
+        border-color: #3a9bdc;
+        outline: none;
+      }
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        
+        &:first-child {
+          background: #e2e8f0;
+          color: #4a5568;
+        }
+        
+        &:last-child {
+          background: #3a9bdc;
+          color: white;
+        }
+        
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
       }
     }
   }

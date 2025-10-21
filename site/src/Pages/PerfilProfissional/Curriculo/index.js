@@ -3,6 +3,7 @@ import Header from "../../../Components/Header/index.js";
 import Footer from "../../../Components/Footer/index.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from '../../../Components/Hooks/useCurrentUser.js';
 
 function MeuCurriculo() {
     const [curriculoData, setCurriculoData] = useState({
@@ -26,23 +27,47 @@ function MeuCurriculo() {
     const [salvando, setSalvando] = useState(false);
     const [uploadingPDF, setUploadingPDF] = useState(false);
     const navigate = useNavigate();
+    const { currentUser, loading: userLoading } = useCurrentUser();
 
-    const usuarioId = 1;
+    console.log('🔍 Estado do currentUser:', currentUser);
+    console.log('🔍 Estado do userLoading:', userLoading);
+
+    // Redirecionar se não estiver logado
+    useEffect(() => {
+        console.log('🔄 Verificando autenticação...');
+        if (!userLoading && !currentUser) {
+            console.log('❌ Usuário não logado, redirecionando para login');
+            navigate('/login');
+            return;
+        }
+        if (currentUser) {
+            console.log('✅ Usuário logado:', currentUser);
+        }
+    }, [currentUser, userLoading, navigate]);
 
     useEffect(() => {
-        carregarCurriculo();
-    }, []);
+        if (currentUser && currentUser.id_usuario) {
+            console.log('📥 Carregando currículo para usuário:', currentUser.id_usuario);
+            carregarCurriculo();
+        }
+    }, [currentUser]);
 
     const carregarCurriculo = async () => {
+        if (!currentUser || !currentUser.id_usuario) {
+            console.log('⚠️ Não há usuário para carregar currículo');
+            setCarregando(false);
+            return;
+        }
+        
         try {
-            console.log('Carregando currículo...');
-            const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${usuarioId}`);
+            console.log('🌐 Buscando currículo na API...');
+            const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${currentUser.id_usuario}`);
             
-            console.log('Status da resposta:', response.status);
+            console.log('📊 Status da resposta:', response.status);
             
             if (response.ok) {
                 const data = await response.json();
-                console.log('Dados do currículo:', data);
+                console.log('✅ Dados do currículo carregados:', data);
                 
                 if (data && Object.keys(data).length > 0) {
                     setCurriculoExistente(data);
@@ -60,18 +85,32 @@ function MeuCurriculo() {
                         idiomas: data.idiomas || ''
                     });
                     
-                    // Se existir URL do PDF, carregar
                     if (data.arquivo_url) {
                         setPdfUrl(data.arquivo_url);
                     }
                     
                     calcularProgresso(data);
+                } else {
+                    console.log('ℹ️ Nenhum currículo encontrado, usando dados do usuário');
+                    // Preencher com dados básicos do usuário
+                    setCurriculoData(prev => ({
+                        ...prev,
+                        nome_completo: currentUser.nome || '',
+                        email: currentUser.email || ''
+                    }));
                 }
+            } else if (response.status === 404) {
+                console.log('ℹ️ Nenhum currículo encontrado (404)');
+                setCurriculoData(prev => ({
+                    ...prev,
+                    nome_completo: currentUser.nome || '',
+                    email: currentUser.email || ''
+                }));
             } else {
-                console.log('Nenhum currículo encontrado ou erro na resposta');
+                console.log('❌ Erro ao buscar currículo:', response.status);
             }
         } catch (error) {
-            console.error('Erro ao carregar currículo:', error);
+            console.error('💥 Erro ao carregar currículo:', error);
         } finally {
             setCarregando(false);
         }
@@ -94,18 +133,29 @@ function MeuCurriculo() {
             [name]: value
         }));
         
-        const novoData = { ...curriculoData, [name]: value };
-        calcularProgresso(novoData);
+        // Calcular progresso em tempo real
+        setTimeout(() => {
+            calcularProgresso({...curriculoData, [name]: value});
+        }, 100);
     };
 
     const handleSalvarCurriculo = async () => {
+        if (!currentUser) {
+            alert('Você precisa estar logado para salvar o currículo');
+            navigate('/login');
+            return;
+        }
+
         setSalvando(true);
         try {
-            console.log('Salvando currículo...', curriculoData);
+            console.log('💾 Salvando currículo...', curriculoData);
             
             let response;
+            let resultado;
             
             if (curriculoExistente && curriculoExistente.id_curriculo) {
+                // Atualizar currículo existente
+                console.log('🔄 Atualizando currículo existente:', curriculoExistente.id_curriculo);
                 response = await fetch(`http://localhost:5000/api/curriculos/${curriculoExistente.id_curriculo}`, {
                     method: 'PUT',
                     headers: {
@@ -114,119 +164,102 @@ function MeuCurriculo() {
                     body: JSON.stringify(curriculoData)
                 });
             } else {
+                // Criar novo currículo
+                console.log('🆕 Criando novo currículo');
                 response = await fetch('http://localhost:5000/api/curriculos', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        id_usuario: usuarioId,
+                        id_usuario: currentUser.id_usuario,
                         ...curriculoData
                     })
                 });
             }
 
-            console.log('Status da resposta:', response.status);
+            console.log('📊 Status da resposta do salvamento:', response.status);
             
             if (response.ok) {
-                const resultado = await response.json();
-                console.log('Currículo salvo com sucesso:', resultado);
-                alert('Currículo salvo com sucesso!');
+                resultado = await response.json();
+                console.log('✅ Currículo salvo com sucesso:', resultado);
                 
+                // Atualizar estado com o currículo salvo
+                setCurriculoExistente(resultado);
+                
+                alert('✅ Currículo salvo com sucesso!');
+                
+                // Recarregar dados para garantir sincronização
                 await carregarCurriculo();
             } else {
                 const errorText = await response.text();
-                console.error('Resposta de erro:', errorText);
-                
-                try {
-                    const errorJson = JSON.parse(errorText);
-                    throw new Error(errorJson.error || `Erro ${response.status}`);
-                } catch (e) {
-                    throw new Error(`Erro ${response.status}: ${errorText}`);
-                }
+                console.error('❌ Resposta de erro:', errorText);
+                throw new Error(`Erro ${response.status}: ${errorText}`);
             }
         } catch (error) {
-            console.error('Erro ao salvar currículo:', error);
-            alert(`Erro ao salvar currículo: ${error.message}`);
+            console.error('💥 Erro ao salvar currículo:', error);
+            alert(`❌ Erro ao salvar currículo: ${error.message}`);
         } finally {
             setSalvando(false);
         }
     };
 
-    // FUNÇÃO DE UPLOAD DE PDF
+    // Restante das funções (upload PDF, visualizar, etc.) permanecem iguais
     const handleUploadPDF = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Verificar se é PDF
         if (file.type !== 'application/pdf') {
             alert('Por favor, selecione um arquivo PDF.');
             return;
         }
 
-        // Verificar tamanho (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             alert('O arquivo deve ter no máximo 5MB.');
             return;
         }
 
-        setCurriculoPDF(file);
         setUploadingPDF(true);
 
         try {
             const formData = new FormData();
             formData.append('curriculo_pdf', file);
-            formData.append('id_usuario', usuarioId);
+            formData.append('id_usuario', currentUser.id_usuario);
 
-            console.log('Enviando PDF...', file.name);
+            console.log('📤 Enviando PDF...', file.name);
 
-            // Tenta diferentes endpoints para upload
-            let response = await fetch('http://localhost:5000/api/curriculos', {
+            const response = await fetch('http://localhost:5000/api/curriculos/upload', {
                 method: 'POST',
                 body: formData
             });
 
-            // Se o endpoint não existir, tenta um alternativo
-            if (!response.ok) {
-                console.log('Tentando endpoint alternativo...');
-                response = await fetch('http://localhost:5000/api/curriculos', {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-
             if (response.ok) {
                 const resultado = await response.json();
-                console.log('PDF enviado com sucesso:', resultado);
+                console.log('✅ PDF enviado com sucesso:', resultado);
                 
-                // Atualiza a URL do PDF
                 if (resultado.arquivo_url) {
                     setPdfUrl(resultado.arquivo_url);
                 }
                 
-                alert('Currículo PDF enviado com sucesso!');
-                
-                // Recarrega os dados
+                alert('✅ Currículo PDF enviado com sucesso!');
                 await carregarCurriculo();
             } else {
                 const errorText = await response.text();
-                console.error('Erro no upload:', errorText);
-                throw new Error('Erro ao enviar PDF. Verifique o console.');
+                console.error('❌ Erro no upload:', errorText);
+                throw new Error('Erro ao enviar PDF');
             }
         } catch (error) {
-            console.error('Erro ao enviar PDF:', error);
-            alert(`Erro ao enviar PDF: ${error.message}`);
+            console.error('💥 Erro ao enviar PDF:', error);
+            alert(`❌ Erro ao enviar PDF: ${error.message}`);
         } finally {
             setUploadingPDF(false);
         }
     };
 
-    // FUNÇÃO PARA VISUALIZAR PDF
     const handleVisualizarPDF = () => {
         if (pdfUrl) {
             window.open(pdfUrl, '_blank');
         } else if (curriculoPDF) {
-            // Se ainda não foi enviado, cria URL local
             const url = URL.createObjectURL(curriculoPDF);
             window.open(url, '_blank');
         } else {
@@ -234,7 +267,6 @@ function MeuCurriculo() {
         }
     };
 
-    // FUNÇÃO PARA EXCLUIR PDF
     const handleExcluirPDF = async () => {
         if (!pdfUrl && !curriculoPDF) return;
 
@@ -243,41 +275,35 @@ function MeuCurriculo() {
         }
 
         try {
-            // Se temos um currículo existente, tenta excluir via API
             if (curriculoExistente && curriculoExistente.id_curriculo) {
-                const response = await fetch(`http://localhost:5000/api/curriculos/${curriculoExistente.id_curriculo}`, {
+                const response = await fetch(`http://localhost:5000/api/curriculos/${curriculoExistente.id_curriculo}/pdf`, {
                     method: 'DELETE'
                 });
 
                 if (response.ok) {
-                    console.log('PDF excluído com sucesso');
+                    console.log('✅ PDF excluído com sucesso');
                 }
             }
 
-            // Limpa os estados locais
             setCurriculoPDF(null);
             setPdfUrl(null);
             
-            // Reseta o input de arquivo
             const fileInput = document.getElementById('uploadPDF');
             if (fileInput) {
                 fileInput.value = '';
             }
             
-            alert('Currículo PDF excluído com sucesso!');
+            alert('✅ Currículo PDF excluído com sucesso!');
         } catch (error) {
-            console.error('Erro ao excluir PDF:', error);
-            // Fallback: apenas limpa o estado local
+            console.error('💥 Erro ao excluir PDF:', error);
             setCurriculoPDF(null);
             setPdfUrl(null);
             alert('PDF removido localmente.');
         }
     };
 
-    // FUNÇÃO PARA DOWNLOAD DO PDF
     const handleDownloadPDF = () => {
         if (pdfUrl) {
-            // Cria um link temporário para download
             const link = document.createElement('a');
             link.href = pdfUrl;
             link.download = 'curriculo.pdf';
@@ -285,7 +311,6 @@ function MeuCurriculo() {
             link.click();
             document.body.removeChild(link);
         } else if (curriculoPDF) {
-            // Download do arquivo local
             const url = URL.createObjectURL(curriculoPDF);
             const link = document.createElement('a');
             link.href = url;
@@ -299,11 +324,28 @@ function MeuCurriculo() {
         }
     };
 
-    if (carregando) {
+    // Se estiver carregando o usuário OU o currículo
+    if (userLoading || carregando) {
         return (
             <main className="meucurriculo">
                 <Header />
-                <div className="loading">Carregando currículo...</div>
+                <div className="loading">
+                    <div className="spinner"></div>
+                    <p>{userLoading ? 'Verificando autenticação...' : 'Carregando seu currículo...'}</p>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
+
+    // Se não há usuário logado (mesmo após o loading)
+    if (!currentUser) {
+        return (
+            <main className="meucurriculo">
+                <Header />
+                <div className="loading">
+                    <p>Redirecionando para login...</p>
+                </div>
                 <Footer />
             </main>
         );
@@ -319,6 +361,11 @@ function MeuCurriculo() {
                     <strong>Atenção:</strong> quando você se candidata a uma vaga, a empresa recebe um link para visualizar o seu currículo online. 
                     Tenha cuidado ao realizar modificações, pois todas as empresas terão acesso às alterações realizadas.
                 </p>
+                <div className="user-info-badge">
+                    👤 Logado como: <strong>{currentUser.nome}</strong> ({currentUser.email}) | 
+                    ID: {currentUser.id_usuario} | 
+                    Tipo: {currentUser.tipo_usuario || 'candidato'}
+                </div>
             </section>
 
             <div className="curriculo-container">
@@ -327,6 +374,7 @@ function MeuCurriculo() {
                     <div className="section pdf-section">
                         <div className="section-header">
                             <h2>Currículo em PDF</h2>
+                            <span className="section-badge optional">Opcional</span>
                         </div>
                         <div className="section-body">
                             {(pdfUrl || curriculoPDF) ? (
@@ -376,6 +424,7 @@ function MeuCurriculo() {
                                         accept=".pdf"
                                         onChange={handleUploadPDF}
                                         className="file-input"
+                                        disabled={uploadingPDF}
                                     />
                                     <label htmlFor="uploadPDF" className="upload-label">
                                         {uploadingPDF ? 'Enviando PDF...' : 'Selecionar Arquivo PDF'}
@@ -392,6 +441,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Dados Pessoais</h2>
+                            <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
                             <input 
@@ -436,6 +486,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Objetivo Profissional</h2>
+                            <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
                             <input 
@@ -450,6 +501,7 @@ function MeuCurriculo() {
                                 placeholder="Resumo profissional e objetivos..."
                                 value={curriculoData.resumo}
                                 onChange={handleInputChange}
+                                rows="4"
                             ></textarea>
                         </div>
                     </div>
@@ -458,6 +510,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Formação Acadêmica</h2>
+                            <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
                             <textarea 
@@ -465,6 +518,7 @@ function MeuCurriculo() {
                                 placeholder="Graduação, instituição, ano de conclusão..."
                                 value={curriculoData.formacao}
                                 onChange={handleInputChange}
+                                rows="4"
                             ></textarea>
                         </div>
                     </div>
@@ -473,6 +527,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Experiência Profissional</h2>
+                            <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
                             <textarea 
@@ -480,6 +535,7 @@ function MeuCurriculo() {
                                 placeholder="Empresa, cargo, período, atividades..."
                                 value={curriculoData.experiencia}
                                 onChange={handleInputChange}
+                                rows="4"
                             ></textarea>
                         </div>
                     </div>
@@ -488,6 +544,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Habilidades e Competências</h2>
+                            <span className="section-badge">Obrigatório</span>
                         </div>
                         <div className="section-body">
                             <textarea 
@@ -495,6 +552,7 @@ function MeuCurriculo() {
                                 placeholder="Habilidades técnicas, soft skills..."
                                 value={curriculoData.habilidades}
                                 onChange={handleInputChange}
+                                rows="3"
                             ></textarea>
                         </div>
                     </div>
@@ -503,6 +561,7 @@ function MeuCurriculo() {
                     <div className="section">
                         <div className="section-header">
                             <h2>Idiomas</h2>
+                            <span className="section-badge optional">Opcional</span>
                         </div>
                         <div className="section-body">
                             <textarea 
@@ -510,6 +569,7 @@ function MeuCurriculo() {
                                 placeholder="Idiomas e níveis de proficiência..."
                                 value={curriculoData.idiomas}
                                 onChange={handleInputChange}
+                                rows="3"
                             ></textarea>
                         </div>
                     </div>
@@ -522,12 +582,13 @@ function MeuCurriculo() {
                                 onClick={handleSalvarCurriculo}
                                 disabled={salvando}
                             >
-                                {salvando ? 'Salvando...' : ' Salvar Currículo'}
+                                {salvando ? '⏳ Salvando...' : '💾 Salvar Currículo'}
                             </button>
                             {curriculoExistente && (
-                                <p style={{textAlign: 'center', marginTop: '10px', color: '#666'}}>
-                                    Currículo ID: {curriculoExistente.id_curriculo}
-                                </p>
+                                <div className="curriculo-info">
+                                    <p>📋 Currículo ID: {curriculoExistente.id_curriculo}</p>
+                                    <p>🕒 Última atualização: {new Date(curriculoExistente.data_atualizacao).toLocaleDateString('pt-BR')}</p>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -535,18 +596,46 @@ function MeuCurriculo() {
 
                 {/* Sidebar */}
                 <aside className="curriculo-sidebar">
-                    <h3>Preenchimento do currículo</h3>
-                    <p>Falta pouco para completar seu currículo!</p>
-                    <div className="progress-container">
-                        <div className="progress-bar">
-                            <div className="progress" style={{ width: `${progresso}%` }}></div>
+                    <div className="sidebar-card">
+                        <h3>📊 Preenchimento do currículo</h3>
+                        <p>Complete seu currículo para aumentar suas chances!</p>
+                        <div className="progress-container">
+                            <div className="progress-bar">
+                                <div 
+                                    className="progress" 
+                                    style={{ width: `${progresso}%` }}
+                                ></div>
+                            </div>
+                            <span className="progress-text">{progresso}% completo</span>
                         </div>
-                        <span>{progresso}%</span>
+
+                        <div className="progress-tips">
+                            <h4>💡 Dicas:</h4>
+                            <ul>
+                                <li>✅ Preencha todos os campos obrigatórios</li>
+                                <li>📝 Seja específico em experiências</li>
+                                <li>🎯 Destaque suas principais habilidades</li>
+                                <li>📄 Adicione um PDF para impressionar</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div className="sidebar-links">
-                        <a href="#" onClick={() => navigate('/minhasvagas')}> Minhas Candidaturas</a>
-                        <a href="#" onClick={() => navigate('/dashboardempresa')}> Dashboard (PARA EMPRESA)</a>
+                        <h4>🚀 Ações Rápidas</h4>
+                        <a href="#" onClick={() => navigate('/minhasvagas')}>
+                            📋 Minhas Candidaturas
+                        </a>
+                        <a href="#" onClick={() => navigate('/vagas')}>
+                            🔍 Buscar Vagas
+                        </a>
+                        <a href="#" onClick={() => navigate('/profissionalprofile')}>
+                            👤 Meu Perfil
+                        </a>
+                        {currentUser?.tipo_usuario === 'empresa' && (
+                            <a href="#" onClick={() => navigate('/dashboardempresa')}>
+                                🏢 Dashboard Empresa
+                            </a>
+                        )}
                     </div>
                 </aside>
             </div>

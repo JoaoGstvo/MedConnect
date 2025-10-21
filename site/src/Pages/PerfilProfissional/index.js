@@ -1,7 +1,10 @@
+// pages/ProfissionalProfile/index.js
 import './index.scss';
 import Header from "../../Components/Header/index.js";
 import Footer from "../../Components/Footer/index.js";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCurrentUser } from '../../Hooks/useCurrentUser'; // CAMINHO CORRETO
 
 function ProfissionalProfile() {
     const [formData, setFormData] = useState({
@@ -15,6 +18,43 @@ function ProfissionalProfile() {
         registro: '',
         especializacoes: ''
     });
+    
+    const { currentUser } = useCurrentUser();
+    const navigate = useNavigate();
+
+    // Redirecionar se não estiver logado
+    useEffect(() => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
+    }, [currentUser, navigate]);
+
+    // Carregar dados do usuário quando o componente montar
+    useEffect(() => {
+        if (currentUser) {
+            carregarDadosUsuario();
+        }
+    }, [currentUser]);
+
+    const carregarDadosUsuario = async () => {
+        if (!currentUser) return;
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/profissionais/${currentUser.id_usuario}`);
+            if (response.ok) {
+                const userData = await response.json();
+                setFormData(prev => ({
+                    ...prev,
+                    nome: userData.nome || '',
+                    email: userData.email || '',
+                    // Adicione outros campos conforme necessário
+                }));
+            }
+        } catch (error) {
+            console.error('Erro ao carregar dados do usuário:', error);
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -24,10 +64,34 @@ function ProfissionalProfile() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Lógica de envio do formulário
-        console.log('Dados do perfil:', formData);
+        if (!currentUser) {
+            alert('Você precisa estar logado para atualizar o perfil');
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/profissionais/${currentUser.id_usuario}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                alert('Perfil atualizado com sucesso!');
+                // Recarregar dados atualizados
+                await carregarDadosUsuario();
+            } else {
+                alert('Erro ao atualizar perfil');
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+            alert('Erro ao atualizar perfil');
+        }
     };
 
     return (
@@ -37,6 +101,11 @@ function ProfissionalProfile() {
                 <form className="form-container" onSubmit={handleSubmit}>
                     <div className="header">
                         <h2>Meu Perfil Profissional</h2>
+                        {currentUser && (
+                            <div className="user-info">
+                                Logado como: <strong>{currentUser.nome}</strong>
+                            </div>
+                        )}
                     </div>
 
                     <div className="divider"></div>
@@ -46,7 +115,6 @@ function ProfissionalProfile() {
                         <p className="form-description">Atualize suas informações profissionais abaixo</p>
 
                         <div className="form-grid">
-                            {/* Campos do formulário com estado */}
                             <div className="form-group">
                                 <label className="input-field">
                                     <span>Nome Completo</span>
@@ -186,11 +254,13 @@ function ProfissionalProfile() {
                         </div>
 
                         <div className="buttons">
-                            <button type="button" className="cancel-button">Cancelar</button>
+                            <button type="button" className="cancel-button" onClick={() => navigate(-1)}>
+                                Cancelar
+                            </button>
                             <button type="submit" className="save-button">💾 Salvar Alterações</button>
-                            <a href="/">
-                                <button type="button" className="voltar-button">🏠 Voltar</button>
-                            </a>
+                            <button type="button" className="voltar-button" onClick={() => navigate('/')}>
+                                🏠 Voltar ao Início
+                            </button>
                         </div>
                     </div>
                 </form>

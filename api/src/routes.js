@@ -4,7 +4,8 @@ import {
   registerProfissionalController,
   getProfissionaisController,
   getProfissionalByIdController,
-  updateProfissionalController
+  updateProfissionalController,
+  loginProfissionalController  // ADICIONE ESTA IMPORT
 } from "./Controller/profissionalController.js";
 
 import {
@@ -65,6 +66,7 @@ router.post("/profissionais", registerProfissionalController);
 router.get("/profissionais", getProfissionaisController);
 router.get("/profissionais/:id", getProfissionalByIdController);
 router.put("/profissionais/:id", updateProfissionalController);
+router.post("/profissionais/login", loginProfissionalController); // NOVA ROTA
 
 // ----------------- CURRÍCULOS -----------------
 router.post("/curriculos", createCurriculoController);

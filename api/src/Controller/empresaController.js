@@ -13,11 +13,11 @@ export async function getEmpresaByIdController(req, res) {
   try {
     const { id } = req.params;
     const empresa = await empresaRepository.getEmpresaById(id);
-    
+
     if (!empresa) {
       return res.status(404).json({ error: 'Empresa não encontrada' });
     }
-    
+
     res.json(empresa);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -27,17 +27,17 @@ export async function getEmpresaByIdController(req, res) {
 // ADICIONAR: Esta função estava faltando
 export async function createEmpresaController(req, res) {
   try {
-    const { 
-      nome, 
-      cnpj, 
-      email, 
-      senha, 
-      endereco, 
-      logo_url, 
-      descricao, 
-      telefone, 
-      cidade, 
-      estado 
+    const {
+      nome,
+      cnpj,
+      email,
+      senha,
+      endereco,
+      logo_url,
+      descricao,
+      telefone,
+      cidade,
+      estado
     } = req.body;
 
     // Validação básica
@@ -52,18 +52,18 @@ export async function createEmpresaController(req, res) {
     }
 
     const empresa = await empresaRepository.createEmpresa(
-      nome, 
-      cnpj, 
-      email, 
-      senha, 
-      endereco, 
-      logo_url, 
-      descricao, 
-      telefone, 
-      cidade, 
+      nome,
+      cnpj,
+      email,
+      senha,
+      endereco,
+      logo_url,
+      descricao,
+      telefone,
+      cidade,
       estado
     );
-    
+
     res.status(201).json(empresa);
   } catch (error) {
     console.error('Erro no createEmpresaController:', error);
@@ -75,7 +75,7 @@ export async function updateEmpresaController(req, res) {
   try {
     const { id } = req.params;
     const updates = req.body;
-    
+
     const empresa = await empresaRepository.updateEmpresa(id, updates);
     res.json(empresa);
   } catch (error) {
@@ -117,3 +117,47 @@ export async function loginEmpresaController(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+// Adicione esta função ao empresaController.js
+export const loginEmpresaController = async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+
+    console.log('Tentativa de login empresa:', email);
+
+    if (!email || !senha) {
+      return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+    }
+
+    // Buscar empresa pelo email
+    const empresa = await getEmpresaByEmail(email);
+
+    if (!empresa) {
+      return res.status(401).json({ error: 'Empresa não encontrada' });
+    }
+
+    // Verificar senha
+    if (empresa.senha !== senha) {
+      return res.status(401).json({ error: 'Senha incorreta' });
+    }
+
+    // Retornar dados da empresa (sem a senha)
+    const empresaData = {
+      id_empresa: empresa.id_empresa,
+      nome: empresa.nome,
+      email: empresa.email,
+      cnpj: empresa.cnpj,
+      endereco: empresa.endereco,
+      descricao: empresa.descricao,
+      logo_url: empresa.logo_url,
+      tipo_usuario: 'empresa',
+      data_criacao: empresa.data_criacao
+    };
+
+    console.log('Login empresa bem-sucedido:', empresaData);
+    res.json(empresaData);
+  } catch (error) {
+    console.error('Erro no login da empresa:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+};

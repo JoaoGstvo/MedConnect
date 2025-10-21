@@ -1,6 +1,8 @@
 import './index.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useCurrentUser } from '../../Components/Hooks/useCurrentUser';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [accountType, setAccountType] = useState('profissional');
@@ -9,6 +11,9 @@ function Login() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  const { loginUser } = useCurrentUser();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,37 +32,25 @@ function Login() {
     setMsg('');
 
     try {
-      const endpoint = accountType === 'profissional'
-        ? 'http://localhost:5000/api/profissional/login'
-        : 'http://localhost:5000/api/empresa/login';
+      const result = await loginUser(email, senha);
 
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
+      if (result.success) {
         toast.success('Login realizado com sucesso!', {
           autoClose: 2000,
           hideProgressBar: true
         });
 
-        // Salvar dados do usuário no localStorage se "Lembrar de mim" estiver marcado
-        if (rememberMe) {
-          localStorage.setItem('userData', JSON.stringify(data));
-        } else {
-          sessionStorage.setItem('userData', JSON.stringify(data));
-        }
-
         // Redirecionar após sucesso
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          // Redirecionar baseado no tipo de usuário
+          if (result.data.tipo_usuario === 'empresa') {
+            navigate('/dashboardempresa');
+          } else {
+            navigate('/meucurriculo');
+          }
         }, 2000);
       } else {
-        setMsg(data.msg || 'Erro ao fazer login');
+        setMsg(result.error);
         toast.error('Credenciais inválidas', {
           autoClose: 3000,
           hideProgressBar: true

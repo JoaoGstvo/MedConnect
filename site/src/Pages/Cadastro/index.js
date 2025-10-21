@@ -1,6 +1,7 @@
 import './index.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Signup() {
   const [accountType, setAccountType] = useState('profissional');
@@ -96,10 +97,15 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        showMensagem('success', "Cadastro realizado com sucesso!");
+        toast.success("Cadastro realizado com sucesso! Redirecionando para login...", {
+          autoClose: 2000,
+          hideProgressBar: true
+        });
+        
         setProfissionalData({
           nome: "", email: "", senha: "", confirmaSenha: "", tipo_usuario: "candidato"
         });
+        
         setTimeout(() => navigate('/login'), 2000);
       } else {
         showMensagem('error', data.error || "Erro ao cadastrar");
@@ -146,11 +152,16 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        showMensagem('success', "Empresa cadastrada com sucesso!");
+        toast.success("Empresa cadastrada com sucesso! Redirecionando para login...", {
+          autoClose: 2000,
+          hideProgressBar: true
+        });
+        
         setEmpresaData({
           nome: "", cnpj: "", email: "", senha: "", confirmaSenha: "", 
           endereco: "", descricao: "", logo: ""
         });
+        
         setTimeout(() => navigate('/login'), 2000);
       } else {
         showMensagem('error', data.error || "Erro ao cadastrar empresa");
