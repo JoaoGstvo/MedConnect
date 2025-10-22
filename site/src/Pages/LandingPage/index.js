@@ -1,6 +1,6 @@
 import './index.scss';
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
@@ -14,21 +14,29 @@ function LandingPage() {
   const [empresas, setEmpresas] = useState([]);
   const [loadingVagas, setLoadingVagas] = useState(true);
   const [loadingEmpresas, setLoadingEmpresas] = useState(true);
+  const [errorVagas, setErrorVagas] = useState(null);
   const sectionRefs = useRef([]);
   const { currentUser } = useCurrentUser();
+  const navigate = useNavigate();
 
-  // Buscar vagas do backend
+  // Buscar vagas do backend - EXATAMENTE IGUAL À PÁGINA DE VAGAS
   useEffect(() => {
     const fetchVagas = async () => {
       try {
         setLoadingVagas(true);
-        const res = await fetch('http://localhost:5000/api/vagas');
-        if (res.ok) {
-          const data = await res.json();
-          setVagas(data || []);
+        setErrorVagas(null);
+        
+        const response = await fetch('http://localhost:5000/api/vagas');
+        
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
         }
-      } catch (err) {
-        console.error("Erro ao buscar vagas:", err);
+        
+        const data = await response.json();
+        setVagas(data || []);
+      } catch (error) {
+        console.error('Erro ao buscar vagas:', error);
+        setErrorVagas('Erro ao carregar vagas. Tente novamente.');
       } finally {
         setLoadingVagas(false);
       }
@@ -78,6 +86,10 @@ function LandingPage() {
     if (el && !sectionRefs.current.includes(el)) sectionRefs.current.push(el);
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
     <main className="landingpage">
       <Header />
@@ -98,34 +110,30 @@ function LandingPage() {
           </p>
         </div>
         <div className="buttons">
-          <Link to="/empresas">
-            <button className="btn-primary">Explorar Empresas</button>
-          </Link>
-          <Link to="/vagas">
-            <button className="btn-secondary">Ver Vagas</button>
-          </Link>
+          <button 
+            className="btn-primary"
+            onClick={() => handleNavigation('/empresas')}
+          >
+            Explorar Empresas
+          </button>
+          <button 
+            className="btn-secondary"
+            onClick={() => handleNavigation('/vagas')}
+          >
+            Ver Vagas
+          </button>
           {!currentUser && (
-            <Link to="/cadastro">
-              <button className="btn-secondary" style={{ background: 'transparent', border: '2px solid rgba(255, 255, 255, 0.3)' }}>
-                Criar Conta
-              </button>
-            </Link>
+            <button 
+              className="btn-secondary" 
+              onClick={() => handleNavigation('/cadastro')}
+            >
+              Criar Conta
+            </button>
           )}
         </div>
-
-        {currentUser && (
-          <div className="user-welcome">
-            <small>
-              Logado como: <strong>{currentUser.nome}</strong> ({currentUser.email}) • 
-              <Link to="/meucurriculo" style={{marginLeft: '8px', color: 'white', textDecoration: 'underline' }}>
-                Meu Perfil
-              </Link>
-            </small>
-          </div>
-        )}
       </section>
 
-      {/* Vagas em Destaque */}
+      {/* Vagas em Destaque - EXATAMENTE IGUAL À PÁGINA DE VAGAS */}
       <section className="section" ref={addToRefs}>
         <div className="section-header">
           <h2>Vagas em Destaque</h2>
@@ -137,36 +145,41 @@ function LandingPage() {
           </p>
         </div>
         <div className="container">
+          {errorVagas && (
+            <div className="error-message">
+              <p>{errorVagas}</p>
+            </div>
+          )}
+          
           <div className="cards-grid">
             {loadingVagas ? (
-              <div className="loading-state">
-                <div className="loading-spinner"></div>
+              <div className="loading">
+                <div className="spinner"></div>
                 <p>Carregando vagas...</p>
               </div>
             ) : vagas.length > 0 ? (
               vagas.slice(0, 3).map(vaga => (
-                <CardVaga 
-                  key={vaga.id_vaga} 
-                  vaga={vaga}
-                  showActions={true}
-                />
+                <CardVaga key={vaga.id_vaga} vaga={vaga} />
               ))
             ) : (
-              <div className="empty-state">
-                <div className="empty-icon">📋</div>
-                <h3>Nenhuma vaga disponível</h3>
-                <p>No momento não há vagas em destaque</p>
-                <Link to="/vagas">
-                  <button className="btn-outline">Ver todas as vagas</button>
-                </Link>
+              <div className="no-vagas">
+                <h3>Nenhuma vaga encontrada</h3>
+                <p>Em breve teremos novas oportunidades</p>
+                <button onClick={() => handleNavigation('/vagas')} className='btn-primary'>
+                  Ver Todas as Vagas
+                </button>
               </div>
             )}
           </div>
+          
           {vagas.length > 0 && (
             <div className="section-footer">
-              <Link to="/vagas" className="view-all-link">
+              <button 
+                className="view-all-link"
+                onClick={() => handleNavigation('/vagas')}
+              >
                 Ver todas as vagas →
-              </Link>
+              </button>
             </div>
           )}
         </div>
@@ -181,8 +194,8 @@ function LandingPage() {
         <div className="container">
           <div className="cards-grid">
             {loadingEmpresas ? (
-              <div className="loading-state">
-                <div className="loading-spinner"></div>
+              <div className="loading">
+                <div className="spinner"></div>
                 <p>Carregando empresas...</p>
               </div>
             ) : empresas.length > 0 ? (
@@ -193,21 +206,26 @@ function LandingPage() {
                 />
               ))
             ) : (
-              <div className="empty-state">
-                <div className="empty-icon">🏢</div>
+              <div className="no-vagas">
                 <h3>Nenhuma empresa cadastrada</h3>
                 <p>Em breve teremos empresas parceiras</p>
-                <Link to="/empresas">
-                  <button className="btn-outline">Explorar empresas</button>
-                </Link>
+                <button 
+                  className="btn-primary"
+                  onClick={() => handleNavigation('/empresas')}
+                >
+                  Explorar Empresas
+                </button>
               </div>
             )}
           </div>
           {empresas.length > 0 && (
             <div className="section-footer">
-              <Link to="/empresas" className="view-all-link">
+              <button 
+                className="view-all-link"
+                onClick={() => handleNavigation('/empresas')}
+              >
                 Ver todas as empresas →
-              </Link>
+              </button>
             </div>
           )}
         </div>
@@ -242,21 +260,33 @@ function LandingPage() {
           <div className="cta-buttons">
             {currentUser ? (
               <>
-                <Link to="/vagas">
-                  <button className="btn-primary">Explorar Mais Vagas</button>
-                </Link>
-                <Link to="/meucurriculo">
-                  <button className="btn-outline">Atualizar Meu Perfil</button>
-                </Link>
+                <button 
+                  className="btn-primary"
+                  onClick={() => handleNavigation('/vagas')}
+                >
+                  Explorar Mais Vagas
+                </button>
+                <button 
+                  className="btn-outline"
+                  onClick={() => handleNavigation('/meucurriculo')}
+                >
+                  Atualizar Meu Perfil
+                </button>
               </>
             ) : (
               <>
-                <Link to="/cadastro">
-                  <button className="btn-primary">Criar Conta</button>
-                </Link>
-                <Link to="/vagas">
-                  <button className="btn-outline">Explorar Vagas</button>
-                </Link>
+                <button 
+                  className="btn-primary"
+                  onClick={() => handleNavigation('/cadastro')}
+                >
+                  Criar Conta
+                </button>
+                <button 
+                  className="btn-outline"
+                  onClick={() => handleNavigation('/vagas')}
+                >
+                  Explorar Vagas
+                </button>
               </>
             )}
           </div>

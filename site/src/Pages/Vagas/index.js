@@ -1,4 +1,3 @@
-// Pages/Vagas/index.js - VERSÃO FINAL
 import './index.scss';
 import { useState, useEffect } from 'react';
 import Header from "../../Components/Header";

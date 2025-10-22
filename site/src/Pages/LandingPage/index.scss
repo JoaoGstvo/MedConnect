@@ -69,6 +69,11 @@
       z-index: 2;
       flex-wrap: wrap;
 
+      .btn-link {
+        text-decoration: none;
+        display: inline-block;
+      }
+
       .btn-primary, .btn-secondary {
         @include btn-base;
         padding: $spacing-4 $spacing-8;
@@ -78,6 +83,9 @@
         position: relative;
         overflow: hidden;
         transition: all $transition-base;
+        cursor: pointer;
+        border: none;
+        font-family: inherit;
 
         @include mobile-only {
           padding: $spacing-3 $spacing-6;
@@ -195,6 +203,7 @@
         border-radius: $radius-full;
         font-weight: $font-weight-semibold;
         text-decoration: none;
+        display: inline-block;
 
         &:hover:not(:disabled) {
           transform: translateY(-2px);
@@ -224,6 +233,9 @@
     .btn-outline {
       @include btn-outline;
       padding: $spacing-3 $spacing-6;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
     }
   }
 
@@ -289,6 +301,11 @@
         gap: $spacing-4;
         flex-wrap: wrap;
 
+        .btn-link {
+          text-decoration: none;
+          display: inline-block;
+        }
+
         .btn-primary, .btn-outline {
           @include btn-base;
           padding: $spacing-4 $spacing-8;
@@ -296,6 +313,9 @@
           font-weight: $font-weight-semibold;
           text-decoration: none;
           transition: all $transition-base;
+          cursor: pointer;
+          border: none;
+          font-family: inherit;
 
           @include mobile-only {
             padding: $spacing-3 $spacing-6;
@@ -395,7 +415,6 @@
   }
 }
 
-// Adicione ao final do seu Landing Page SCSS
 .user-welcome {
   margin-top: $spacing-4;
   padding: $spacing-3;
@@ -430,4 +449,27 @@
     color: $primary-600;
     font-size: $font-size-xs;
   }
+}
+// --- Correção de bloqueio de cliques nos botões de seção ---
+.section,
+.section * {
+  pointer-events: auto;
+}
+
+.section::before,
+.section::after {
+  pointer-events: none !important;
+}
+
+.section.in-view,
+.section.fade-in {
+  z-index: auto !important;
+  pointer-events: auto !important;
+}
+
+.section .buttons,
+.section .section-footer {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
 }

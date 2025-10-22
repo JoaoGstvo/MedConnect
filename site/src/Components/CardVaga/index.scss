@@ -12,6 +12,39 @@
   border: 1px solid $gray-200;
   position: relative;
   overflow: hidden;
+  z-index: 5;
+  pointer-events: auto; 
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-xl;
+  }
+
+  .job-action {
+    position: relative;
+    z-index: 6;  
+    pointer-events: auto;
+
+    .apply-button,
+    .info-button {
+      position: relative;
+      z-index: 7;
+      pointer-events: auto;
+    }
+  }
+}
+
+
+.job-card {
+  @include card-base;
+  padding: $spacing-6;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all $transition-base;
+  border: 1px solid $gray-200;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-4px);
