@@ -130,7 +130,7 @@ function EmpresaPage() {
           />
           
           <div className="filtros-info">
-            <p>Encontre hospitais por nome ou localização</p>
+            <p>Encontre hospitais por nome ou endereço</p>
           </div>
           
           <button className="limpar" onClick={limparFiltros}>

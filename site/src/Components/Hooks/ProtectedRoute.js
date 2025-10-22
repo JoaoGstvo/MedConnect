@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
-  console.log('🛡️ ProtectedRoute - Verificando autenticação:', {
+  console.log(' ProtectedRoute - Verificando autenticação:', {
     isAuthenticated,
     isLoading,
     user: user?.email,
@@ -51,7 +51,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (location.pathname === '/dashboardempresa' && user?.tipo_usuario !== 'empresa') {
-    console.log('🚫 Acesso negado: Rota de empresa para usuário profissional');
+    console.log(' Acesso negado: Rota de empresa para usuário profissional');
     return <Navigate to="/vagas" replace />;
   }
 

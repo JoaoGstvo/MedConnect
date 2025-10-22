@@ -32,7 +32,7 @@ function CardEmpresa({ empresa }) {
     return (
       <article className="empresa-card error">
         <div className="error-message">
-          <span>⚠️</span>
+          <span></span>
           <p>Não foi possível carregar os dados da empresa</p>
         </div>
       </article>
@@ -43,7 +43,6 @@ function CardEmpresa({ empresa }) {
   const empresaNome = empresa.nome || "Hospital";
   const empresaLogo = empresa.logo_url;
   const empresaDescricao = empresa.descricao || "Descrição não disponível";
-  const empresaLocalizacao = `${empresa.cidade || ""}, ${empresa.estado || ""}`.trim() || "Localização não informada";
   const empresaEndereco = empresa.endereco;
   const empresaTelefone = empresa.telefone;
   const empresaEmail = empresa.email;
@@ -68,22 +67,19 @@ function CardEmpresa({ empresa }) {
         <p className="descricao">{empresaDescricao}</p>
 
         <div className="meta">
-          <span className="meta-item">
-            📍 {empresaLocalizacao}
-          </span>
           {empresaEndereco && (
             <span className="meta-item">
-              🏢 {empresaEndereco}
+              {empresaEndereco}
             </span>
           )}
           {empresaTelefone && (
             <span className="meta-item">
-              📞 {empresaTelefone}
+              {empresaTelefone}
             </span>
           )}
           {empresaEmail && (
             <span className="meta-item">
-              ✉️ {empresaEmail}
+              {empresaEmail}
             </span>
           )}
         </div>

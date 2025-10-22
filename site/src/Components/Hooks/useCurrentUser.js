@@ -1,7 +1,7 @@
 // Hooks/useCurrentUser.js - VERSÃO SIMPLIFICADA
 import { useState, useEffect } from 'react';
 
-const USER_STORAGE_KEY = 'currentUser_v3'; // ⬅️ NOVA CHAVE
+const USER_STORAGE_KEY = 'currentUser_v3';
 const SESSION_TIMEOUT = 7 * 24 * 60 * 60 * 1000;
 
 export const useCurrentUser = () => {

@@ -54,12 +54,6 @@ function Header() {
         setIsMenuOpen(false);
     };
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        // Implementar lógica de busca
-        console.log('🔍 Buscando...');
-    };
-
     return (
         <header className={`header-page ${isScrolled ? 'scrolled' : ''}`}>
             <div className='navigation-container'>
@@ -109,13 +103,18 @@ function Header() {
                         {/* Links adicionais para usuários logados */}
                         {isAuthenticated && (
                             <>
-                                <a 
-                                    href="/minhasvagas" 
-                                    className={`nav-link ${isActiveLink('/minhasvagas')}`}
-                                    onClick={(e) => { e.preventDefault(); handleNavigation('/minhasvagas'); }}
-                                >
-                                    <span>Minhas Vagas</span>
-                                </a>
+                                {/* Mostrar "Minhas Vagas" apenas para candidatos */}
+                                {user?.tipo_usuario !== 'empresa' && (
+                                    <a 
+                                        href="/minhasvagas" 
+                                        className={`nav-link ${isActiveLink('/minhasvagas')}`}
+                                        onClick={(e) => { e.preventDefault(); handleNavigation('/minhasvagas'); }}
+                                    >
+                                        <span>Minhas Vagas</span>
+                                    </a>
+                                )}
+                                
+                                {/* Mostrar "Meu Currículo" apenas para candidatos */}
                                 {user?.tipo_usuario !== 'empresa' && (
                                     <a 
                                         href="/meucurriculo" 
@@ -125,6 +124,8 @@ function Header() {
                                         <span>Meu Currículo</span>
                                     </a>
                                 )}
+                                
+                                {/* Mostrar "Dashboard" apenas para empresas */}
                                 {user?.tipo_usuario === 'empresa' && (
                                     <a 
                                         href="/dashboardempresa" 

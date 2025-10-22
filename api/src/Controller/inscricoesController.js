@@ -5,7 +5,7 @@ export async function registerInscricaoController(req, res) {
     try {
         const { id_vaga, id_usuario, usar_curriculo_salvo = true } = req.body;
         
-        console.log('📝 Dados recebidos na inscrição:', { id_vaga, id_usuario, usar_curriculo_salvo });
+        console.log('Dados recebidos na inscrição:', { id_vaga, id_usuario, usar_curriculo_salvo });
         
         if (!id_vaga || !id_usuario) {
             return res.status(400).json({ error: 'ID da vaga e ID do usuário são obrigatórios' });
@@ -16,7 +16,7 @@ export async function registerInscricaoController(req, res) {
         // Buscar dados do profissional (usuário) para criar currículo automático
         const buscarDadosProfissional = async (id_usuario) => {
             try {
-                console.log('🔍 Buscando dados do profissional:', id_usuario);
+                console.log('Buscando dados do profissional:', id_usuario);
                 // Tenta buscar da tabela profissionais
                 const query = 'SELECT * FROM profissionais WHERE id_profissional = $1';
                 const result = await pool.query(query, [id_usuario]);
@@ -36,7 +36,7 @@ export async function registerInscricaoController(req, res) {
 
         if (usar_curriculo_salvo) {
             try {
-                console.log('🔍 Buscando currículo para usuário:', id_usuario);
+                console.log('Buscando currículo para usuário:', id_usuario);
                 let curriculo = await curriculoRepository.getCurriculoByUsuario(id_usuario);
                 
                 if (!curriculo) {
@@ -44,7 +44,7 @@ export async function registerInscricaoController(req, res) {
                     const profissional = await buscarDadosProfissional(id_usuario);
                     
                     if (profissional) {
-                        console.log('👤 Dados do profissional encontrados:', profissional);
+                        console.log('Dados do profissional encontrados:', profissional);
                         // Cria um currículo básico com dados do profissional
                         const curriculoBasico = {
                             nome_completo: profissional.nome || 'Usuário Demo',
@@ -60,7 +60,7 @@ export async function registerInscricaoController(req, res) {
                             idiomas: null
                         };
                         
-                        console.log('📄 Criando currículo automático:', curriculoBasico);
+                        console.log(' Criando currículo automático:', curriculoBasico);
                         try {
                             curriculo = await curriculoRepository.createCurriculo(id_usuario, curriculoBasico);
                             console.log('✅ Currículo automático criado:', curriculo);
@@ -95,10 +95,10 @@ export async function registerInscricaoController(req, res) {
                 console.error('💥 Erro ao buscar/processar currículo:', error);
             }
         } else {
-            console.log('ℹ️ Usuário optou por não usar currículo salvo');
+            console.log(' Usuário optou por não usar currículo salvo');
         }
 
-        console.log('🎯 Criando inscrição com dados:', { id_vaga, id_usuario, dadosCurriculo });
+        console.log('Criando inscrição com dados:', { id_vaga, id_usuario, dadosCurriculo });
         const inscricao = await inscricaoRepository.createInscricao(id_vaga, id_usuario, dadosCurriculo);
         
         res.status(201).json({

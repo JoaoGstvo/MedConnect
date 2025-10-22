@@ -81,11 +81,6 @@ function VagasPage() {
                 <div className='hero-content'>
                     <h1>Encontre Sua Vaga na Área da Saúde</h1>
                     <p>Conectamos profissionais qualificados às melhores oportunidades</p>
-                    {isAuthenticated && user && (
-                        <div className="user-welcome">
-                            <p>Olá, <strong>{user.nome}</strong>! 👋</p>
-                        </div>
-                    )}
                 </div>
             </section>
 
@@ -96,7 +91,7 @@ function VagasPage() {
                         <input 
                             type="text" 
                             name="pesquisa"
-                            placeholder="🔍 Cargo, especialidade ou empresa"
+                            placeholder=" Cargo, especialidade ou empresa"
                             value={filtros.pesquisa}
                             onChange={handleFiltroChange}
                             className='filter-input'
@@ -104,23 +99,11 @@ function VagasPage() {
                         <input 
                             type="text" 
                             name="localidade"
-                            placeholder="📍 Cidade ou estado"
+                            placeholder="Cidade ou estado"
                             value={filtros.localidade}
                             onChange={handleFiltroChange}
                             className='filter-input'
                         />
-                        <select 
-                            name="tipoContrato"
-                            value={filtros.tipoContrato}
-                            onChange={handleFiltroChange}
-                            className='filter-select'
-                        >
-                            <option value="">Todos os contratos</option>
-                            <option value="CLT">CLT</option>
-                            <option value="PJ">PJ</option>
-                            <option value="Estágio">Estágio</option>
-                            <option value="Temporário">Temporário</option>
-                        </select>
                     </div>
                     <div className='filters-actions'>
                         <button onClick={handleLimparFiltros} className='btn-limpar'>
@@ -161,7 +144,6 @@ function VagasPage() {
                         </div>
                     ) : (
                         <div className="no-vagas">
-                            <div className="no-vagas-icon">🔍</div>
                             <h3>Nenhuma vaga encontrada</h3>
                             <p>Tente ajustar os filtros de busca ou limpar os filtros</p>
                             <button onClick={handleLimparFiltros} className='btn-primary'>

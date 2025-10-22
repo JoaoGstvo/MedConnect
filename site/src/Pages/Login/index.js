@@ -76,7 +76,7 @@ function Login() {
   };
 
   const handleAccountTypeChange = (type) => {
-    console.log('🔄 Alterando tipo de conta para:', type);
+    console.log(' Alterando tipo de conta para:', type);
     setAccountType(type);
     // Limpar campos ao mudar o tipo de conta
     setEmail('');

@@ -6,12 +6,12 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('🔄 useAuth: Iniciando verificação do localStorage');
+    console.log('useAuth: Iniciando verificação do localStorage');
     
     const userData = localStorage.getItem('user');
     const empresaData = localStorage.getItem('empresaLogada');
     
-    console.log('📦 Dados no localStorage:', {
+    console.log(' Dados no localStorage:', {
       userData: userData ? 'PRESENTE' : 'AUSENTE',
       empresaData: empresaData ? 'PRESENTE' : 'AUSENTE'
     });
@@ -19,8 +19,8 @@ export const useAuth = () => {
     if (empresaData) {
       try {
         const empresa = JSON.parse(empresaData);
-        console.log('🏢 useAuth: Empresa detectada:', empresa.nome);
-        console.log('🏢 Tipo do usuário empresa:', empresa.tipo_usuario);
+        console.log(' useAuth: Empresa detectada:', empresa.nome);
+        console.log(' Tipo do usuário empresa:', empresa.tipo_usuario);
         
         const empresaComTipo = {
           ...empresa,
@@ -29,14 +29,14 @@ export const useAuth = () => {
         
         setUser(empresaComTipo);
       } catch (error) {
-        console.error('❌ useAuth: Erro ao parsear dados da empresa:', error);
+        console.error(' useAuth: Erro ao parsear dados da empresa:', error);
         localStorage.removeItem('empresaLogada');
       }
     } else if (userData) {
       try {
         const user = JSON.parse(userData);
-        console.log('👤 useAuth: Usuário profissional detectado:', user.email);
-        console.log('👤 Tipo do usuário profissional:', user.tipo_usuario);
+        console.log(' useAuth: Usuário profissional detectado:', user.email);
+        console.log(' Tipo do usuário profissional:', user.tipo_usuario);
         
         const userComTipo = {
           ...user,
@@ -45,11 +45,11 @@ export const useAuth = () => {
         
         setUser(userComTipo);
       } catch (error) {
-        console.error('❌ useAuth: Erro ao parsear dados do usuário:', error);
+        console.error(' useAuth: Erro ao parsear dados do usuário:', error);
         localStorage.removeItem('user');
       }
     } else {
-      console.log('🔍 useAuth: Nenhum usuário autenticado encontrado');
+      console.log(' useAuth: Nenhum usuário autenticado encontrado');
     }
     
     setLoading(false);
@@ -63,8 +63,8 @@ export const useAuth = () => {
         ? 'http://localhost:5000/api/empresas/login'
         : 'http://localhost:5000/api/profissionais/login';
 
-      console.log('🔐 useAuth: Tentando login em:', endpoint);
-      console.log('🔐 Tipo de conta:', accountType);
+      console.log(' useAuth: Tentando login em:', endpoint);
+      console.log(' Tipo de conta:', accountType);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -72,7 +72,7 @@ export const useAuth = () => {
         body: JSON.stringify({ email, senha })
       });
 
-      console.log('📊 useAuth: Status da resposta:', response.status);
+      console.log(' useAuth: Status da resposta:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -89,23 +89,23 @@ export const useAuth = () => {
         id_usuario: userData.id_usuario || userData.id_empresa
       };
 
-      console.log('👤 useAuth: Dados estruturados:', userComTipo);
+      console.log(' useAuth: Dados estruturados:', userComTipo);
 
       if (accountType === 'empresa') {
         localStorage.setItem('empresaLogada', JSON.stringify(userComTipo));
         localStorage.removeItem('user');
-        console.log('💾 useAuth: Empresa salva no localStorage');
+        console.log(' useAuth: Empresa salva no localStorage');
       } else {
         localStorage.setItem('user', JSON.stringify(userComTipo));
         localStorage.removeItem('empresaLogada');
-        console.log('💾 useAuth: Profissional salvo no localStorage');
+        console.log(' useAuth: Profissional salvo no localStorage');
       }
       
       setUser(userComTipo);
       return { success: true, data: userComTipo };
 
     } catch (error) {
-      console.error('💥 useAuth: Erro no login:', error);
+      console.error(' useAuth: Erro no login:', error);
       return { success: false, error: 'Erro de conexão' };
     } finally {
       setLoading(false);
@@ -113,7 +113,7 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    console.log('🚪 useAuth: Fazendo logout - LIMPANDO LOCALSTORAGE');
+    console.log(' useAuth: Fazendo logout - LIMPANDO LOCALSTORAGE');
     
     localStorage.removeItem('user');
     localStorage.removeItem('empresaLogada');

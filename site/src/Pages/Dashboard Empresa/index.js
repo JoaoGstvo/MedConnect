@@ -58,12 +58,12 @@ const DashboardEmpresa = () => {
     const empresaLogada = localStorage.getItem('empresaLogada');
     const userData = localStorage.getItem('user');
     
-    console.log('🔍 Verificando autenticação...');
+    console.log(' Verificando autenticação...');
     
     if (empresaLogada) {
       try {
         const empresaData = JSON.parse(empresaLogada);
-        console.log('🏢 Empresa encontrada:', empresaData.nome);
+        console.log(' Empresa encontrada:', empresaData.nome);
         setEmpresa(empresaData);
         carregarVagas(empresaData.id_empresa);
         setDadosPerfil({
@@ -82,7 +82,7 @@ const DashboardEmpresa = () => {
       try {
         const user = JSON.parse(userData);
         if (user.tipo_usuario === 'empresa') {
-          console.log('👤 Usuário empresa encontrado:', user.nome);
+          console.log(' Usuário empresa encontrado:', user.nome);
           setEmpresa(user);
           carregarVagas(user.id_empresa);
         } else {
@@ -115,7 +115,7 @@ const DashboardEmpresa = () => {
     try {
       setLoading(true);
       setError('');
-      console.log(`📡 Carregando vagas para empresa ID: ${idEmpresa}`);
+      console.log(`  Carregando vagas para empresa ID: ${idEmpresa}`);
       
       const response = await fetch(`http://localhost:5000/api/vagas/empresa/${idEmpresa}`);
       
@@ -313,7 +313,7 @@ const DashboardEmpresa = () => {
       }
 
       setVagas(vagas.filter(v => v.id_vaga !== idVaga));
-      console.log('🗑️ Vaga excluída com sucesso');
+      console.log(' Vaga excluída com sucesso');
       
     } catch (error) {
       console.error('Erro ao excluir vaga:', error);
@@ -475,21 +475,21 @@ const DashboardEmpresa = () => {
           {/* Estatísticas Rápidas */}
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-icon">📋</div>
+              <div className="stat-icon"></div>
               <div className="stat-info">
                 <h3>{stats.totalVagas}</h3>
                 <p>Vagas Ativas</p>
               </div>
             </div>
             <div className="stat-card">
-              <div className="stat-icon">👥</div>
+              <div className="stat-icon"></div>
               <div className="stat-info">
                 <h3>{stats.totalCandidaturas}</h3>
                 <p>Total Candidaturas</p>
               </div>
             </div>
             <div className="stat-card">
-              <div className="stat-icon">⏳</div>
+              <div className="stat-icon"></div>
               <div className="stat-info">
                 <h3>{stats.candidaturasPendentes}</h3>
                 <p>Candidaturas Pendentes</p>
@@ -626,7 +626,7 @@ const DashboardEmpresa = () => {
               <div className="vagas-grid">
                 {vagas.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-icon">📋</div>
+                    <div className="empty-icon"></div>
                     <h3>Nenhuma vaga criada ainda</h3>
                     <p>Comece criando sua primeira oportunidade</p>
                     <button 
@@ -741,7 +741,7 @@ const DashboardEmpresa = () => {
               <div className="candidaturas-list">
                 {candidaturas.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-icon">👥</div>
+                    <div className="empty-icon"></div>
                     <h3>Nenhuma candidatura recebida</h3>
                     <p>As candidaturas aparecerão aqui quando os profissionais se candidatarem às suas vagas</p>
                   </div>

@@ -10,7 +10,7 @@ function MinhasVagas() {
     const [loading, setLoading] = useState(true);
     const [cancelando, setCancelando] = useState(null);
     const navigate = useNavigate();
-    
+
     const { user, isAuthenticated, isLoading } = useAuth();
 
     // Redirecionar se não estiver autenticado
@@ -27,13 +27,13 @@ function MinhasVagas() {
             setLoading(false);
             return;
         }
-        
+
         try {
             setLoading(true);
-            console.log('📥 Buscando inscrições para usuário:', user.id_usuario);
-            
+            console.log(' Buscando inscrições para usuário:', user.id_usuario);
+
             const response = await fetch(`http://localhost:5000/api/inscricoes/usuario/${user.id_usuario}`);
-            
+
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ Inscrições carregadas:', data.length);
@@ -53,7 +53,7 @@ function MinhasVagas() {
     // ✅ CORREÇÃO: useEffect com dependências específicas
     useEffect(() => {
         if (isAuthenticated && user?.id_usuario) {
-            console.log('🎯 Executando busca de inscrições');
+            console.log(' Executando busca de inscrições');
             fetchMinhasInscricoes();
         }
     }, [isAuthenticated, user?.id_usuario, fetchMinhasInscricoes]);
@@ -86,7 +86,7 @@ function MinhasVagas() {
         }
 
         setCancelando(idCandidatura);
-        
+
         try {
             const response = await fetch(`http://localhost:5000/api/inscricoes/${idCandidatura}/status`, {
                 method: 'PUT',
@@ -100,9 +100,9 @@ function MinhasVagas() {
 
             if (response.ok) {
                 // Atualizar estado local
-                setInscricoes(prev => 
-                    prev.map(insc => 
-                        insc.id_candidatura === idCandidatura 
+                setInscricoes(prev =>
+                    prev.map(insc =>
+                        insc.id_candidatura === idCandidatura
                             ? { ...insc, status: 'cancelado' }
                             : insc
                     )
@@ -113,7 +113,7 @@ function MinhasVagas() {
                 throw new Error(error.error || 'Erro ao cancelar inscrição');
             }
         } catch (error) {
-            console.error('💥 Erro ao cancelar inscrição:', error);
+            console.error('Erro ao cancelar inscrição:', error);
             alert(`❌ Erro: ${error.message}`);
         } finally {
             setCancelando(null);
@@ -134,7 +134,7 @@ function MinhasVagas() {
 
     const formatarData = (dataString) => {
         if (!dataString) return 'Data não disponível';
-        
+
         try {
             return new Date(dataString).toLocaleDateString('pt-BR', {
                 day: '2-digit',
@@ -173,7 +173,7 @@ function MinhasVagas() {
             <main className="minhasvagas-page">
                 <Header />
                 <div className="auth-required">
-                    <div className="empty-icon">🔒</div>
+                    <div className="empty-icon"></div>
                     <h2>Autenticação Necessária</h2>
                     <p>Você precisa estar logado para acessar suas candidaturas.</p>
                     <button onClick={() => navigate('/login')} className="btn-primary">
@@ -193,22 +193,19 @@ function MinhasVagas() {
                 <div className="title">
                     <h1>Minhas Candidaturas</h1>
                     <p>Acompanhe o andamento de todos os seus processos seletivos</p>
-                    
+
                     <div className="user-info-badge">
-                        👤 Logado como: <strong>{user.nome}</strong> 
-                        {user.tipo_usuario && (
-                            <span className="user-type"> • {user.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional'}</span>
-                        )}
+                        <strong>{user.nome}</strong>
                     </div>
-                    
+
                     {hasInscricoes && (
                         <div className="stats">
                             <span className="stat-item">
-                                📊 {inscricoesAtivas.length} candidatura(s) ativa(s)
+                                {inscricoesAtivas.length} candidatura(s) ativa(s)
                             </span>
                             {inscricoesCanceladas.length > 0 && (
                                 <span className="stat-item cancelled">
-                                    📋 {inscricoesCanceladas.length} cancelada(s)
+                                    {inscricoesCanceladas.length} cancelada(s)
                                 </span>
                             )}
                         </div>
@@ -229,7 +226,7 @@ function MinhasVagas() {
                                 {inscricoesAtivas.map((inscricao) => {
                                     const statusInfo = getStatusBadge(inscricao.status);
                                     const progressStep = getProgressStep(inscricao.status);
-                                    
+
                                     return (
                                         <div key={inscricao.id_candidatura} className="vaga-card">
                                             <div className="card-header">
@@ -238,29 +235,29 @@ function MinhasVagas() {
                                                     {statusInfo.text}
                                                 </div>
                                             </div>
-                                            
+
                                             <p className="empresa">
-                                                <strong>🏢 Empresa:</strong> {inscricao.empresa_nome || 'Não informada'}
+                                                <strong>Empresa:</strong> {inscricao.empresa_nome || 'Não informada'}
                                             </p>
-                                            
+
                                             <div className="info-grid">
                                                 <div className="info-item">
-                                                    <span className="label">📅 Data da Inscrição:</span>
+                                                    <span className="label"> Data da Inscrição:</span>
                                                     <span className="value">
                                                         {formatarData(inscricao.data_candidatura)}
                                                     </span>
                                                 </div>
                                                 <div className="info-item">
-                                                    <span className="label">📍 Local:</span>
+                                                    <span className="label">Local:</span>
                                                     <span className="value">{inscricao.vaga_localizacao || inscricao.localizacao || 'Não informado'}</span>
                                                 </div>
                                                 <div className="info-item">
-                                                    <span className="label">💼 Modalidade:</span>
+                                                    <span className="label"> Modalidade:</span>
                                                     <span className="value">{inscricao.vaga_modalidade || inscricao.modalidade || 'Não informada'}</span>
                                                 </div>
                                                 {inscricao.vaga_salario && (
                                                     <div className="info-item">
-                                                        <span className="label">💰 Salário:</span>
+                                                        <span className="label"> Salário:</span>
                                                         <span className="value">{inscricao.vaga_salario}</span>
                                                     </div>
                                                 )}
@@ -268,7 +265,7 @@ function MinhasVagas() {
 
                                             <div className="progress-section">
                                                 <div className="progress-bar">
-                                                    <div 
+                                                    <div
                                                         className={`progress-fill step-${progressStep}`}
                                                         style={{ width: `${(progressStep / 3) * 100}%` }}
                                                     ></div>
@@ -281,22 +278,22 @@ function MinhasVagas() {
                                             </div>
 
                                             <div className="acoes">
-                                                <button 
+                                                <button
                                                     className="btn-acessar"
                                                     onClick={() => handleVerVaga(inscricao.id_vaga)}
                                                 >
-                                                    👁️ Ver Vaga
+                                                     Ver Vaga
                                                 </button>
                                                 {inscricao.status === 'pendente' && (
-                                                    <button 
+                                                    <button
                                                         className="btn-cancelar"
                                                         onClick={() => handleCancelarInscricao(
-                                                            inscricao.id_candidatura, 
+                                                            inscricao.id_candidatura,
                                                             inscricao.vaga_titulo
                                                         )}
                                                         disabled={cancelando === inscricao.id_candidatura}
                                                     >
-                                                        {cancelando === inscricao.id_candidatura ? '⏳ Cancelando...' : '❌ Cancelar'}
+                                                        {cancelando === inscricao.id_candidatura ? 'Cancelando...' : 'Cancelar'}
                                                     </button>
                                                 )}
                                             </div>
@@ -307,43 +304,43 @@ function MinhasVagas() {
 
                             {/* Ações adicionais */}
                             <div className="actions-footer">
-                                <button 
+                                <button
                                     className="btn-secondary"
                                     onClick={handleNovaInscricao}
                                 >
-                                    🔍 Buscar Mais Vagas
+                                    Buscar Mais Vagas
                                 </button>
                                 {user.tipo_usuario !== 'empresa' && (
-                                    <button 
+                                    <button
                                         className="btn-outline"
                                         onClick={handleAtualizarCurriculo}
                                     >
-                                        📄 Atualizar Currículo
+                                        Atualizar Currículo
                                     </button>
                                 )}
                             </div>
                         </>
                     ) : (
                         <div className="empty-state">
-                            <div className="empty-icon">📭</div>
+                            <div className="empty-icon"></div>
                             <h3>Nenhuma candidatura encontrada</h3>
                             <p>
-                                Você ainda não se candidatou a nenhuma vaga. 
+                                Você ainda não se candidatou a nenhuma vaga.
                                 Explore as oportunidades disponíveis e comece sua jornada profissional.
                             </p>
                             <div className="empty-actions">
-                                <button 
+                                <button
                                     className="btn-primary"
                                     onClick={handleNovaInscricao}
                                 >
-                                    🔍 Explorar Vagas
+                                     Explorar Vagas
                                 </button>
                                 {user.tipo_usuario !== 'empresa' && (
-                                    <button 
+                                    <button
                                         className="btn-secondary"
                                         onClick={handleAtualizarCurriculo}
                                     >
-                                        📄 Criar Currículo
+                                     Criar Currículo
                                     </button>
                                 )}
                             </div>
@@ -353,21 +350,21 @@ function MinhasVagas() {
                     {/* Histórico de candidaturas canceladas */}
                     {inscricoesCanceladas.length > 0 && (
                         <div className="historico-section">
-                            <h3>📋 Histórico de Candidaturas Canceladas</h3>
+                            <h3> Histórico de Candidaturas Canceladas</h3>
                             <div className="inscricoes-grid historico">
                                 {inscricoesCanceladas.map(inscricao => (
                                     <div key={inscricao.id_candidatura} className="vaga-card cancelled">
                                         <div className="card-header">
                                             <h2>{inscricao.vaga_titulo || 'Vaga sem título'}</h2>
                                             <div className="status-badge cancelled">
-                                                ❌ Cancelada
+                                                Cancelada
                                             </div>
                                         </div>
                                         <p className="empresa">
-                                            <strong>🏢 Empresa:</strong> {inscricao.empresa_nome || 'Não informada'}
+                                            <strong>Empresa:</strong> {inscricao.empresa_nome || 'Não informada'}
                                         </p>
                                         <div className="info">
-                                            <span>📅 Cancelada em: {formatarData(inscricao.data_candidatura)}</span>
+                                            <span> Cancelada em: {formatarData(inscricao.data_candidatura)}</span>
                                         </div>
                                     </div>
                                 ))}

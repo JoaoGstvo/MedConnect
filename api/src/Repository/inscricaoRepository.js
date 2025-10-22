@@ -2,7 +2,7 @@ import pool from "../connection.js";
 
 export async function createInscricao(id_vaga, id_usuario, dadosCurriculo = null) {
     try {
-        console.log('🎯 Criando inscrição com dados:', { id_vaga, id_usuario, dadosCurriculo });
+        console.log(' Criando inscrição com dados:', { id_vaga, id_usuario, dadosCurriculo });
         
         let query, values;
         
@@ -44,17 +44,17 @@ export async function createInscricao(id_vaga, id_usuario, dadosCurriculo = null
                 RETURNING *
             `;
             values = [id_vaga, id_usuario];
-            console.log('ℹ️ Inserindo inscrição SEM dados do currículo');
+            console.log(' Inserindo inscrição SEM dados do currículo');
         }
         
-        console.log('📝 Query executada:', query);
-        console.log('🔢 Valores:', values);
+        console.log(' Query executada:', query);
+        console.log(' Valores:', values);
         
         const result = await pool.query(query, values);
-        console.log('🎉 Inscrição criada com sucesso:', result.rows[0]);
+        console.log(' Inscrição criada com sucesso:', result.rows[0]);
         return result.rows[0];
     } catch (error) {
-        console.error('💥 Erro detalhado no createInscricao:', error);
+        console.error(' Erro detalhado no createInscricao:', error);
         throw error;
     }
 }

@@ -43,7 +43,7 @@ export async function createCurriculo(id_usuario, dadosCurriculo) {
 
 export async function getCurriculoByUsuario(id_usuario) {
     try {
-        console.log('🔍 Buscando currículo para o usuário:', id_usuario);
+        console.log(' Buscando currículo para o usuário:', id_usuario);
         const query = `
             SELECT * FROM curriculos 
             WHERE id_usuario = $1 
@@ -51,10 +51,10 @@ export async function getCurriculoByUsuario(id_usuario) {
             LIMIT 1
         `;
         const result = await pool.query(query, [id_usuario]);
-        console.log('📊 Resultado da busca de currículo:', result.rows[0]);
+        console.log(' Resultado da busca de currículo:', result.rows[0]);
         return result.rows[0];
     } catch (error) {
-        console.error('💥 Erro no getCurriculoByUsuario:', error);
+        console.error(' Erro no getCurriculoByUsuario:', error);
         throw error;
     }
 }

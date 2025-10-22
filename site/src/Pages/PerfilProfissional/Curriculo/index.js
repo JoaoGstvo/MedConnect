@@ -20,21 +20,18 @@ function MeuCurriculo() {
         idiomas: ''
     });
     const [curriculoExistente, setCurriculoExistente] = useState(null);
-    const [curriculoPDF, setCurriculoPDF] = useState(null);
-    const [pdfUrl, setPdfUrl] = useState(null);
     const [progresso, setProgresso] = useState(0);
     const [carregando, setCarregando] = useState(true);
     const [salvando, setSalvando] = useState(false);
-    const [uploadingPDF, setUploadingPDF] = useState(false);
     const navigate = useNavigate();
     
     const { user: currentUser, isLoading: userLoading } = useAuth();
 
-    console.log('🔍 Estado do currentUser no MeuCurriculo:', currentUser);
-    console.log('🔍 Tipo do usuário:', currentUser?.tipo_usuario);
+    console.log(' Estado do currentUser no MeuCurriculo:', currentUser);
+    console.log(' Tipo do usuário:', currentUser?.tipo_usuario);
 
     useEffect(() => {
-        console.log('🔄 Verificando autenticação no MeuCurriculo...');
+        console.log('Verificando autenticação no MeuCurriculo...');
         
         if (!userLoading) {
             if (!currentUser) {
@@ -44,7 +41,7 @@ function MeuCurriculo() {
             }
             
             if (currentUser.tipo_usuario === 'empresa') {
-                console.log('🚫 ACESSO NEGADO: Usuário é empresa, redirecionando para dashboard');
+                console.log(' ACESSO NEGADO: Usuário é empresa, redirecionando para dashboard');
                 setTimeout(() => {
                     navigate('/dashboardempresa', { replace: true });
                 }, 100);
@@ -57,23 +54,23 @@ function MeuCurriculo() {
 
     useEffect(() => {
         if (currentUser && currentUser.id_usuario && currentUser.tipo_usuario !== 'empresa') {
-            console.log('📥 Carregando currículo para usuário candidato:', currentUser.id_usuario);
+            console.log(' Carregando currículo para usuário candidato:', currentUser.id_usuario);
             carregarCurriculo();
         }
     }, [currentUser]);
 
     const carregarCurriculo = async () => {
         if (!currentUser || !currentUser.id_usuario) {
-            console.log('⚠️ Usuário não disponível para carregar currículo');
+            console.log(' Usuário não disponível para carregar currículo');
             setCarregando(false);
             return;
         }
 
         try {
-            console.log('🌐 Buscando currículo na API para usuário:', currentUser.id_usuario);
+            console.log(' Buscando currículo na API para usuário:', currentUser.id_usuario);
             const response = await fetch(`http://localhost:5000/api/curriculos/usuario/${currentUser.id_usuario}`);
 
-            console.log('📊 Status da resposta:', response.status);
+            console.log(' Status da resposta:', response.status);
 
             if (response.ok) {
                 const data = await response.json();
@@ -95,13 +92,9 @@ function MeuCurriculo() {
                         idiomas: data.idiomas || ''
                     });
 
-                    if (data.arquivo_url) {
-                        setPdfUrl(data.arquivo_url);
-                    }
-
                     calcularProgresso(data);
                 } else {
-                    console.log('ℹ️ Nenhum currículo encontrado, usando dados do usuário');
+                    console.log(' Nenhum currículo encontrado, usando dados do usuário');
                     setCurriculoData(prev => ({
                         ...prev,
                         nome_completo: currentUser.nome || currentUser.nome_completo || '',
@@ -109,7 +102,7 @@ function MeuCurriculo() {
                     }));
                 }
             } else if (response.status === 404) {
-                console.log('ℹ️ Nenhum currículo encontrado (404)');
+                console.log('Nenhum currículo encontrado (404)');
                 setCurriculoData(prev => ({
                     ...prev,
                     nome_completo: currentUser.nome || currentUser.nome_completo || '',
@@ -119,7 +112,7 @@ function MeuCurriculo() {
                 console.log('❌ Erro ao buscar currículo:', response.status);
             }
         } catch (error) {
-            console.error('💥 Erro ao carregar currículo:', error);
+            console.error('Erro ao carregar currículo:', error);
         } finally {
             setCarregando(false);
         }
@@ -156,13 +149,13 @@ function MeuCurriculo() {
 
         setSalvando(true);
         try {
-            console.log('💾 Salvando currículo...', curriculoData);
+            console.log(' Salvando currículo...', curriculoData);
 
             let response;
             let resultado;
 
             if (curriculoExistente && curriculoExistente.id_curriculo) {
-                console.log('🔄 Atualizando currículo existente:', curriculoExistente.id_curriculo);
+                console.log(' Atualizando currículo existente:', curriculoExistente.id_curriculo);
                 response = await fetch(`http://localhost:5000/api/curriculos/${curriculoExistente.id_curriculo}`, {
                     method: 'PUT',
                     headers: {
@@ -171,7 +164,7 @@ function MeuCurriculo() {
                     body: JSON.stringify(curriculoData)
                 });
             } else {
-                console.log('🆕 Criando novo currículo');
+                console.log(' Criando novo currículo');
                 response = await fetch('http://localhost:5000/api/curriculos', {
                     method: 'POST',
                     headers: {
@@ -184,7 +177,7 @@ function MeuCurriculo() {
                 });
             }
 
-            console.log('📊 Status da resposta do salvamento:', response.status);
+            console.log(' Status da resposta do salvamento:', response.status);
 
             if (response.ok) {
                 resultado = await response.json();
@@ -199,139 +192,10 @@ function MeuCurriculo() {
                 throw new Error(`Erro ${response.status}: ${errorText}`);
             }
         } catch (error) {
-            console.error('💥 Erro ao salvar currículo:', error);
+            console.error('Erro ao salvar currículo:', error);
             alert(`❌ Erro ao salvar currículo: ${error.message}`);
         } finally {
             setSalvando(false);
-        }
-    };
-
-    const handleUploadPDF = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        if (!currentUser || currentUser.tipo_usuario === 'empresa') {
-            alert('Apenas candidatos podem enviar currículos');
-            return;
-        }
-
-        if (file.type !== 'application/pdf') {
-            alert('Por favor, selecione um arquivo PDF.');
-            return;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            alert('O arquivo deve ter no máximo 5MB.');
-            return;
-        }
-
-        setUploadingPDF(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('curriculo_pdf', file);
-            formData.append('id_usuario', currentUser.id_usuario);
-
-            console.log('📤 Enviando PDF...', file.name);
-
-            const response = await fetch('http://localhost:5000/api/curriculos/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const resultado = await response.json();
-                console.log('✅ PDF enviado com sucesso:', resultado);
-
-                if (resultado.arquivo_url) {
-                    setPdfUrl(resultado.arquivo_url);
-                }
-
-                alert('✅ Currículo PDF enviado com sucesso!');
-                await carregarCurriculo();
-            } else {
-                const errorText = await response.text();
-                console.error('❌ Erro no upload:', errorText);
-                throw new Error('Erro ao enviar PDF');
-            }
-        } catch (error) {
-            console.error('💥 Erro ao enviar PDF:', error);
-            alert(`❌ Erro ao enviar PDF: ${error.message}`);
-        } finally {
-            setUploadingPDF(false);
-        }
-    };
-
-    const handleVisualizarPDF = () => {
-        if (pdfUrl) {
-            window.open(pdfUrl, '_blank');
-        } else if (curriculoPDF) {
-            const url = URL.createObjectURL(curriculoPDF);
-            window.open(url, '_blank');
-        } else {
-            alert('Nenhum PDF disponível para visualização.');
-        }
-    };
-
-    const handleExcluirPDF = async () => {
-        if (!pdfUrl && !curriculoPDF) return;
-
-        if (!currentUser || currentUser.tipo_usuario === 'empresa') {
-            alert('Apenas candidatos podem excluir currículos');
-            return;
-        }
-
-        if (!window.confirm('Tem certeza que deseja excluir o currículo PDF?')) {
-            return;
-        }
-
-        try {
-            if (curriculoExistente && curriculoExistente.id_curriculo) {
-                const response = await fetch(`http://localhost:5000/api/curriculos/${curriculoExistente.id_curriculo}/pdf`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    console.log('✅ PDF excluído com sucesso');
-                }
-            }
-
-            setCurriculoPDF(null);
-            setPdfUrl(null);
-
-            const fileInput = document.getElementById('uploadPDF');
-            if (fileInput) {
-                fileInput.value = '';
-            }
-
-            alert('✅ Currículo PDF excluído com sucesso!');
-        } catch (error) {
-            console.error('💥 Erro ao excluir PDF:', error);
-            setCurriculoPDF(null);
-            setPdfUrl(null);
-            alert('PDF removido localmente.');
-        }
-    };
-
-    const handleDownloadPDF = () => {
-        if (pdfUrl) {
-            const link = document.createElement('a');
-            link.href = pdfUrl;
-            link.download = 'curriculo.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else if (curriculoPDF) {
-            const url = URL.createObjectURL(curriculoPDF);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = curriculoPDF.name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        } else {
-            alert('Nenhum PDF disponível para download.');
         }
     };
 
@@ -371,79 +235,13 @@ function MeuCurriculo() {
                     Tenha cuidado ao realizar modificações, pois todas as empresas terão acesso às alterações realizadas.
                 </p>
                 <div className="user-info-badge">
-                    👤 Logado como: <strong>{currentUser.nome || currentUser.nome_completo}</strong> ({currentUser.email}) |
-                    ID: {currentUser.id_usuario} |
-                    Tipo: Candidato
+                    Bem vindo ao seu curriculo,  <>{currentUser.nome || currentUser.nome_completo}</>
                 </div>
             </section>
 
             <div className="curriculo-container">
                 <div className="curriculo-content">
-                    <div className="section pdf-section">
-                        <div className="section-header">
-                            <h2>Currículo em PDF</h2>
-                            <span className="section-badge optional">Opcional</span>
-                        </div>
-                        <div className="section-body">
-                            {(pdfUrl || curriculoPDF) ? (
-                                <div className="pdf-uploaded">
-                                    <div className="pdf-info">
-                                        <div className="pdf-icon">📄</div>
-                                        <div className="pdf-details">
-                                            <strong>Currículo PDF Carregado</strong>
-                                            <span>
-                                                {curriculoPDF ? curriculoPDF.name : 'Arquivo do servidor'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="pdf-actions">
-                                        <button
-                                            className="btn-pdf visualizar"
-                                            onClick={handleVisualizarPDF}
-                                        >
-                                            👁️ Visualizar
-                                        </button>
-                                        <button
-                                            className="btn-pdf download"
-                                            onClick={handleDownloadPDF}
-                                        >
-                                            📥 Download
-                                        </button>
-                                        <button
-                                            className="btn-pdf excluir"
-                                            onClick={handleExcluirPDF}
-                                        >
-                                            🗑️ Excluir
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="pdf-upload-area">
-                                    <div className="upload-placeholder">
-                                        <div className="upload-icon">📤</div>
-                                        <div className="upload-text">
-                                            <strong>Enviar Currículo em PDF</strong>
-                                            <span>Arraste ou clique para enviar um arquivo PDF</span>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        id="uploadPDF"
-                                        accept=".pdf"
-                                        onChange={handleUploadPDF}
-                                        className="file-input"
-                                        disabled={uploadingPDF}
-                                    />
-                                    <label htmlFor="uploadPDF" className="upload-label">
-                                        {uploadingPDF ? 'Enviando PDF...' : 'Selecionar Arquivo PDF'}
-                                    </label>
-                                    <div className="upload-info">
-                                        <small>Tamanho máximo: 5MB • Formato: PDF</small>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    {/* REMOVIDA A SEÇÃO DE PDF */}
 
                     <div className="section">
                         <div className="section-header">
@@ -583,12 +381,12 @@ function MeuCurriculo() {
                                 onClick={handleSalvarCurriculo}
                                 disabled={salvando}
                             >
-                                {salvando ? '⏳ Salvando...' : '💾 Salvar Currículo'}
+                                {salvando ? 'Salvando...' : 'Salvar Currículo'}
                             </button>
                             {curriculoExistente && (
                                 <div className="curriculo-info">
-                                    <p>📋 Currículo ID: {curriculoExistente.id_curriculo}</p>
-                                    <p>🕒 Última atualização: {new Date(curriculoExistente.data_atualizacao).toLocaleDateString('pt-BR')}</p>
+                                    <p> Currículo De: {curriculoExistente.nome_completo}</p>
+                                    <p> Última atualização: {new Date(curriculoExistente.data_atualizacao).toLocaleDateString('pt-BR')}</p>
                                 </div>
                             )}
                         </div>
@@ -597,7 +395,7 @@ function MeuCurriculo() {
 
                 <aside className="curriculo-sidebar">
                     <div className="sidebar-card">
-                        <h3>📊 Preenchimento do currículo</h3>
+                        <h3> Preenchimento do currículo</h3>
                         <p>Complete seu currículo para aumentar suas chances!</p>
                         <div className="progress-container">
                             <div className="progress-bar">
@@ -611,15 +409,12 @@ function MeuCurriculo() {
                     </div>
 
                     <div className="sidebar-links">
-                        <h4>🚀 Ações Rápidas</h4>
+                        <h4> Ações Rápidas</h4>
                         <a href="" onClick={(e) => { e.preventDefault(); navigate('/minhasvagas'); }}>
-                            📋 Minhas Candidaturas
+                             Minhas Candidaturas
                         </a>
                         <a href="" onClick={(e) => { e.preventDefault(); navigate('/vagas'); }}>
-                            🔍 Buscar Vagas
-                        </a>
-                        <a href="" onClick={(e) => { e.preventDefault(); navigate('/profissionalprofile'); }}>
-                            👤 Meu Perfil
+                             Buscar Vagas
                         </a>
                     </div>
                 </aside>
