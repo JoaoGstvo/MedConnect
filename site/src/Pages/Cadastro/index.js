@@ -101,11 +101,11 @@ function Signup() {
           autoClose: 2000,
           hideProgressBar: true
         });
-        
+
         setProfissionalData({
           nome: "", email: "", senha: "", confirmaSenha: "", tipo_usuario: "candidato"
         });
-        
+
         setTimeout(() => navigate('/login'), 2000);
       } else {
         showMensagem('error', data.error || "Erro ao cadastrar");
@@ -117,7 +117,7 @@ function Signup() {
   };
 
   const handleEmpresaSubmit = async () => {
-    const { nome, cnpj, email, senha, confirmaSenha, endereco, descricao } = empresaData;
+    const { nome, cnpj, email, senha, confirmaSenha, endereco, descricao, telefone, cidade, estado } = empresaData;
 
     if (senha !== confirmaSenha) {
       showMensagem('error', "As senhas não conferem!");
@@ -137,7 +137,9 @@ function Signup() {
         senha: senha,
         endereco: endereco?.trim() || "",
         descricao: descricao?.trim() || "",
-        logo: ""
+        telefone: telefone?.trim() || "",
+        cidade: cidade?.trim() || "",
+        estado: estado?.trim() || ""
       };
 
       console.log("Enviando dados da empresa:", body);
@@ -156,12 +158,12 @@ function Signup() {
           autoClose: 2000,
           hideProgressBar: true
         });
-        
+
         setEmpresaData({
-          nome: "", cnpj: "", email: "", senha: "", confirmaSenha: "", 
-          endereco: "", descricao: "", logo: ""
+          nome: "", cnpj: "", email: "", senha: "", confirmaSenha: "",
+          endereco: "", descricao: "", telefone: "", cidade: "", estado: "", logo: ""
         });
-        
+
         setTimeout(() => navigate('/login'), 2000);
       } else {
         showMensagem('error', data.error || "Erro ao cadastrar empresa");
@@ -217,13 +219,13 @@ function Signup() {
                 <div className='form-group full-width'>
                   <label className='input-field'>
                     <span>Nome Completo *</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="nome"
                       value={profissionalData.nome}
                       onChange={handleProfissionalChange}
                       placeholder="Digite seu nome completo"
-                      required 
+                      required
                     />
                   </label>
                 </div>
@@ -231,13 +233,13 @@ function Signup() {
                 <div className='form-group full-width'>
                   <label className='input-field'>
                     <span>E-mail *</span>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={profissionalData.email}
                       onChange={handleProfissionalChange}
                       placeholder="seu@email.com"
-                      required 
+                      required
                     />
                   </label>
                 </div>
@@ -245,13 +247,13 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>Senha *</span>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       name="senha"
                       value={profissionalData.senha}
                       onChange={handleProfissionalChange}
                       placeholder="Crie uma senha segura"
-                      required 
+                      required
                       minLength={6}
                     />
                   </label>
@@ -260,19 +262,19 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>Confirmar Senha *</span>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       name="confirmaSenha"
                       value={profissionalData.confirmaSenha}
                       onChange={handleProfissionalChange}
                       placeholder="Digite a senha novamente"
-                      required 
+                      required
                     />
                   </label>
                 </div>
 
                 <div className='form-group full-width'>
-                  <button 
+                  <button
                     className={`signup-button ${loading ? 'loading' : ''}`}
                     type="submit"
                     disabled={loading}
@@ -288,13 +290,13 @@ function Signup() {
                 <div className='form-group full-width'>
                   <label className='input-field'>
                     <span>Nome da Empresa *</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="nome"
                       value={empresaData.nome}
                       onChange={handleEmpresaChange}
                       placeholder="Razão social da empresa"
-                      required 
+                      required
                     />
                   </label>
                 </div>
@@ -302,13 +304,13 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>CNPJ *</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="cnpj"
                       value={empresaData.cnpj}
                       onChange={handleEmpresaChange}
                       placeholder="00.000.000/0000-00"
-                      required 
+                      required
                     />
                   </label>
                 </div>
@@ -316,13 +318,13 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>E-mail *</span>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={empresaData.email}
                       onChange={handleEmpresaChange}
                       placeholder="empresa@email.com"
-                      required 
+                      required
                     />
                   </label>
                 </div>
@@ -330,8 +332,8 @@ function Signup() {
                 <div className='form-group full-width'>
                   <label className='input-field'>
                     <span>Endereço</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="endereco"
                       value={empresaData.endereco}
                       onChange={handleEmpresaChange}
@@ -343,7 +345,7 @@ function Signup() {
                 <div className='form-group full-width'>
                   <label className='input-field'>
                     <span>Descrição da Empresa</span>
-                    <textarea 
+                    <textarea
                       name="descricao"
                       value={empresaData.descricao}
                       onChange={handleEmpresaChange}
@@ -356,13 +358,13 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>Senha *</span>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       name="senha"
                       value={empresaData.senha}
                       onChange={handleEmpresaChange}
                       placeholder="Crie uma senha segura"
-                      required 
+                      required
                       minLength={6}
                     />
                   </label>
@@ -371,19 +373,19 @@ function Signup() {
                 <div className='form-group'>
                   <label className='input-field'>
                     <span>Confirmar Senha *</span>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       name="confirmaSenha"
                       value={empresaData.confirmaSenha}
                       onChange={handleEmpresaChange}
                       placeholder="Digite a senha novamente"
-                      required 
+                      required
                     />
                   </label>
                 </div>
 
                 <div className='form-group full-width'>
-                  <button 
+                  <button
                     className={`signup-button ${loading ? 'loading' : ''}`}
                     type="submit"
                     disabled={loading}

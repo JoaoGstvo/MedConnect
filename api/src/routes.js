@@ -26,8 +26,7 @@ import {
   getArtigosController,
   getArtigoByIdController,
   updateArtigoController,
-  deleteArtigoController,
-  getArtigosByUsuarioController
+  deleteArtigoController
 } from "./Controller/artigosController.js";
 
 import {
@@ -39,12 +38,11 @@ import {
 } from "./Controller/categoriasController.js";
 
 import {
-  getEmpresasController,
-  getEmpresaByIdController,
   createEmpresaController,
+  loginEmpresaController,
   updateEmpresaController,
-  deleteEmpresaController,
-  loginEmpresaController
+  getEmpresaByIdController,
+  getEmpresasController
 } from "./Controller/empresaController.js";
 
 import {
@@ -75,12 +73,11 @@ router.get("/curriculos/usuario/:id_usuario", getCurriculoByUsuarioController);
 router.put("/curriculos/:id_curriculo", updateCurriculoController);
 
 // ----------------- EMPRESAS -----------------
-router.get("/empresas", getEmpresasController);
-router.get("/empresas/:id", getEmpresaByIdController);
 router.post("/empresas", createEmpresaController);
-router.put("/empresas/:id", updateEmpresaController);
-router.delete("/empresas/:id", deleteEmpresaController);
 router.post("/empresas/login", loginEmpresaController);
+router.put("/empresas/:id", updateEmpresaController);
+router.get("/empresas/:id", getEmpresaByIdController);
+router.get("/empresas", getEmpresasController);
 
 // ----------------- CATEGORIAS -----------------
 router.get("/categorias", getCategoriasController);
@@ -92,7 +89,6 @@ router.delete("/categorias/:id", deleteCategoriaController);
 // ----------------- ARTIGOS -----------------
 router.get("/artigos", getArtigosController);
 router.get("/artigos/:id", getArtigoByIdController);
-router.get("/artigos/usuario/:id_usuario", getArtigosByUsuarioController);
 router.post("/artigos", createArtigoController);
 router.put("/artigos/:id", updateArtigoController);
 router.delete("/artigos/:id", deleteArtigoController);

@@ -5,7 +5,7 @@ export async function createVagaController(req, res) {
     const { id_empresa, titulo, descricao, requisitos, localizacao, salario, modalidade } = req.body;
     
     if (!id_empresa || !titulo || !descricao || !localizacao) {
-      return res.status(400).json({ error: 'Campos obrigatórios faltando' });
+      return res.status(400).json({ error: 'ID da empresa, título, descrição e localização são obrigatórios' });
     }
     
     const vaga = await vagaRepository.createVaga(id_empresa, titulo, descricao, requisitos, localizacao, salario, modalidade);

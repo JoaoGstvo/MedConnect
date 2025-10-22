@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../Components/Header/index.js'; // Importando o Header
+import Header from '../../Components/Header/index.js';
 import './index.scss';
 
 const DashboardEmpresa = () => {
@@ -31,7 +31,10 @@ const DashboardEmpresa = () => {
     email: '',
     endereco: '',
     descricao: '',
-    logo_url: ''
+    logo_url: '',
+    telefone: '',
+    cidade: '',
+    estado: ''
   });
 
   // Dados do formulário de nova vaga
@@ -58,39 +61,65 @@ const DashboardEmpresa = () => {
     const empresaLogada = localStorage.getItem('empresaLogada');
     const userData = localStorage.getItem('user');
     
-    console.log(' Verificando autenticação...');
+    console.log('🔍 Verificando autenticação...');
+    console.log('🏢 Empresa logada no localStorage:', empresaLogada);
     
     if (empresaLogada) {
       try {
         const empresaData = JSON.parse(empresaLogada);
-        console.log(' Empresa encontrada:', empresaData.nome);
-        setEmpresa(empresaData);
-        carregarVagas(empresaData.id_empresa);
+        console.log('✅ Dados completos da empresa:', empresaData);
+        
+        // CORREÇÃO: Acessar empresa.empresa.id_empresa
+        const empresaInfo = empresaData.empresa || empresaData;
+        const empresaId = empresaInfo.id_empresa;
+        
+        console.log('🏢 Informações da empresa:', empresaInfo);
+        console.log('🆔 ID da empresa:', empresaId);
+        
+        if (!empresaId) {
+          console.error('❌ ID da empresa não encontrado nos dados');
+          navigate('/login');
+          return;
+        }
+        
+        setEmpresa(empresaInfo);
+        carregarVagas(empresaId);
         setDadosPerfil({
-          nome: empresaData.nome || '',
-          cnpj: empresaData.cnpj || '',
-          email: empresaData.email || '',
-          endereco: empresaData.endereco || '',
-          descricao: empresaData.descricao || '',
-          logo_url: empresaData.logo_url || ''
+          nome: empresaInfo.nome || '',
+          cnpj: empresaInfo.cnpj || '',
+          email: empresaInfo.email || '',
+          endereco: empresaInfo.endereco || '',
+          descricao: empresaInfo.descricao || '',
+          logo_url: empresaInfo.logo_url || '',
+          telefone: empresaInfo.telefone || '',
+          cidade: empresaInfo.cidade || '',
+          estado: empresaInfo.estado || ''
         });
       } catch (error) {
-        console.error('Erro ao parsear dados da empresa:', error);
+        console.error('❌ Erro ao parsear dados da empresa:', error);
         navigate('/login');
       }
     } else if (userData) {
       try {
         const user = JSON.parse(userData);
-        if (user.tipo_usuario === 'empresa') {
-          console.log(' Usuário empresa encontrado:', user.nome);
-          setEmpresa(user);
-          carregarVagas(user.id_empresa);
+        console.log('👤 Usuário encontrado:', user);
+        
+        // CORREÇÃO: Verificar estrutura do usuário empresa
+        const empresaId = user.id_empresa || (user.empresa && user.empresa.id_empresa);
+        
+        if (user.tipo_usuario === 'empresa' && empresaId) {
+          console.log('✅ Usuário empresa encontrado:', user.nome);
+          console.log('🆔 ID da empresa do usuário:', empresaId);
+          
+          const empresaInfo = user.empresa || user;
+          setEmpresa(empresaInfo);
+          carregarVagas(empresaId);
         } else {
-          console.log('❌ Usuário não é empresa');
+          console.log('❌ Usuário não é empresa ou não tem ID');
           navigate('/login');
         }
       } catch (error) {
-        console.error('Erro ao parsear dados do usuário:', error);
+        console.error('❌ Erro ao parsear dados do usuário:', error);
         navigate('/login');
       }
     } else {
@@ -115,19 +144,24 @@ const DashboardEmpresa = () => {
     try {
       setLoading(true);
       setError('');
-      console.log(`  Carregando vagas para empresa ID: ${idEmpresa}`);
+      console.log(`🔄 Carregando vagas para empresa ID: ${idEmpresa}`);
+      
+      if (!idEmpresa || idEmpresa === 'undefined') {
+        throw new Error('ID da empresa inválido');
+      }
       
       const response = await fetch(`http://localhost:5000/api/vagas/empresa/${idEmpresa}`);
       
       if (!response.ok) {
-        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Erro ${response.status}: ${response.statusText}`);
       }
       
       const vagasData = await response.json();
       console.log(`✅ ${vagasData.length} vagas carregadas`);
       setVagas(vagasData);
     } catch (error) {
-      console.error('Erro ao carregar vagas:', error);
+      console.error('❌ Erro ao carregar vagas:', error);
       setError('Erro ao carregar vagas: ' + error.message);
     } finally {
       setLoading(false);
@@ -161,7 +195,7 @@ const DashboardEmpresa = () => {
         setCandidaturas(todasCandidaturas);
       }
     } catch (error) {
-      console.error('Erro ao carregar candidaturas:', error);
+      console.error('❌ Erro ao carregar candidaturas:', error);
       setError('Erro ao carregar candidaturas: ' + error.message);
     } finally {
       setLoading(false);
@@ -198,7 +232,7 @@ const DashboardEmpresa = () => {
       const curriculoData = await response.json();
       setCurriculoCandidato(curriculoData);
     } catch (error) {
-      console.error('Erro ao carregar currículo:', error);
+      console.error('❌ Erro ao carregar currículo:', error);
       setError('Erro ao carregar currículo: ' + error.message);
       setCurriculoCandidato({
         nome_completo: 'Erro ao carregar currículo',
@@ -229,15 +263,36 @@ const DashboardEmpresa = () => {
       setLoading(true);
       setError('');
       
+      // Validação dos campos obrigatórios
+      if (!novaVaga.titulo || !novaVaga.descricao || !novaVaga.localizacao) {
+        throw new Error('Título, descrição e localização são obrigatórios');
+      }
+
+      // CORREÇÃO: Acessar empresa.id_empresa corretamente
+      const empresaId = empresa.id_empresa;
+      
+      if (!empresaId) {
+        throw new Error('ID da empresa não encontrado');
+      }
+
+      const vagaData = {
+        id_empresa: empresaId,
+        titulo: novaVaga.titulo.trim(),
+        descricao: novaVaga.descricao.trim(),
+        requisitos: novaVaga.requisitos?.trim() || '',
+        localizacao: novaVaga.localizacao.trim(),
+        salario: novaVaga.salario?.trim() || null,
+        modalidade: novaVaga.modalidade
+      };
+
+      console.log('📤 Enviando dados da vaga:', vagaData);
+
       const response = await fetch('http://localhost:5000/api/vagas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...novaVaga,
-          id_empresa: empresa.id_empresa
-        }),
+        body: JSON.stringify(vagaData),
       });
 
       if (!response.ok) {
@@ -253,7 +308,7 @@ const DashboardEmpresa = () => {
       
       console.log('✅ Vaga criada com sucesso:', vagaCriada.titulo);
     } catch (error) {
-      console.error('Erro ao criar vaga:', error);
+      console.error('❌ Erro ao criar vaga:', error);
       setError('Erro ao criar vaga: ' + error.message);
     } finally {
       setLoading(false);
@@ -266,12 +321,21 @@ const DashboardEmpresa = () => {
       setLoading(true);
       setError('');
       
+      const vagaData = {
+        titulo: novaVaga.titulo.trim(),
+        descricao: novaVaga.descricao.trim(),
+        requisitos: novaVaga.requisitos?.trim() || '',
+        localizacao: novaVaga.localizacao.trim(),
+        salario: novaVaga.salario?.trim() || null,
+        modalidade: novaVaga.modalidade
+      };
+
       const response = await fetch(`http://localhost:5000/api/vagas/${editingVaga.id_vaga}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(novaVaga),
+        body: JSON.stringify(vagaData),
       });
 
       if (!response.ok) {
@@ -287,7 +351,7 @@ const DashboardEmpresa = () => {
       
       console.log('✅ Vaga atualizada com sucesso:', vagaAtualizada.titulo);
     } catch (error) {
-      console.error('Erro ao editar vaga:', error);
+      console.error('❌ Erro ao editar vaga:', error);
       setError('Erro ao editar vaga: ' + error.message);
     } finally {
       setLoading(false);
@@ -313,10 +377,10 @@ const DashboardEmpresa = () => {
       }
 
       setVagas(vagas.filter(v => v.id_vaga !== idVaga));
-      console.log(' Vaga excluída com sucesso');
+      console.log('🗑️ Vaga excluída com sucesso');
       
     } catch (error) {
-      console.error('Erro ao excluir vaga:', error);
+      console.error('❌ Erro ao excluir vaga:', error);
       setError('Erro ao excluir vaga: ' + error.message);
     } finally {
       setLoading(false);
@@ -344,7 +408,7 @@ const DashboardEmpresa = () => {
       
       console.log(`✅ Status da candidatura atualizado para: ${novoStatus}`);
     } catch (error) {
-      console.error('Erro ao atualizar status:', error);
+      console.error('❌ Erro ao atualizar status:', error);
       setError('Erro ao atualizar status: ' + error.message);
     }
   };
@@ -379,12 +443,33 @@ const DashboardEmpresa = () => {
       setLoading(true);
       setError('');
 
-      const response = await fetch(`http://localhost:5000/api/empresas/${empresa.id_empresa}`, {
+      // CORREÇÃO: Acessar empresa.id_empresa corretamente
+      const empresaId = empresa.id_empresa;
+      
+      if (!empresaId) {
+        throw new Error('ID da empresa não encontrado');
+      }
+
+      const perfilData = {
+        nome: dadosPerfil.nome.trim(),
+        cnpj: dadosPerfil.cnpj.trim(),
+        email: dadosPerfil.email.trim(),
+        endereco: dadosPerfil.endereco.trim(),
+        descricao: dadosPerfil.descricao.trim(),
+        telefone: dadosPerfil.telefone?.trim() || '',
+        cidade: dadosPerfil.cidade?.trim() || '',
+        estado: dadosPerfil.estado?.trim() || '',
+        logo_url: dadosPerfil.logo_url?.trim() || ''
+      };
+
+      console.log('📤 Atualizando perfil:', perfilData);
+
+      const response = await fetch(`http://localhost:5000/api/empresas/${empresaId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dadosPerfil),
+        body: JSON.stringify(perfilData),
       });
 
       if (!response.ok) {
@@ -394,12 +479,21 @@ const DashboardEmpresa = () => {
 
       const empresaAtualizada = await response.json();
       setEmpresa(empresaAtualizada);
-      localStorage.setItem('empresaLogada', JSON.stringify(empresaAtualizada));
+      
+      // CORREÇÃO: Atualizar localStorage com estrutura correta
+      const empresaCompleta = {
+        success: true,
+        empresa: empresaAtualizada,
+        message: 'Perfil atualizado com sucesso',
+        tipo_usuario: 'empresa'
+      };
+      
+      localStorage.setItem('empresaLogada', JSON.stringify(empresaCompleta));
       setEditandoPerfil(false);
       
       console.log('✅ Perfil atualizado com sucesso');
     } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
+      console.error('❌ Erro ao atualizar perfil:', error);
       setError('Erro ao atualizar perfil: ' + error.message);
     } finally {
       setLoading(false);
@@ -418,10 +512,8 @@ const DashboardEmpresa = () => {
 
   return (
     <div className="dashboard-empresa">
-      {/* ✅ HEADER ADICIONADO AQUI */}
       <Header />
       
-      {/* Header do Dashboard (mantido para informações da empresa) */}
       <header className="dashboard-header">
         <div className="header-content">
           <div className="empresa-info">
@@ -434,7 +526,6 @@ const DashboardEmpresa = () => {
         </div>
       </header>
 
-      {/* Navigation */}
       <nav className="dashboard-nav">
         <div className="nav-container">
           <button 
@@ -458,7 +549,6 @@ const DashboardEmpresa = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="dashboard-main">
         <div className="container">
           {error && (
@@ -472,7 +562,6 @@ const DashboardEmpresa = () => {
           
           {loading && <div className="loading">Carregando...</div>}
 
-          {/* Estatísticas Rápidas */}
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon"></div>
@@ -497,7 +586,6 @@ const DashboardEmpresa = () => {
             </div>
           </div>
 
-          {/* Vagas Section */}
           {activeTab === 'vagas' && (
             <section className="section vagas-section">
               <div className="section-header">
@@ -515,7 +603,6 @@ const DashboardEmpresa = () => {
                 </button>
               </div>
 
-              {/* Modal Nova/Edição Vaga */}
               {showFormVaga && (
                 <div className="modal-overlay">
                   <div className="modal">
@@ -536,7 +623,7 @@ const DashboardEmpresa = () => {
                       <div className="form-group">
                         <input
                           type="text"
-                          placeholder="Título da vaga"
+                          placeholder="Título da vaga *"
                           value={novaVaga.titulo}
                           onChange={(e) => setNovaVaga({...novaVaga, titulo: e.target.value})}
                           required
@@ -546,7 +633,7 @@ const DashboardEmpresa = () => {
                       
                       <div className="form-group">
                         <textarea
-                          placeholder="Descrição da vaga"
+                          placeholder="Descrição da vaga *"
                           value={novaVaga.descricao}
                           onChange={(e) => setNovaVaga({...novaVaga, descricao: e.target.value})}
                           required
@@ -569,7 +656,7 @@ const DashboardEmpresa = () => {
                         <div className="form-group">
                           <input
                             type="text"
-                            placeholder="Localização"
+                            placeholder="Localização *"
                             value={novaVaga.localizacao}
                             onChange={(e) => setNovaVaga({...novaVaga, localizacao: e.target.value})}
                             required
@@ -622,7 +709,6 @@ const DashboardEmpresa = () => {
                 </div>
               )}
 
-              {/* Lista de Vagas */}
               <div className="vagas-grid">
                 {vagas.length === 0 ? (
                   <div className="empty-state">
@@ -651,9 +737,9 @@ const DashboardEmpresa = () => {
                       <p className="vaga-descricao">{vaga.descricao}</p>
                       
                       <div className="vaga-detalhes">
-                        <span className="detalhe localizacao">{vaga.localizacao}</span>
-                        <span className="detalhe modalidade">{vaga.modalidade}</span>
-                        {vaga.salario && <span className="detalhe salario">{vaga.salario}</span>}
+                        <span className="detalhe localizacao">📍 {vaga.localizacao}</span>
+                        <span className="detalhe modalidade">🏢 {vaga.modalidade}</span>
+                        {vaga.salario && <span className="detalhe salario">💰 {vaga.salario}</span>}
                       </div>
                       
                       <div className="vaga-footer">
@@ -694,7 +780,6 @@ const DashboardEmpresa = () => {
             </section>
           )}
 
-          {/* Candidaturas Section */}
           {activeTab === 'candidaturas' && (
             <section className="section candidaturas-section">
               <div className="section-header">
@@ -778,7 +863,7 @@ const DashboardEmpresa = () => {
                           className="btn-primary"
                           onClick={() => verCurriculoCandidato(candidatura)}
                         >
-                           Ver Currículo
+                          📄 Ver Currículo
                         </button>
                       </div>
                     </div>
@@ -788,7 +873,6 @@ const DashboardEmpresa = () => {
             </section>
           )}
 
-          {/* Perfil Section */}
           {activeTab === 'perfil' && (
             <section className="section perfil-section">
               <div className="section-header">
@@ -811,7 +895,6 @@ const DashboardEmpresa = () => {
               </div>
 
               {!editandoPerfil ? (
-                // Visualização do Perfil
                 <div className="empresa-profile">
                   <div className="profile-header">
                     <div className="empresa-avatar">
@@ -842,6 +925,14 @@ const DashboardEmpresa = () => {
                       <strong>Endereço:</strong>
                       <span>{empresa.endereco}</span>
                     </div>
+                    <div className="detalhe-item">
+                      <strong>Telefone:</strong>
+                      <span>{empresa.telefone || 'Não informado'}</span>
+                    </div>
+                    <div className="detalhe-item">
+                      <strong>Cidade/Estado:</strong>
+                      <span>{empresa.cidade && empresa.estado ? `${empresa.cidade}/${empresa.estado}` : 'Não informado'}</span>
+                    </div>
                     <div className="detalhe-item full-width">
                       <strong>Descrição:</strong>
                       <span>{empresa.descricao}</span>
@@ -849,7 +940,6 @@ const DashboardEmpresa = () => {
                   </div>
                 </div>
               ) : (
-                // Edição do Perfil
                 <div className="empresa-profile">
                   <form onSubmit={salvarPerfil} className="perfil-form">
                     <div className="form-row">
@@ -893,6 +983,36 @@ const DashboardEmpresa = () => {
                       />
                     </div>
 
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Telefone</label>
+                        <input
+                          type="text"
+                          value={dadosPerfil.telefone}
+                          onChange={(e) => setDadosPerfil({...dadosPerfil, telefone: e.target.value})}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Cidade</label>
+                        <input
+                          type="text"
+                          value={dadosPerfil.cidade}
+                          onChange={(e) => setDadosPerfil({...dadosPerfil, cidade: e.target.value})}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Estado</label>
+                      <input
+                        type="text"
+                        value={dadosPerfil.estado}
+                        onChange={(e) => setDadosPerfil({...dadosPerfil, estado: e.target.value})}
+                        maxLength="2"
+                        placeholder="Ex: SP"
+                      />
+                    </div>
+
                     <div className="form-group">
                       <label>Descrição *</label>
                       <textarea
@@ -924,12 +1044,11 @@ const DashboardEmpresa = () => {
         </div>
       </main>
 
-      {/* Modal de Visualização de Currículo */}
       {showCurriculoModal && (
         <div className="modal-overlay">
           <div className="modal modal-large">
             <div className="modal-header">
-              <h3>Currículo do Candidato</h3>
+              <h3>📄 Currículo do Candidato</h3>
               <button 
                 className="close-btn"
                 onClick={() => {
@@ -985,7 +1104,7 @@ const DashboardEmpresa = () => {
 
                   {curriculoCandidato.experiencia && (
                     <div className="curriculo-section">
-                      <h4> Experiência Profissional</h4>
+                      <h4>💼 Experiência Profissional</h4>
                       <div className="text-content">
                         <p>{curriculoCandidato.experiencia}</p>
                       </div>
