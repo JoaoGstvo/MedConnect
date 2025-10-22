@@ -1,19 +1,22 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .footer-page {
   display: flex;
   flex-direction: column;
-  background-color: #1f2937;
-  padding: 2rem 1rem 1rem 1rem;
-  color: #979fae;
+  background-color: $gray-900;
+  padding: $spacing-8 $spacing-4 $spacing-4 $spacing-4;
+  color: $gray-400;
 
   .footer-section {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 2rem;
-    max-width: 1200px;
+    gap: $spacing-8;
+    max-width: $breakpoint-2xl;
     width: 100%;
     margin: 0 auto;
-    padding-bottom: 2rem;
+    padding-bottom: $spacing-8;
 
     .info-column {
       display: flex;
@@ -21,13 +24,22 @@
       max-width: 20rem;
 
       .logo {
-        width: 12rem;
-        margin-bottom: 1rem;
+        margin-bottom: $spacing-4;
+        width: 60%;
+        height: auto;
+        filter: brightness(0%) invert(1) contrast(100%); // Logo branca
+        transition: transform $transition-base;
+          
+        &:hover {
+        transform: scale(1.05);
+          
+        }
       }
 
       .description {
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: $gray-400;
       }
     }
 
@@ -35,10 +47,10 @@
       min-width: 150px;
 
       .title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #ffffff;
-        margin-bottom: 1rem;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: white;
+        margin-bottom: $spacing-4;
       }
 
       .link-list {
@@ -47,16 +59,17 @@
         margin: 0;
 
         li {
-          margin-bottom: 0.5rem;
+          margin-bottom: $spacing-2;
 
           a {
-            color: #979fae;
+            color: $gray-400;
             text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
+            font-size: $font-size-sm;
+            transition: color $transition-base;
+            @include focus-visible;
 
             &:hover {
-              color: #4a90e2;
+              color: $primary-400;
             }
           }
         }
@@ -67,76 +80,77 @@
   .credits {
     display: flex;
     justify-content: center;
-    padding: 1rem 0;
-    font-size: 0.85rem;
-    color: #979fae;
-    border-top: 1px solid #405066;
+    padding: $spacing-4 0;
+    font-size: $font-size-xs;
+    color: $gray-500;
+    border-top: 1px solid $gray-700;
     text-align: center;
   }
 
   /* Responsividade */
-  @media (max-width: 1024px) {
+  @include desktop-up {
     .footer-section {
       justify-content: space-around;
     }
   }
 
-  @media (max-width: 768px) {
+  @include mobile-only {
     .footer-section {
       flex-direction: column;
       align-items: center;
       text-align: center;
+      gap: $spacing-6;
 
       .info-column {
         align-items: center;
 
         .description {
-          font-size: 0.9rem;
+          font-size: $font-size-sm;
         }
       }
 
       .link-column {
-        margin-top: 1rem;
+        margin-top: $spacing-4;
 
         .title {
-          font-size: 1.1rem;
+          font-size: $font-size-base;
         }
       }
     }
 
     .credits {
-      font-size: 0.8rem;
+      font-size: $font-size-xs;
       width: 100%;
     }
   }
 
   @media (max-width: 480px) {
     .footer-section {
-      gap: 1.5rem;
+      gap: $spacing-6;
 
       .info-column {
         .logo {
           width: 10rem;
         }
         .description {
-          font-size: 0.85rem;
+          font-size: $font-size-sm;
         }
       }
 
       .link-column {
         .title {
-          font-size: 1rem;
+          font-size: $font-size-base;
         }
 
         .link-list li a {
-          font-size: 0.85rem;
+          font-size: $font-size-sm;
         }
       }
     }
 
     .credits {
-      font-size: 0.75rem;
-      padding: 0.8rem 0;
+      font-size: $font-size-xs;
+      padding: $spacing-3 0;
     }
   }
 }

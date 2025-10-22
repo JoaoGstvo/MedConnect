@@ -651,9 +651,9 @@ const DashboardEmpresa = () => {
                       <p className="vaga-descricao">{vaga.descricao}</p>
                       
                       <div className="vaga-detalhes">
-                        <span className="detalhe localizacao">📍 {vaga.localizacao}</span>
-                        <span className="detalhe modalidade">🏢 {vaga.modalidade}</span>
-                        {vaga.salario && <span className="detalhe salario">💰 {vaga.salario}</span>}
+                        <span className="detalhe localizacao">{vaga.localizacao}</span>
+                        <span className="detalhe modalidade">{vaga.modalidade}</span>
+                        {vaga.salario && <span className="detalhe salario">{vaga.salario}</span>}
                       </div>
                       
                       <div className="vaga-footer">
@@ -778,7 +778,7 @@ const DashboardEmpresa = () => {
                           className="btn-primary"
                           onClick={() => verCurriculoCandidato(candidatura)}
                         >
-                          📄 Ver Currículo
+                           Ver Currículo
                         </button>
                       </div>
                     </div>

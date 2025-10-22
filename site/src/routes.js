@@ -22,6 +22,7 @@ import ArtigoPublicadoPage from './Pages/Artigos/ArtigoPublicado/index.js';
 import EsqueceuSenha from './Pages/Login/EsqueceuSenha/index.js';
 import CardCandidato from './Components/CardCandidato/index.js';
 import CardEmpresa from './Components/CardEmpresa/index.js';
+import EditarArtigoPage from './Pages/Artigos/EditarArtigo/index.js';
 
 export default function Index() {
     return (
@@ -91,6 +92,12 @@ export default function Index() {
                 <Route path="/mensagemenviadaprofissional" element={
                     <ProtectedRoute>
                         <MensagemSucessoPage />
+                    </ProtectedRoute>
+                } />
+
+                <Route path="/editar-artigo/:id" element={
+                    <ProtectedRoute>
+                        <EditarArtigoPage />
                     </ProtectedRoute>
                 } />
 

@@ -1,59 +1,55 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
 .dashboard-empresa {
   min-height: 100vh;
-  background-color: #f8f9fa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #1f2937;
+  background-color: $gray-50;
+  font-family: $font-family-primary;
+  color: $gray-900;
 
   // Header do Dashboard
   .dashboard-header {
     background: white;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    border-bottom: 1px solid #e5e7eb;
+    box-shadow: $shadow-base;
+    border-bottom: 1px solid $gray-200;
 
     .header-content {
-      max-width: 1200px;
+      max-width: $breakpoint-2xl;
       margin: 0 auto;
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: $spacing-6 $spacing-8;
+      @include flex-between;
 
-      @media (max-width: 768px) {
-        padding: 1rem;
+      @include mobile-only {
+        padding: $spacing-4;
         flex-direction: column;
-        gap: 1rem;
+        gap: $spacing-4;
         text-align: center;
       }
     }
 
     .empresa-info {
       h1 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #2563eb;
-        margin: 0 0 0.5rem 0;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $primary-600;
+        margin: 0 0 $spacing-2 0;
       }
 
       p {
-        color: #6b7280;
+        color: $gray-500;
         margin: 0;
-        font-size: 1rem;
+        font-size: $font-size-base;
       }
     }
 
     .logout-btn {
-      background: transparent;
-      color: #dc2626;
-      border: 1px solid #dc2626;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      @include btn-outline;
+      color: $error-600;
+      border-color: $error-600;
 
       &:hover:not(:disabled) {
-        background: #dc2626;
+        background: $error-600;
         color: white;
-        transform: translateY(-2px);
       }
     }
   }
@@ -61,35 +57,32 @@
   // Navegação
   .dashboard-nav {
     background: white;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid $gray-200;
 
     .nav-container {
-      max-width: 1200px;
+      max-width: $breakpoint-2xl;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 $spacing-8;
       display: flex;
-      gap: 0.5rem;
+      gap: $spacing-2;
 
-      @media (max-width: 768px) {
-        padding: 0 1rem;
+      @include mobile-only {
+        padding: 0 $spacing-4;
         overflow-x: auto;
       }
     }
 
     .nav-tab {
-      background: transparent;
-      border: none;
-      padding: 1rem 1.5rem;
-      border-radius: 8px 8px 0 0;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: #6b7280;
+      @include btn-ghost;
+      padding: $spacing-4 $spacing-6;
+      border-radius: $radius-lg $radius-lg 0 0;
+      color: $gray-500;
       position: relative;
       white-space: nowrap;
 
       &.active {
-        color: #2563eb;
-        font-weight: 600;
+        color: $primary-600;
+        font-weight: $font-weight-semibold;
         
         &::after {
           content: '';
@@ -98,56 +91,52 @@
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+          background: $gradient-primary;
           border-radius: 2px 2px 0 0;
         }
       }
 
       &:hover {
-        background: #f9fafb;
-        color: #374151;
+        background: $gray-50;
+        color: $gray-700;
       }
     }
   }
 
   // Conteúdo Principal
   .dashboard-main {
-    padding: 2rem;
+    padding: $spacing-8;
 
-    @media (max-width: 768px) {
-      padding: 1rem;
+    @include mobile-only {
+      padding: $spacing-4;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: $breakpoint-2xl;
       margin: 0 auto;
     }
   }
 
   // Seções
   .section {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    padding: 2rem;
-    margin-bottom: 2rem;
+    @include card-base;
+    padding: $spacing-8;
+    margin-bottom: $spacing-8;
 
     .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
+      @include flex-between;
+      margin-bottom: $spacing-8;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         flex-direction: column;
-        gap: 1rem;
+        gap: $spacing-4;
         text-align: center;
       }
 
       h2 {
-        font-size: 1.875rem;
-        font-weight: 700;
-        color: #2563eb;
+        font-size: $font-size-3xl;
+        font-weight: $font-weight-bold;
+        color: $primary-600;
         margin: 0;
       }
     }
@@ -155,39 +144,11 @@
 
   // Botões
   .btn-primary {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    @include btn-primary;
   }
 
   .btn-secondary {
-    background: white;
-    color: #374151;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover:not(:disabled) {
-      background: #f9fafb;
-      transform: translateY(-1px);
-    }
+    @include btn-secondary;
   }
 
   // Modal
@@ -198,17 +159,15 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center;
     z-index: 1000;
     backdrop-filter: blur(5px);
   }
 
   .modal {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: $radius-xl;
+    box-shadow: $shadow-2xl;
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
@@ -219,172 +178,141 @@
     }
 
     .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem 2rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
+      @include flex-between;
+      padding: $spacing-8 $spacing-8 $spacing-4;
+      border-bottom: 1px solid $gray-200;
 
       h3 {
         margin: 0;
-        color: #2563eb;
-        font-size: 1.5rem;
+        color: $primary-600;
+        font-size: $font-size-2xl;
       }
 
       .close-btn {
-        background: transparent;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.25rem;
-        color: #6b7280;
+        @include btn-ghost;
+        font-size: $font-size-2xl;
+        padding: $spacing-1;
+        color: $gray-500;
 
         &:hover {
-          color: #374151;
+          color: $gray-700;
         }
       }
     }
 
     .modal-content {
-      padding: 2rem;
+      padding: $spacing-8;
 
-      @media (max-width: 768px) {
-        padding: 1.5rem;
+      @include mobile-only {
+        padding: $spacing-6;
       }
     }
 
     .modal-form {
       .form-group {
-        margin-bottom: 1.5rem;
-
-        input, textarea, select {
-          width: 100%;
-          padding: 0.75rem;
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          font-size: 1rem;
-          transition: all 0.2s;
-
-          &:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-          }
-        }
-
-        textarea {
-          resize: vertical;
-          min-height: 100px;
-        }
+        @include form-field;
+        margin-bottom: $spacing-6;
       }
 
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: $spacing-4;
 
-        @media (max-width: 768px) {
+        @include mobile-only {
           grid-template-columns: 1fr;
         }
       }
 
       .modal-actions {
         display: flex;
-        gap: 1rem;
+        gap: $spacing-4;
         justify-content: flex-end;
-        margin-top: 2rem;
+        margin-top: $spacing-8;
       }
     }
   }
 
   // Grid de Vagas
   .vagas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 1.5rem;
+    @include card-grid(2, $spacing-6);
 
-    @media (max-width: 768px) {
+    @include mobile-only {
       grid-template-columns: 1fr;
     }
   }
 
   .vaga-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    padding: 1.5rem;
-    transition: all 0.2s;
-    border: 1px solid #e5e7eb;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
+    @include card-base;
+    padding: $spacing-6;
+    border: 1px solid $gray-200;
 
     .vaga-header {
-      display: flex;
-      justify-content: space-between;
+      @include flex-between;
       align-items: flex-start;
-      margin-bottom: 1rem;
+      margin-bottom: $spacing-4;
 
       h3 {
         margin: 0;
-        color: #2563eb;
-        font-size: 1.25rem;
+        color: $primary-600;
+        font-size: $font-size-xl;
         flex: 1;
-        margin-right: 1rem;
+        margin-right: $spacing-4;
       }
 
       .vaga-status {
         .status {
-          background: #dbeafe;
-          color: #1e40af;
-          padding: 0.25rem 0.75rem;
-          border-radius: 9999px;
-          font-size: 0.75rem;
-          font-weight: 500;
-          text-transform: uppercase;
+          @include status-badge(#dbeafe, #1e40af);
+          padding: $spacing-1 $spacing-3;
 
-          &.status-pendente { background: #fef3c7; color: #92400e; }
-          &.status-aprovado { background: #d1fae5; color: #065f46; }
-          &.status-recusado { background: #fee2e2; color: #991b1b; }
-          &.status-cancelado { background: #e5e7eb; color: #374151; }
+          &.status-pendente { 
+            @include status-badge(#fef3c7, #92400e); 
+          }
+          &.status-aprovado { 
+            @include status-badge(#d1fae5, #065f46); 
+          }
+          &.status-recusado { 
+            @include status-badge(#fee2e2, #991b1b); 
+          }
+          &.status-cancelado { 
+            @include status-badge(#e5e7eb, #374151); 
+          }
         }
       }
     }
 
     .vaga-descricao {
-      color: #6b7280;
-      line-height: 1.625;
-      margin-bottom: 1rem;
+      color: $gray-500;
+      line-height: $line-height-relaxed;
+      margin-bottom: $spacing-4;
+      @include text-truncate-lines(3);
     }
 
     .vaga-detalhes {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: $spacing-2;
+      margin-bottom: $spacing-4;
 
       .detalhe {
-        background: #f3f4f6;
-        color: #374151;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 500;
+        background: $gray-100;
+        color: $gray-700;
+        padding: $spacing-1 $spacing-3;
+        border-radius: $radius-full;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
       }
     }
 
     .vaga-footer {
-      border-top: 1px solid #e5e7eb;
-      padding-top: 1rem;
-      display: flex;
-      justify-content: space-between;
+      border-top: 1px solid $gray-200;
+      padding-top: $spacing-4;
+      @include flex-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: $spacing-4;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         flex-direction: column;
         align-items: stretch;
       }
@@ -392,54 +320,40 @@
       .vaga-info {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: $spacing-1;
 
         .vaga-data {
-          color: #6b7280;
-          font-size: 0.875rem;
+          color: $gray-500;
+          font-size: $font-size-sm;
         }
 
         .vaga-candidaturas {
-          color: #2563eb;
-          font-weight: 600;
-          font-size: 0.875rem;
+          color: $primary-600;
+          font-weight: $font-weight-semibold;
+          font-size: $font-size-sm;
         }
       }
 
       .vaga-actions {
         display: flex;
-        gap: 0.5rem;
+        gap: $spacing-2;
         flex-wrap: wrap;
 
         .btn-edit {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          transition: all 0.2s;
-          font-size: 0.875rem;
-
-          &:hover:not(:disabled) {
-            background: #2563eb;
-            transform: translateY(-1px);
-          }
+          @include btn-primary;
+          padding: $spacing-2 $spacing-4;
+          font-size: $font-size-sm;
         }
 
         .btn-delete {
-          background: #ef4444;
+          @include btn-base;
+          background: $error-500;
           color: white;
-          border: none;
-          border-radius: 6px;
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          transition: all 0.2s;
-          font-size: 0.875rem;
+          padding: $spacing-2 $spacing-4;
+          font-size: $font-size-sm;
 
           &:hover:not(:disabled) {
-            background: #dc2626;
-            transform: translateY(-1px);
+            background: $error-600;
           }
         }
       }
@@ -450,75 +364,64 @@
   .candidaturas-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: $spacing-4;
   }
 
   .candidatura-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    padding: 1.5rem;
-    display: flex;
-    justify-content: space-between;
+    @include card-base;
+    padding: $spacing-6;
+    @include flex-between;
     align-items: center;
-    transition: all 0.2s;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
 
-    @media (max-width: 768px) {
+    @include mobile-only {
       flex-direction: column;
-      gap: 1rem;
+      gap: $spacing-4;
       text-align: center;
-    }
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
     .candidato-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: $spacing-4;
       justify-content: flex-start;
 
       .candidato-avatar {
         width: 50px;
         height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: $radius-full;
+        background: $gradient-primary;
+        @include flex-center;
         color: white;
-        font-weight: 600;
-        font-size: 1.125rem;
+        font-weight: $font-weight-semibold;
+        font-size: $font-size-lg;
       }
 
       .candidato-detalhes {
         h4 {
-          margin: 0 0 0.25rem 0;
-          color: #2563eb;
+          margin: 0 0 $spacing-1 0;
+          color: $primary-600;
         }
 
         p {
-          margin: 0 0 0.5rem 0;
-          color: #6b7280;
+          margin: 0 0 $spacing-2 0;
+          color: $gray-500;
         }
 
         .candidatura-meta {
           display: flex;
           flex-direction: column;
-          gap: 0.25rem;
+          gap: $spacing-1;
 
           .vaga-titulo {
-            color: #374151;
-            font-size: 0.875rem;
-            font-weight: 500;
+            color: $gray-700;
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
           }
 
           .candidatura-data {
-            color: #6b7280;
-            font-size: 0.75rem;
+            color: $gray-500;
+            font-size: $font-size-xs;
           }
         }
       }
@@ -526,26 +429,26 @@
 
     .candidatura-actions {
       display: flex;
-      gap: 1rem;
+      gap: $spacing-4;
       align-items: center;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         flex-direction: column;
         width: 100%;
       }
 
       .status-select {
-        padding: 0.5rem;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
+        padding: $spacing-2;
+        border: 1px solid $gray-300;
+        border-radius: $radius-lg;
         cursor: pointer;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         background: white;
 
-        &.status-pendente { border-color: #f59e0b; color: #92400e; }
-        &.status-aprovado { border-color: #10b981; color: #065f46; }
-        &.status-recusado { border-color: #ef4444; color: #991b1b; }
-        &.status-cancelado { border-color: #6b7280; color: #374151; }
+        &.status-pendente { border-color: $warning-500; color: $warning-700; }
+        &.status-aprovado { border-color: $success-500; color: $success-700; }
+        &.status-recusado { border-color: $error-500; color: $error-700; }
+        &.status-cancelado { border-color: $gray-500; color: $gray-700; }
       }
     }
   }
@@ -555,11 +458,11 @@
     .profile-header {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      gap: $spacing-6;
+      margin-bottom: $spacing-8;
       justify-content: flex-start;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         flex-direction: column;
         text-align: center;
       }
@@ -567,14 +470,12 @@
       .empresa-avatar {
         width: 100px;
         height: 100px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: $radius-full;
+        background: $gradient-primary;
+        @include flex-center;
         color: white;
-        font-weight: 700;
-        font-size: 2rem;
+        font-weight: $font-weight-bold;
+        font-size: $font-size-3xl;
         overflow: hidden;
 
         .logo-empresa {
@@ -586,34 +487,34 @@
 
       .empresa-titulo {
         h3 {
-          margin: 0 0 0.5rem 0;
-          color: #2563eb;
-          font-size: 1.5rem;
+          margin: 0 0 $spacing-2 0;
+          color: $primary-600;
+          font-size: $font-size-2xl;
         }
 
         p {
           margin: 0;
-          color: #6b7280;
-          font-size: 1.125rem;
+          color: $gray-500;
+          font-size: $font-size-lg;
         }
       }
     }
 
     .profile-detalhes {
       display: grid;
-      gap: 1rem;
+      gap: $spacing-4;
 
       .detalhe-item {
         display: grid;
         grid-template-columns: 120px 1fr;
-        gap: 1rem;
-        padding: 1rem;
-        background: rgba(59, 130, 246, 0.05);
-        border-radius: 8px;
+        gap: $spacing-4;
+        padding: $spacing-4;
+        background: rgba($primary-500, 0.05);
+        border-radius: $radius-lg;
 
-        @media (max-width: 768px) {
+        @include mobile-only {
           grid-template-columns: 1fr;
-          gap: 0.5rem;
+          gap: $spacing-2;
         }
 
         &.full-width {
@@ -621,12 +522,12 @@
         }
 
         strong {
-          color: #2563eb;
-          font-weight: 600;
+          color: $primary-600;
+          font-weight: $font-weight-semibold;
         }
 
         span {
-          color: #1f2937;
+          color: $gray-900;
         }
       }
     }
@@ -634,113 +535,95 @@
 
   // Estatísticas
   .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    @include card-grid(2, $spacing-6);
+    margin-bottom: $spacing-8;
   }
 
   .stat-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    padding: 1.5rem;
+    @include card-base;
+    padding: $spacing-6;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: $spacing-4;
     justify-content: flex-start;
-    transition: all 0.2s;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
 
     .stat-icon {
-      font-size: 2.5rem;
+      font-size: $font-size-4xl;
       opacity: 0.8;
-      color: #2563eb;
+      color: $primary-600;
     }
 
     .stat-info {
       h3 {
         margin: 0;
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2563eb;
+        font-size: $font-size-3xl;
+        font-weight: $font-weight-bold;
+        color: $primary-600;
       }
 
       p {
-        margin: 0.25rem 0 0 0;
-        color: #6b7280;
-        font-weight: 500;
+        margin: $spacing-1 0 0 0;
+        color: $gray-500;
+        font-weight: $font-weight-medium;
       }
     }
   }
 
   // Estados Vazios
   .empty-state {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    @include card-base;
     text-align: center;
-    padding: 4rem 2rem;
+    padding: $spacing-16 $spacing-8;
 
     .empty-icon {
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
+      font-size: $font-size-5xl;
+      margin-bottom: $spacing-6;
       opacity: 0.5;
-      color: #9ca3af;
+      color: $gray-400;
     }
 
     h3 {
-      color: #2563eb;
-      margin-bottom: 1rem;
+      color: $primary-600;
+      margin-bottom: $spacing-4;
     }
 
     p {
-      color: #6b7280;
-      margin-bottom: 2rem;
-      font-size: 1.125rem;
+      color: $gray-500;
+      margin-bottom: $spacing-8;
+      font-size: $font-size-lg;
     }
   }
 
   // Mensagens de Erro e Loading
   .error-message {
-    background: #fef2f2;
-    color: #dc2626;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    border: 1px solid #fecaca;
-    display: flex;
-    justify-content: space-between;
+    background: $error-50;
+    color: $error-600;
+    padding: $spacing-4;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-6;
+    border: 1px solid $error-200;
+    @include flex-between;
     align-items: center;
   }
 
   .loading {
     text-align: center;
-    padding: 2rem;
-    color: #2563eb;
-    font-size: 1.125rem;
+    padding: $spacing-8;
+    color: $primary-600;
+    font-size: $font-size-lg;
 
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #f3f4f6;
-      border-top: 4px solid #3b82f6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
+      @include loading-spinner(40px, $primary-500);
+      margin: 0 auto $spacing-4;
     }
   }
 
   // Ações da Seção
   .section-actions {
     display: flex;
-    gap: 1rem;
+    gap: $spacing-4;
 
-    @media (max-width: 768px) {
+    @include mobile-only {
       flex-direction: column;
       align-items: center;
     }
@@ -748,31 +631,20 @@
 
   // Filtros de Candidaturas
   .candidaturas-filters {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    @include card-base;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
+    gap: $spacing-4;
+    margin-bottom: $spacing-8;
+    padding: $spacing-6;
 
     .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      @include form-field;
 
       label {
-        font-weight: 600;
-        color: #2563eb;
-        font-size: 0.875rem;
-      }
-
-      select {
-        padding: 0.75rem;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        cursor: pointer;
+        font-weight: $font-weight-semibold;
+        color: $primary-600;
+        font-size: $font-size-sm;
       }
     }
   }
@@ -780,43 +652,16 @@
   // Formulário de Edição do Perfil
   .perfil-form {
     .form-group {
-      margin-bottom: 1.5rem;
-
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        color: #2563eb;
-        font-size: 0.875rem;
-      }
-
-      input, textarea, select {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        font-size: 1rem;
-        transition: all 0.2s;
-
-        &:focus {
-          outline: none;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 100px;
-      }
+      @include form-field;
+      margin-bottom: $spacing-6;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: $spacing-4;
 
-      @media (max-width: 768px) {
+      @include mobile-only {
         grid-template-columns: 1fr;
       }
     }
@@ -825,13 +670,13 @@
   // Ações do Formulário
   .form-actions {
     display: flex;
-    gap: 1rem;
+    gap: $spacing-4;
     justify-content: flex-end;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
+    margin-top: $spacing-8;
+    padding-top: $spacing-6;
+    border-top: 1px solid $gray-200;
 
-    @media (max-width: 768px) {
+    @include mobile-only {
       flex-direction: column;
     }
   }
@@ -840,108 +685,104 @@
   .curriculo-content {
     .loading {
       text-align: center;
-      padding: 3rem;
-      color: #2563eb;
+      padding: $spacing-12;
+      color: $primary-600;
     }
 
     .curriculo-detalhes {
-      padding: 1rem 0;
+      padding: $spacing-4 0;
     }
   }
 
   .curriculo-section {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
+    @include card-base;
+    margin-bottom: $spacing-6;
+    padding: $spacing-6;
 
     h4 {
-      color: #2563eb;
-      margin-bottom: 1rem;
-      font-size: 1.25rem;
-      font-weight: 600;
+      color: $primary-600;
+      margin-bottom: $spacing-4;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: $spacing-2;
       justify-content: flex-start;
 
       &::after {
         content: '';
         flex: 1;
         height: 2px;
-        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-        margin-left: 1rem;
+        background: $gradient-primary;
+        margin-left: $spacing-4;
       }
     }
   }
 
   .curriculo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    @include card-grid(2, $spacing-4);
 
-    @media (max-width: 768px) {
+    @include mobile-only {
       grid-template-columns: 1fr;
     }
 
     .info-item {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
-      padding: 0.75rem;
-      background: rgba(59, 130, 246, 0.05);
-      border-radius: 6px;
+      gap: $spacing-1;
+      padding: $spacing-3;
+      background: rgba($primary-500, 0.05);
+      border-radius: $radius-lg;
 
       strong {
-        color: #2563eb;
-        font-size: 0.875rem;
-        font-weight: 600;
+        color: $primary-600;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
       }
 
       span {
-        color: #1f2937;
-        font-size: 1rem;
+        color: $gray-900;
+        font-size: $font-size-base;
       }
     }
   }
 
   .text-content {
-    line-height: 1.625;
-    color: #1f2937;
+    line-height: $line-height-relaxed;
+    color: $gray-900;
 
     p {
-      margin: 0.5rem 0;
-      padding: 1rem;
-      background: rgba(59, 130, 246, 0.03);
-      border-radius: 6px;
-      border-left: 3px solid #3b82f6;
+      margin: $spacing-2 0;
+      padding: $spacing-4;
+      background: rgba($primary-500, 0.03);
+      border-radius: $radius-lg;
+      border-left: 3px solid $primary-500;
     }
   }
 
   .skills-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: $spacing-2;
 
     .skill-tag {
-      background: #3b82f6;
+      background: $primary-500;
       color: white;
-      padding: 0.5rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      padding: $spacing-2 $spacing-3;
+      border-radius: $radius-full;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      box-shadow: $shadow-base;
     }
   }
 
   .empty-curriculo {
     text-align: center;
-    padding: 3rem;
-    color: #6b7280;
+    padding: $spacing-12;
+    color: $gray-500;
 
     p {
-      font-size: 1.125rem;
+      font-size: $font-size-lg;
       margin: 0;
     }
   }
@@ -949,18 +790,10 @@
 
 // Loading Container
 .loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
   height: 50vh;
   flex-direction: column;
-  gap: 1rem;
-}
-
-// Animação do spinner
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  gap: $spacing-4;
 }
 
 // Acessibilidade

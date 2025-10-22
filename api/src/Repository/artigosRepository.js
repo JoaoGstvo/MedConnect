@@ -1,4 +1,3 @@
-// Repository/artigosRepository.js
 import pool from "../connection.js";
 
 export async function createArtigo(id_usuario, id_categoria, titulo, resumo, conteudo, imagem) {
@@ -28,7 +27,8 @@ export async function getArtigos() {
         a.imagem,
         a.data_publicacao,
         c.nome as categoria,
-        u.nome as autor
+        u.nome as autor,
+        u.id_usuario
       FROM artigos a
       JOIN artigos_categorias c ON a.id_categoria = c.id_categoria
       JOIN usuarios u ON a.id_usuario = u.id_usuario
@@ -79,7 +79,8 @@ export async function getArtigosByCategoria(categoria) {
         a.imagem,
         a.data_publicacao,
         c.nome as categoria,
-        u.nome as autor
+        u.nome as autor,
+        u.id_usuario
       FROM artigos a
       JOIN artigos_categorias c ON a.id_categoria = c.id_categoria
       JOIN usuarios u ON a.id_usuario = u.id_usuario
@@ -90,6 +91,33 @@ export async function getArtigosByCategoria(categoria) {
     return result.rows;
   } catch (error) {
     console.error('Erro no getArtigosByCategoria:', error);
+    throw error;
+  }
+}
+
+export async function getArtigosByUsuario(id_usuario) {
+  try {
+    const query = `
+      SELECT 
+        a.id_artigo as id,
+        a.titulo,
+        a.resumo,
+        a.conteudo,
+        a.imagem,
+        a.data_publicacao,
+        c.nome as categoria,
+        u.nome as autor,
+        u.id_usuario
+      FROM artigos a
+      JOIN artigos_categorias c ON a.id_categoria = c.id_categoria
+      JOIN usuarios u ON a.id_usuario = u.id_usuario
+      WHERE a.id_usuario = $1
+      ORDER BY a.data_publicacao DESC
+    `;
+    const result = await pool.query(query, [id_usuario]);
+    return result.rows;
+  } catch (error) {
+    console.error('Erro no getArtigosByUsuario:', error);
     throw error;
   }
 }

@@ -1,31 +1,79 @@
-import { Link } from "react-router-dom";
-import { Calendar, User } from "lucide-react";
 import './index.scss';
 
-function CardArtigo({ id, titulo, resumo, imagem, categoria, autor, dataPublicacao }) {
+function CardArtigo({ 
+  id, 
+  titulo, 
+  resumo, 
+  imagem, 
+  categoria, 
+  dataPublicacao, 
+  autor, 
+  visualizacoes, 
+  comentarios, 
+  reacoes,
+  isMeuArtigo = false,
+  onVisualizar,
+  onEditar,
+  onExcluir
+}) {
+  
+  const formatarData = (data) => {
+    return new Date(data).toLocaleDateString('pt-BR');
+  };
+
+  const handleVisualizar = (e) => {
+    e.stopPropagation();
+    if (onVisualizar) onVisualizar();
+  };
+
+  const handleEditar = (e) => {
+    e.stopPropagation();
+    if (onEditar) onEditar(id);
+  };
+
+  const handleExcluir = (e) => {
+    e.stopPropagation();
+    if (onExcluir) onExcluir(id);
+  };
+
   return (
-    <div className="card-artigo fade-in">
-      {imagem && <img src={imagem} alt={titulo} className="card-img" />}
-      <div className="card-conteudo">
-        <span className="categoria">{categoria}</span>
-
-        <h3 className="titulo">{titulo}</h3>
-        <p className="resumo">{resumo}</p>
-
-        <div className="card-footer">
-          <div className="autor-info">
-            <span className="autor">
-              <User size={14} className="icon" /> {autor}
-            </span>
-            <span className="data">
-              <Calendar size={14} className="icon" />
-              {new Date(dataPublicacao).toLocaleDateString('pt-BR')}
-            </span>
-          </div>
-          <Link to={`/artigos/${id}`} className="btn-ver">Ler mais</Link>
+    <article className="card-artigo" onClick={handleVisualizar}>
+      {imagem && (
+        <div className="card-imagem">
+          <img src={imagem} alt={titulo} />
         </div>
+      )}
+      
+      <div className="card-conteudo">
+        <div className="card-cabecalho">
+          <span className="categoria">{categoria}</span>
+          <span className="data">{formatarData(dataPublicacao)}</span>
+        </div>
+        
+        <h3 className="card-titulo">{titulo}</h3>
+        
+        {resumo && (
+          <p className="card-resumo">{resumo}</p>
+        )}
+        
+        <div className="card-rodape">
+          <div className="autor-info">
+            <span className="autor">Por {autor}</span>
+          </div>
+        </div>
+
+        {isMeuArtigo && (
+          <div className="acoes-artigo">
+            <button className="btn-editar" onClick={handleEditar}>
+               Editar
+            </button>
+            <button className="btn-excluir" onClick={handleExcluir}>
+                 Excluir
+            </button>
+          </div>
+        )}
       </div>
-    </div>
+    </article>
   );
 }
 

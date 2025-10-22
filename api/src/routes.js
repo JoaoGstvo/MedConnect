@@ -26,7 +26,8 @@ import {
   getArtigosController,
   getArtigoByIdController,
   updateArtigoController,
-  deleteArtigoController
+  deleteArtigoController,
+  getArtigosByUsuarioController
 } from "./Controller/artigosController.js";
 
 import {
@@ -91,6 +92,7 @@ router.delete("/categorias/:id", deleteCategoriaController);
 // ----------------- ARTIGOS -----------------
 router.get("/artigos", getArtigosController);
 router.get("/artigos/:id", getArtigoByIdController);
+router.get("/artigos/usuario/:id_usuario", getArtigosByUsuarioController);
 router.post("/artigos", createArtigoController);
 router.put("/artigos/:id", updateArtigoController);
 router.delete("/artigos/:id", deleteArtigoController);

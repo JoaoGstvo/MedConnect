@@ -2,10 +2,10 @@ import './index.scss';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from '../../../Components/Hooks/useAuth';
 
-function NovoArtigoPage() {
+function EditarArtigoPage() {
   const [form, setForm] = useState({
     titulo: "",
     id_categoria: "",
@@ -15,8 +15,10 @@ function NovoArtigoPage() {
   });
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [carregandoArtigo, setCarregandoArtigo] = useState(true);
   const [mensagem, setMensagem] = useState({ type: '', text: '' });
   const navigate = useNavigate();
+  const { id } = useParams();
   const { user } = useAuth();
 
   // Buscar categorias do backend
@@ -27,9 +29,6 @@ function NovoArtigoPage() {
         const data = await res.json();
         if (res.ok) {
           setCategorias(data);
-          if (data.length > 0) {
-            setForm(prev => ({ ...prev, id_categoria: data[0].id_categoria }));
-          }
         }
       } catch (err) {
         console.error("Erro ao carregar categorias:", err);
@@ -38,6 +37,56 @@ function NovoArtigoPage() {
     }
     fetchCategorias();
   }, []);
+
+  // Buscar artigo para edição
+  useEffect(() => {
+    async function fetchArtigo() {
+      if (!id) {
+        setMensagem({ type: 'error', text: 'ID do artigo não encontrado' });
+        setCarregandoArtigo(false);
+        return;
+      }
+      
+      try {
+        setCarregandoArtigo(true);
+        const response = await fetch(`http://localhost:5000/api/artigos/${id}`);
+        
+        if (!response.ok) {
+          throw new Error('Artigo não encontrado');
+        }
+        
+        const artigo = await response.json();
+        console.log('Artigo carregado:', artigo);
+        
+        // Verificar se o usuário é o autor do artigo
+        if (user && artigo.id_usuario !== user.id_usuario) {
+          setMensagem({ type: 'error', text: 'Você não tem permissão para editar este artigo' });
+          setTimeout(() => navigate('/artigos'), 2000);
+          return;
+        }
+        
+        // Preencher o formulário com os dados do artigo
+        setForm({
+          titulo: artigo.titulo || "",
+          id_categoria: artigo.id_categoria?.toString() || "",
+          resumo: artigo.resumo || "",
+          conteudo: artigo.conteudo || "",
+          imagem: artigo.imagem || ""
+        });
+        
+      } catch (err) {
+        console.error("Erro ao carregar artigo:", err);
+        setMensagem({ type: 'error', text: 'Erro ao carregar artigo' });
+        setTimeout(() => navigate('/artigos'), 2000);
+      } finally {
+        setCarregandoArtigo(false);
+      }
+    }
+    
+    if (user && id) {
+      fetchArtigo();
+    }
+  }, [id, user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +103,7 @@ function NovoArtigoPage() {
     e.preventDefault();
     
     if (!user) {
-      showMensagem('error', 'Você precisa estar logado para publicar um artigo');
+      showMensagem('error', 'Você precisa estar logado para editar um artigo');
       return;
     }
 
@@ -68,22 +117,18 @@ function NovoArtigoPage() {
     }
 
     try {
-      const artigoData = {
-        ...form,
-        id_usuario: user.id_usuario
-      };
-
-      const response = await fetch("http://localhost:5000/api/artigos", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/api/artigos/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(artigoData)
+        body: JSON.stringify(form)
       });
 
       const data = await response.json();
       if (response.ok) {
-      navigate('/artigopublicado');
+        showMensagem('success', '🎉 Artigo atualizado com sucesso!');
+        setTimeout(() => navigate('/artigos'), 1500);
       } else {
-        showMensagem('error', data.error || data.msg || "❌ Erro ao publicar artigo");
+        showMensagem('error', data.error || "❌ Erro ao atualizar artigo");
       }
     } catch (err) {
       console.error(err);
@@ -93,17 +138,30 @@ function NovoArtigoPage() {
     }
   };
 
+  if (carregandoArtigo) {
+    return (
+      <main className="criar-artigo-page">
+        <Header />
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Carregando artigo...</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
   return (
     <main className="criar-artigo-page">
       <Header />
 
       <section className="hero-section">
-        <h1>Compartilhe Seu Conhecimento</h1>
-        <p>Escreva um artigo e contribua para a comunidade de profissionais da saúde.</p>
+        <h1>Editar Artigo</h1>
+        <p>Atualize seu artigo e mantenha o conteúdo sempre relevante.</p>
       </section>
 
       <section className="form-container">
-        <h2>Criar Novo Artigo</h2>
+        <h2>Editar Artigo</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Título do Artigo *</label>
@@ -182,17 +240,17 @@ function NovoArtigoPage() {
             <button 
               type="button" 
               className="btn-voltar"
-              onClick={() => navigate("/artigopublicado")}
+              onClick={() => navigate("/artigos")}
               disabled={loading}
             >
-              ← Voltar para Artigos
+              ← Cancelar
             </button>
             <button 
               type="submit" 
               className={`btn-publicar ${loading ? 'loading' : ''}`}
               disabled={loading}
             >
-              {loading ? ' Publicando...' : ' Publicar Artigo'}
+              {loading ? ' Atualizando...' : ' Atualizar Artigo'}
             </button>
           </div>
         </form>
@@ -203,4 +261,4 @@ function NovoArtigoPage() {
   );
 }
 
-export default NovoArtigoPage;
+export default EditarArtigoPage;

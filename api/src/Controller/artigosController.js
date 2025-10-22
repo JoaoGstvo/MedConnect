@@ -1,11 +1,9 @@
-// Controller/artigosController.js
 import * as artigosRepository from '../Repository/artigosRepository.js';
 
 export async function createArtigoController(req, res) {
   try {
     const { id_usuario, id_categoria, titulo, resumo, conteudo, imagem } = req.body;
     
-    // Validação dos campos obrigatórios
     if (!id_usuario || !id_categoria || !titulo || !conteudo) {
       return res.status(400).json({ 
         error: 'Campos obrigatórios: id_usuario, id_categoria, titulo e conteudo' 
@@ -68,6 +66,23 @@ export async function getArtigoByIdController(req, res) {
     res.json(artigo);
   } catch (error) {
     console.error('Erro no getArtigoByIdController:', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+// CORRIGIR ESTA FUNÇÃO - ADICIONAR PARÂMETRO req
+export async function getArtigosByUsuarioController(req, res) {
+  try {
+    const { id_usuario } = req.params;
+    
+    if (!id_usuario || isNaN(id_usuario)) {
+      return res.status(400).json({ error: 'ID do usuário inválido' });
+    }
+    
+    const artigos = await artigosRepository.getArtigosByUsuario(parseInt(id_usuario));
+    res.json(artigos);
+  } catch (error) {
+    console.error('Erro no getArtigosByUsuarioController:', error);
     res.status(500).json({ error: error.message });
   }
 }
