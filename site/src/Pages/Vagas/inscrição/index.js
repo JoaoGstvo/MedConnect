@@ -163,23 +163,20 @@ function InscricaoPage() {
                         {/* Sidebar com detalhes da vaga */}
                         <div className='vaga-sidebar'>
                             <div className='vaga-card'>
-                                <h3>📋 Detalhes da Vaga</h3>
+                                <h3> Detalhes da Vaga</h3>
                                 <div className='vaga-info'>
                                     <h2>{vaga.titulo}</h2>
                                     <p className='empresa'>{vaga.empresa_nome}</p>
                                     
                                     <div className='vaga-details'>
                                         <div className='detail-item'>
-                                            <span className='icon'>📍</span>
                                             <span>{vaga.localizacao}</span>
                                         </div>
                                         <div className='detail-item'>
-                                            <span className='icon'>💼</span>
                                             <span>{vaga.modalidade}</span>
                                         </div>
                                         {vaga.salario && (
                                             <div className='detail-item'>
-                                                <span className='icon'>💰</span>
                                                 <span>{vaga.salario}</span>
                                             </div>
                                         )}
@@ -199,7 +196,7 @@ function InscricaoPage() {
                         <div className='form-container'>
                             {etapa === 1 ? (
                                 <div className='etapa-revisao'>
-                                    <h2>📄 Seus Dados de Candidatura</h2>
+                                    <h2>Seus Dados de Candidatura</h2>
                                     <p className='subtitulo'>
                                         Revise as informações que serão enviadas para a empresa
                                     </p>
@@ -224,7 +221,7 @@ function InscricaoPage() {
 
                                     {usarCurriculoSalvo && curriculo && (
                                         <div className='dados-curriculo'>
-                                            <h3>📋 Dados do seu Currículo</h3>
+                                            <h3> Dados do seu Currículo</h3>
                                             
                                             <div className='info-grid'>
                                                 <div className='info-group'>
@@ -292,7 +289,7 @@ function InscricaoPage() {
                                 </div>
                             ) : (
                                 <div className='etapa-confirmacao'>
-                                    <h2>✅ Confirmar Candidatura</h2>
+                                    <h2> Confirmar Candidatura</h2>
                                     <p className='subtitulo'>
                                         Revise todas as informações antes de confirmar sua inscrição
                                     </p>
@@ -314,7 +311,6 @@ function InscricaoPage() {
                                     </div>
 
                                     <div className='confirmacao-aviso'>
-                                        <div className='aviso-icon'>💡</div>
                                         <div className='aviso-text'>
                                             <strong>Importante:</strong> Após a confirmação, sua candidatura será enviada 
                                             e você poderá acompanhar o status na página "Minhas Candidaturas".
@@ -341,7 +337,7 @@ function InscricaoPage() {
                                                     Enviando...
                                                 </>
                                             ) : (
-                                                '✅ Confirmar e Enviar Candidatura'
+                                                ' Confirmar e Enviar Candidatura'
                                             )}
                                         </button>
                                     </div>

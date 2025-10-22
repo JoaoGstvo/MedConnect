@@ -111,14 +111,12 @@ function DashboardCandidato() {
                         </div>
 
                         <div className="action-card" onClick={() => navigate('/minhas-vagas')}>
-                            <div className="action-icon">📋</div>
                             <h3>Minhas Candidaturas</h3>
                             <p>Acompanhe suas inscrições em vagas</p>
                             <div className="action-badge">{estatisticas.totalInscricoes}</div>
                         </div>
 
                         <div className="action-card" onClick={() => navigate('/vagas')}>
-                            <div className="action-icon">💼</div>
                             <h3>Buscar Vagas</h3>
                             <p>Encontre novas oportunidades</p>
                             <div className="action-badge">Novo</div>
@@ -161,10 +159,10 @@ function DashboardCandidato() {
                                 {inscricoes.slice(0, 3).map(inscricao => (
                                     <div key={inscricao.id_candidatura} className="activity-item">
                                         <div className="activity-icon">
-                                            {inscricao.status === 'pendente' && '⏳'}
-                                            {inscricao.status === 'analise' && '🔍'}
-                                            {inscricao.status === 'aprovado' && '✅'}
-                                            {inscricao.status === 'recusado' && '❌'}
+                                            {inscricao.status === 'pendente' && ''}
+                                            {inscricao.status === 'analise' && ''}
+                                            {inscricao.status === 'aprovado' && ''}
+                                            {inscricao.status === 'recusado' && ''}
                                         </div>
                                         <div className="activity-content">
                                             <div className="activity-title">{inscricao.vaga_titulo}</div>

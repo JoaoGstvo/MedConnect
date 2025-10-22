@@ -10,15 +10,14 @@
   position: relative;
 
   .empresa-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: $spacing-20 $spacing-6 $spacing-16;
-    background: $gradient-primary;
+    @include flex-column-center;
+    min-height: 65vh;
+    padding: $spacing-20 $spacing-8;
+    text-align: center;
     color: white;
     position: relative;
-    overflow: hidden;
+    background: $gradient-secondary;
+    z-index: 1;
 
     @include mobile-only {
       padding: $spacing-16 $spacing-4 $spacing-12;

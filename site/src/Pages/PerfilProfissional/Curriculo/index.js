@@ -419,7 +419,7 @@ function MeuCurriculo() {
                     </div>
                 </aside>
             </div>
-
+                          
             <Footer />
         </main>
     );

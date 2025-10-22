@@ -929,7 +929,7 @@ const DashboardEmpresa = () => {
         <div className="modal-overlay">
           <div className="modal modal-large">
             <div className="modal-header">
-              <h3>📄 Currículo do Candidato</h3>
+              <h3>Currículo do Candidato</h3>
               <button 
                 className="close-btn"
                 onClick={() => {
@@ -985,7 +985,7 @@ const DashboardEmpresa = () => {
 
                   {curriculoCandidato.experiencia && (
                     <div className="curriculo-section">
-                      <h4>💼 Experiência Profissional</h4>
+                      <h4> Experiência Profissional</h4>
                       <div className="text-content">
                         <p>{curriculoCandidato.experiencia}</p>
                       </div>

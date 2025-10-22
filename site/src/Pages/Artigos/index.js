@@ -295,7 +295,6 @@ function ArtigosPage() {
                                 </div>
                             ) : artigosFiltrados.length === 0 ? (
                                 <div className="empty-state">
-                                    <div className="empty-icon">📄</div>
                                     <h3>Nenhum artigo encontrado</h3>
                                     <p>
                                         {searchTerm || filtroAtivo !== 'todos'

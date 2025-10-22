@@ -21,7 +21,7 @@ function MinhasVagas() {
         }
     }, [isAuthenticated, isLoading, navigate]);
 
-    // ✅ CORREÇÃO: useCallback para evitar recriação da função
+    //  CORREÇÃO: useCallback para evitar recriação da função
     const fetchMinhasInscricoes = useCallback(async () => {
         if (!user?.id_usuario) {
             setLoading(false);
@@ -36,21 +36,21 @@ function MinhasVagas() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('✅ Inscrições carregadas:', data.length);
+                console.log(' Inscrições carregadas:', data.length);
                 setInscricoes(data || []);
             } else {
                 console.error('❌ Erro ao buscar inscrições');
                 setInscricoes([]);
             }
         } catch (error) {
-            console.error('💥 Erro ao buscar inscrições:', error);
+            console.error('Erro ao buscar inscrições:', error);
             setInscricoes([]);
         } finally {
             setLoading(false);
         }
-    }, [user?.id_usuario]); // ✅ Dependência apenas do id_usuario
+    }, [user?.id_usuario]); //  Dependência apenas do id_usuario
 
-    // ✅ CORREÇÃO: useEffect com dependências específicas
+    //  CORREÇÃO: useEffect com dependências específicas
     useEffect(() => {
         if (isAuthenticated && user?.id_usuario) {
             console.log(' Executando busca de inscrições');
@@ -107,7 +107,7 @@ function MinhasVagas() {
                             : insc
                     )
                 );
-                alert('✅ Inscrição cancelada com sucesso!');
+                alert(' Inscrição cancelada com sucesso!');
             } else {
                 const error = await response.json();
                 throw new Error(error.error || 'Erro ao cancelar inscrição');
