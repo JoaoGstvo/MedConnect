@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 // Criando o ícone personalizado
 const hospitalIcon = new L.Icon({
   iconUrl: "/Images/Logo.png", // coloque a URL do seu ícone aqui
-  iconSize: [60, 40], // tamanho do ícone
+  iconSize: [60,], // tamanho do ícone
   iconAnchor: [17, 35], // ponto do ícone que vai marcar a posição
   popupAnchor: [0, -35], // onde o popup vai abrir em relação ao ícone
 });
@@ -26,7 +26,17 @@ function MapaEmpresas() {
         <Popup>Teste: Hospital São Lucas</Popup>
       </Marker>
 
-      <Marker position={[-22.55, -46.63]} icon={hospitalIcon}>
+      <Marker position={[-22.55, -47.62]} icon={hospitalIcon}>
+        <Popup>Hospital São Thiago</Popup>
+      </Marker>
+
+        <Marker position={[-22.55, -48.64]} icon={hospitalIcon}>
+        <Popup>Hospital São Thiago</Popup>
+      </Marker>
+        <Marker position={[-22.55, -49.66]} icon={hospitalIcon}>
+        <Popup>Hospital São Thiago</Popup>
+      </Marker>
+        <Marker position={[-22.55, -46.68]} icon={hospitalIcon}>
         <Popup>Hospital São Thiago</Popup>
       </Marker>
     </MapContainer>

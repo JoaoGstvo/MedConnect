@@ -1,219 +1,273 @@
-  .meucurriculo {
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #f4f5f7 0%, #e8ecf1 100%);
-    min-height: 100vh;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    position: relative;
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
 
-    /* Efeito de background sutil */
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(58, 155, 220, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(33, 129, 238, 0.03) 0%, transparent 50%);
-      z-index: 0;
+.meucurriculo {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  position: relative;
+
+  /* HEADER DEVE TER O MAIOR Z-INDEX */
+  /* Garantir que o header fique acima de tudo */
+  header {
+    position: relative;
+    z-index: 1000 !important; /* Z-index mais alto para o header */
+  }
+
+  /* Garantir que o conteúdo principal ocupe o espaço disponível */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 10% 20%, rgba($primary-400, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba($primary-500, 0.03) 0%, transparent 50%);
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .curriculo-header {
+    max-width: $breakpoint-2xl;
+    margin: 0 auto $spacing-8;
+    padding: $spacing-8 $spacing-6 0;
+
+    @include mobile-only {
+      padding: $spacing-6 $spacing-4 0;
+      margin-bottom: $spacing-6;
     }
 
-    .curriculo-header {
-      max-width: 1200px;
-      margin: 0 auto 40px;
+    h1 {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-extrabold;
+      margin-bottom: $spacing-4;
+      color: $gray-900;
       position: relative;
-      z-index: 1;
+      display: inline-block;
 
-      h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 15px;
-        color: #2c3e50;
-        position: relative;
-        display: inline-block;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -$spacing-2;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: $gradient-primary;
+        border-radius: 2px;
+      }
+    }
 
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -8px;
-          left: 0;
-          width: 80px;
-          height: 4px;
-          background: linear-gradient(90deg, #3a9bdc, #2181ee);
-          border-radius: 2px;
+    p {
+      font-size: $font-size-lg;
+      color: $gray-600;
+      line-height: $line-height-relaxed;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: $spacing-6;
+      border-radius: $radius-xl;
+      box-shadow: $shadow-lg;
+      border-left: 4px solid $primary-500;
+      margin-bottom: $spacing-4;
+
+      strong {
+        color: $error-500;
+      }
+    }
+
+    .user-info-badge {
+      background: $primary-50;
+      color: $primary-700;
+      padding: $spacing-3 $spacing-4;
+      border-radius: $radius-lg;
+      font-weight: $font-weight-semibold;
+      display: inline-block;
+      border-left: 4px solid $primary-500;
+    }
+  }
+
+  .curriculo-container {
+    flex: 1; /* Isso faz o container crescer e empurrar o footer para baixo */
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: $spacing-8;
+    max-width: $breakpoint-2xl;
+    margin: 0 auto;
+    padding: 0 $spacing-6;
+    width: 100%;
+    min-height: 0; /* Importante para flexbox */
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+      padding: 0 $spacing-4;
+      gap: $spacing-6;
+      margin-bottom: $spacing-6;
+    }
+  }
+
+  .curriculo-content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    min-height: 0; /* Importante para flexbox */
+  }
+
+  .section {
+    @include card-glass;
+    padding: $spacing-8;
+    transition: all $transition-base;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-xl;
+    }
+
+    .section-header {
+      @include flex-between;
+      margin-bottom: $spacing-6;
+      align-items: flex-start;
+
+      @include mobile-only {
+        flex-direction: column;
+        gap: $spacing-2;
+        align-items: flex-start;
+      }
+
+      h2 {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-semibold;
+        color: $gray-800;
+        margin: 0;
+      }
+
+      .section-badge {
+        @include status-badge($primary-100, $primary-700);
+        padding: $spacing-1 $spacing-3;
+        font-size: $font-size-xs;
+
+        &.optional {
+          @include status-badge($gray-100, $gray-600);
         }
+      }
+    }
+
+    .section-body {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-4;
+
+      input, textarea {
+        @include input-base;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+
+        &:focus {
+          border-color: $primary-500;
+          box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+          background: rgba(255, 255, 255, 0.95);
+          transform: translateY(-1px);
+        }
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+        line-height: $line-height-relaxed;
+      }
+
+      .edit-btn {
+        @include btn-primary;
+        padding: $spacing-3 $spacing-6;
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
+
+        &.save-full {
+          width: 100%;
+          margin-top: $spacing-4;
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      .curriculo-info {
+        margin-top: $spacing-4;
+        padding: $spacing-4;
+        background: $gray-50;
+        border-radius: $radius-lg;
+        border-left: 4px solid $primary-500;
+
+        p {
+          margin: $spacing-1 0;
+          color: $gray-600;
+          font-size: $font-size-sm;
+        }
+      }
+    }
+  }
+
+  .curriculo-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    height: fit-content;
+    position: sticky;
+    top: $spacing-20;
+
+    @include mobile-only {
+      position: static;
+      order: -1;
+    }
+
+    .sidebar-card {
+      @include card-glass;
+      padding: $spacing-6;
+
+      h3 {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: $gray-800;
+        margin-bottom: $spacing-2;
       }
 
       p {
-        font-size: 1.1rem;
-        color: #555;
-        line-height: 1.6;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        border-left: 4px solid #3a9bdc;
-
-        strong {
-          color: #e74c3c;
-        }
-      }
-    }
-
-    .curriculo-container {
-      display: grid;
-      grid-template-columns: 1fr 350px;
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .curriculo-content {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-
-    .section {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(15px);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #3a9bdc, #2181ee);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-      }
-
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-
-        &::before {
-          transform: scaleX(1);
-        }
-      }
-
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-
-        h2 {
-          font-size: 1.4rem;
-          color: #2c3e50;
-          font-weight: 700;
-        }
-
-        .edit-btn {
-          border: none;
-          background: linear-gradient(135deg, #3a9bdc, #2181ee);
-          color: #fff;
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(58, 155, 220, 0.3);
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(58, 155, 220, 0.4);
-          }
-        }
-      }
-
-      .section-body {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-
-        input,
-        textarea {
-          padding: 14px 16px;
-          border: 2px solid rgba(58, 155, 220, 0.2);
-          border-radius: 10px;
-          font-size: 1rem;
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-          color: #2c3e50;
-
-          &::placeholder {
-            color: rgba(44, 62, 80, 0.6);
-          }
-
-          &:focus {
-            outline: none;
-            border-color: #3a9bdc;
-            box-shadow: 0 0 0 3px rgba(58, 155, 220, 0.1);
-            background: rgba(255, 255, 255, 0.95);
-            transform: translateY(-2px);
-          }
-        }
-
-        textarea {
-          min-height: 100px;
-          resize: vertical;
-          font-family: inherit;
-        }
-      }
-    }
-
-    .curriculo-sidebar {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(15px);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      height: fit-content;
-      position: sticky;
-      top: 100px;
-
-      h3 {
-        margin-bottom: 15px;
-        font-size: 1.3rem;
-        color: #2c3e50;
-        font-weight: 700;
+        color: $gray-600;
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-4;
       }
 
       .progress-container {
-        margin: 20px 0;
+        margin: $spacing-4 0;
 
         .progress-bar {
-          background: rgba(58, 155, 220, 0.2);
-          border-radius: 10px;
-          height: 16px;
-          margin: 10px 0;
+          width: 100%;
+          height: 12px;
+          background: $gray-200;
+          border-radius: $radius-full;
           overflow: hidden;
-          position: relative;
+          margin-bottom: $spacing-2;
 
           .progress {
-            background: linear-gradient(90deg, #3a9bdc, #2181ee);
             height: 100%;
-            border-radius: 10px;
-            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: $gradient-secondary;
+            border-radius: $radius-full;
+            transition: width 0.8s ease-in-out;
             position: relative;
-            overflow: hidden;
 
             &::after {
               content: '';
@@ -228,447 +282,168 @@
           }
         }
 
-        span {
-          display: block;
-          font-weight: 700;
-          color: #2c3e50;
-          font-size: 1.1rem;
+        .progress-text {
+          font-size: $font-size-base;
+          font-weight: $font-weight-semibold;
+          color: $gradient-secondary;
           text-align: center;
+          display: block;
         }
       }
+    }
 
-      .sidebar-links {
+    .sidebar-links {
+      @include card-glass;
+      padding: $spacing-6;
+
+      h4 {
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
+        color: $gray-800;
+        margin-bottom: $spacing-3;
+      }
+
+      a {
         display: flex;
-        flex-direction: column;
-        gap: 15px;
+        align-items: center;
+        gap: $spacing-2;
+        padding: $spacing-3;
+        color: $primary-600;
+        text-decoration: none;
+        font-weight: $font-weight-medium;
+        transition: all $transition-fast;
+        border-radius: $radius-lg;
+        background: rgba($primary-500, 0.1);
 
-        a {
-          color: #3a9bdc;
-          font-size: 1rem;
-          text-decoration: none;
-          padding: 12px 16px;
-          border-radius: 10px;
-          background: rgba(58, 155, 220, 0.1);
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-weight: 500;
-
-          &:hover {
-            background: #3a9bdc;
-            color: #fff;
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(58, 155, 220, 0.3);
-          }
-
-          &::before {
-            content: '→';
-            font-weight: 600;
-          }
-        }
-      }
-    }
-
-    /* Animações */
-    @keyframes shimmer {
-      0% {
-        left: -100%;
-      }
-
-      100% {
-        left: 100%;
-      }
-    }
-
-    /* Responsividade */
-    @media (max-width: 1024px) {
-      .curriculo-container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-
-      .curriculo-sidebar {
-        position: static;
-        order: -1;
-      }
-    }
-
-    @media (max-width: 768px) {
-      padding: 30px 15px;
-
-      .curriculo-header {
-        h1 {
-          font-size: 2rem;
+        &:not(:last-child) {
+          margin-bottom: $spacing-2;
         }
 
-        p {
-          font-size: 1rem;
-          padding: 15px;
+        &:hover {
+          background: $primary-500;
+          color: white;
+          transform: translateX(4px);
+        }
+
+        &::before {
+          content: '→';
+          font-weight: $font-weight-semibold;
         }
       }
-
-      .section {
-        padding: 25px 20px;
-
-        .section-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
-
-          h2 {
-            font-size: 1.2rem;
-          }
-        }
-      }
-
-      .curriculo-sidebar {
-        padding: 25px 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      padding: 20px 10px;
-
-      .curriculo-header {
-        h1 {
-          font-size: 1.7rem;
-        }
-      }
-
-      .section {
-        padding: 20px 15px;
-      }
-
-      .curriculo-sidebar {
-        padding: 20px 15px;
-      }
-    }
-
-    /* Acessibilidade */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  }
-
-  .pdf-info,
-  .pdf-upload {
-    text-align: center;
-    padding: 20px;
-
-    p {
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-    }
-  }
-
-  .pdf-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .save-full {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.1rem;
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-
-    &:hover {
-      background: linear-gradient(135deg, #229954, #27ae60);
     }
   }
 
   .loading {
-    text-align: center;
-    padding: 4rem;
-    font-size: 1.2rem;
-    color: #666;
+    flex: 1;
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-4;
+    padding: $spacing-16;
+
+    .spinner {
+      @include loading-spinner(40px, $primary-500);
+    }
+
+    p {
+      color: $gray-600;
+      font-size: $font-size-lg;
+    }
   }
+}
 
-  .pdf-section {
-      .section-body {
-          padding: 0 !important;
-      }
+/* NOTIFICAÇÃO - Z-INDEX MENOR QUE O HEADER */
+.notification {
+  color: white;
+  position: fixed;
+  top: 120px; /* Posicionada abaixo do header */
+  right: 20px;
+  background: white;
+  padding: $spacing-4 $spacing-6;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+  border-left: 4px solid $gradient-secondary;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  z-index: 999; /* Z-index menor que o header */
+  animation: slideInRight 0.3s ease-out;
+  max-width: 400px;
+  
+  &.success {
+    border-left-color: $gradient-primary;
+    background: $gradient-secondary;
+    color: white;
   }
-
-  .pdf-uploaded {
-      padding: 25px;
-      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-      border-radius: 12px;
-      border: 2px dashed #3a9bdc;
-
-      .pdf-info {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          margin-bottom: 20px;
-
-          .pdf-icon {
-              font-size: 3rem;
-              color: #3a9bdc;
-          }
-
-          .pdf-details {
-              display: flex;
-              flex-direction: column;
-
-              strong {
-                  color: #2c3e50;
-                  font-size: 1.1rem;
-                  margin-bottom: 5px;
-              }
-
-              span {
-                  color: #666;
-                  font-size: 0.9rem;
-              }
-          }
-      }
-
-      .pdf-actions {
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-
-          .btn-pdf {
-              padding: 10px 16px;
-              border: none;
-              border-radius: 8px;
-              font-weight: 600;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              flex: 1;
-              min-width: 120px;
-
-              &.visualizar {
-                  background: #3498db;
-                  color: white;
-
-                  &:hover {
-                      background: #2980b9;
-                  }
-              }
-
-              &.download {
-                  background: #27ae60;
-                  color: white;
-
-                  &:hover {
-                      background: #219a52;
-                  }
-              }
-
-              &.excluir {
-                  background: #e74c3c;
-                  color: white;
-
-                  &:hover {
-                      background: #c0392b;
-                  }
-              }
-          }
-      }
+  
+  &.error {
+    border-left-color: $error-500;
+    background: $error-500;
+    color: white;
   }
-
-  .pdf-upload-area {
-      padding: 40px 25px;
-      text-align: center;
-      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-      border: 2px dashed #3a9bdc;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      position: relative;
-
-      &:hover {
-          background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
-          border-color: #2181ee;
-      }
-
-      .upload-placeholder {
-          margin-bottom: 20px;
-
-          .upload-icon {
-              font-size: 4rem;
-              color: #3a9bdc;
-              margin-bottom: 15px;
-          }
-
-          .upload-text {
-              display: flex;
-              flex-direction: column;
-              gap: 5px;
-
-              strong {
-                  color: #2c3e50;
-                  font-size: 1.2rem;
-              }
-
-              span {
-                  color: #666;
-                  font-size: 0.95rem;
-              }
-          }
-      }
-
-      .file-input {
-          display: none;
-      }
-
-      .upload-label {
-          display: inline-block;
-          background: linear-gradient(135deg, #3a9bdc, #2181ee);
-          color: white;
-          padding: 12px 24px;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          margin-bottom: 15px;
-
-          &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(58, 155, 220, 0.3);
-          }
-      }
-
-      .upload-info {
-          small {
-              color: #999;
-              font-size: 0.85rem;
-          }
-      }
+  
+  .notification-close {
+    background: none;
+    border: none;
+    font-size: $font-size-xl;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
   }
+}
 
-  // Responsividade
-  @media (max-width: 768px) {
-      .pdf-uploaded {
-          .pdf-actions {
-              flex-direction: column;
-
-              .btn-pdf {
-                  min-width: auto;
-              }
-          }
-      }
-
-      .pdf-upload-area {
-          padding: 30px 20px;
-      }
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@include mobile-only {
+  .notification {
+    top: 100px; /* Ajuste para mobile */
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+/* Animações */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
   .meucurriculo {
-    .curriculo-header {
-      .user-info-badge {
-        background: rgba(58, 155, 220, 0.1);
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-top: 15px;
-        border-left: 4px solid #3a9bdc;
-        font-size: 14px;
-        color: #2c3e50;
-        
-        strong {
-          color: #2181ee;
-        }
-      }
-    }
-
-    .section {
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        .section-badge {
-          background: #e74c3c;
-          color: white;
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 11px;
-          font-weight: 600;
-          
-          &.optional {
-            background: #95a5a6;
-          }
-        }
-      }
-    }
-
-    .curriculo-info {
-      text-align: center;
-      margin-top: 15px;
-      padding: 12px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #6c757d;
-      
-      p {
-        margin: 5px 0;
-      }
-    }
-
-    .sidebar-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .progress-tips {
-      margin-top: 20px;
-      
-      h4 {
-        color: #2c3e50;
-        margin-bottom: 10px;
-        font-size: 14px;
-      }
-      
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        
-        li {
-          padding: 5px 0;
-          font-size: 13px;
-          color: #5a6c7d;
-        }
-      }
-    }
-
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      min-height: 50vh;
-      
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3a9bdc;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-      }
-      
-      p {
-        color: #6c757d;
-        font-size: 16px;
-      }
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
+}

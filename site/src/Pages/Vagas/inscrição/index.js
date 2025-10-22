@@ -88,14 +88,10 @@ function InscricaoPage() {
 
             const resultado = await inscricaoResponse.json();
             
-            let mensagemSucesso = 'Inscrição realizada com sucesso!';
             if (resultado.dados_curriculo_incluidos) {
-                mensagemSucesso += '\nSeus dados do currículo foram incluídos automaticamente!';
+                navigate('/inscricaovagasucesso');
             }
-
-            alert(mensagemSucesso);
-            navigate('/minhasvagas');
-            
+        
         } catch (error) {
             console.error('Erro:', error);
             alert(`Erro: ${error.message}`);

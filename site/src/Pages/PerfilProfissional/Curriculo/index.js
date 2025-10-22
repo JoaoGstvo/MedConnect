@@ -23,9 +23,20 @@ function MeuCurriculo() {
     const [progresso, setProgresso] = useState(0);
     const [carregando, setCarregando] = useState(true);
     const [salvando, setSalvando] = useState(false);
+    const [notificacao, setNotificacao] = useState({ show: false, message: '', type: '' });
     const navigate = useNavigate();
     
     const { user: currentUser, isLoading: userLoading } = useAuth();
+
+    // Função para mostrar notificação
+    const mostrarNotificacao = (message, type = 'success') => {
+        setNotificacao({ show: true, message, type });
+        
+        // Auto-esconder após 3 segundos
+        setTimeout(() => {
+            setNotificacao({ show: false, message: '', type: '' });
+        }, 3000);
+    };
 
     console.log(' Estado do currentUser no MeuCurriculo:', currentUser);
     console.log(' Tipo do usuário:', currentUser?.tipo_usuario);
@@ -181,10 +192,15 @@ function MeuCurriculo() {
 
             if (response.ok) {
                 resultado = await response.json();
-                console.log('✅ Currículo salvo com sucesso:', resultado);
+                console.log('Currículo salvo com sucesso:', resultado);
 
-                setCurriculoExistente(resultado);
-                alert('✅ Currículo salvo com sucesso!');
+                setCurriculoExistente(resultado);                
+                mostrarNotificacao(
+                    curriculoExistente 
+                        ? ' Currículo atualizado com sucesso!' 
+                        : ' Currículo criado com sucesso!'
+                );
+                
                 await carregarCurriculo();
             } else {
                 const errorText = await response.text();
@@ -193,7 +209,8 @@ function MeuCurriculo() {
             }
         } catch (error) {
             console.error('Erro ao salvar currículo:', error);
-            alert(`❌ Erro ao salvar currículo: ${error.message}`);
+            // Mostrar notificação de erro
+            mostrarNotificacao(`❌ Erro ao salvar currículo: ${error.message}`, 'error');
         } finally {
             setSalvando(false);
         }
@@ -227,6 +244,19 @@ function MeuCurriculo() {
     return (
         <main className="meucurriculo">
             <Header />
+
+            {/* Notificação */}
+            {notificacao.show && (
+                <div className={`notification ${notificacao.type}`}>
+                    <span>{notificacao.message}</span>
+                    <button 
+                        className="notification-close"
+                        onClick={() => setNotificacao({ show: false, message: '', type: '' })}
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
 
             <section className="curriculo-header">
                 <h1>Meu Currículo</h1>
