@@ -1,0 +1,169 @@
+-- =========================================
+-- TABELA: USUARIOS
+-- =========================================
+CREATE TABLE usuarios (
+  id_usuario SERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  email VARCHAR(120) UNIQUE NOT NULL,
+  senha TEXT NOT NULL,
+  tipo_usuario VARCHAR(20) NOT NULL DEFAULT 'candidato',
+  data_cadastro TIMESTAMP DEFAULT now()
+);
+
+-- =========================================
+-- TABELA: EMPRESAS
+-- =========================================
+CREATE TABLE empresas (
+  id_empresa SERIAL PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  cnpj VARCHAR(18) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  senha TEXT NOT NULL,
+  endereco VARCHAR(255),
+  logo_url TEXT,
+  descricao TEXT,
+  data_criacao TIMESTAMP DEFAULT now(),
+  telefone VARCHAR(20),
+  cidade VARCHAR(100),
+  estado VARCHAR(2),
+  ativo BOOLEAN DEFAULT true
+);
+
+-- =========================================
+-- TABELA: VAGAS
+-- =========================================
+CREATE TABLE vagas (
+  id_vaga SERIAL PRIMARY KEY,
+  id_empresa INTEGER NOT NULL,
+  titulo VARCHAR(200) NOT NULL,
+  descricao TEXT NOT NULL,
+  requisitos TEXT,
+  localizacao VARCHAR(200),
+  salario NUMERIC(12,2),
+  modalidade VARCHAR(50),
+  data_publicacao TIMESTAMP DEFAULT now(),
+  status VARCHAR(20) DEFAULT 'aberta',
+  CONSTRAINT vagas_id_empresa_fkey
+    FOREIGN KEY (id_empresa)
+    REFERENCES empresas (id_empresa)
+    ON DELETE CASCADE
+);
+
+-- =========================================
+-- TABELA: VAGA_CANDIDATURAS
+-- =========================================
+CREATE TABLE vaga_candidaturas (
+  id_candidatura SERIAL PRIMARY KEY,
+  id_vaga INTEGER NOT NULL,
+  id_usuario INTEGER NOT NULL,
+  data_candidatura TIMESTAMP DEFAULT now(),
+  status VARCHAR(20) DEFAULT 'pendente',
+  nome_completo VARCHAR(255),
+  email VARCHAR(255),
+  telefone VARCHAR(50),
+  endereco TEXT,
+  cidade VARCHAR(255),
+  objetivo TEXT,
+  resumo_profissional TEXT,
+  formacao_academica TEXT,
+  experiencia_profissional TEXT,
+  habilidades TEXT,
+  idiomas TEXT,
+  curriculo_pdf_url TEXT,
+  CONSTRAINT vaga_candidaturas_id_vaga_fkey
+    FOREIGN KEY (id_vaga)
+    REFERENCES vagas (id_vaga)
+    ON DELETE CASCADE,
+  CONSTRAINT vaga_candidaturas_id_usuario_fkey
+    FOREIGN KEY (id_usuario)
+    REFERENCES usuarios (id_usuario)
+    ON DELETE CASCADE
+);
+
+-- =========================================
+-- TABELA: CURRICULOS
+-- =========================================
+CREATE TABLE curriculos (
+  id_curriculo SERIAL PRIMARY KEY,
+  id_usuario INTEGER NOT NULL,
+  nome_completo VARCHAR(255),
+  email VARCHAR(255),
+  telefone VARCHAR(50),
+  endereco TEXT,
+  cidade VARCHAR(255),
+  objetivo TEXT,
+  resumo TEXT,
+  formacao TEXT,
+  experiencia TEXT,
+  habilidades TEXT,
+  competencias TEXT,
+  idiomas TEXT,
+  arquivo_url TEXT,
+  nome_arquivo VARCHAR(255),
+  data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  ativo BOOLEAN DEFAULT true,
+  CONSTRAINT curriculos_id_usuario_fkey
+    FOREIGN KEY (id_usuario)
+    REFERENCES usuarios (id_usuario)
+    ON DELETE CASCADE
+);
+
+-- =========================================
+-- TABELA: CARD_EMPRESAS
+-- =========================================
+CREATE TABLE card_empresas (
+  id_card SERIAL PRIMARY KEY,
+  id_empresa INTEGER NOT NULL,
+  nome VARCHAR(120) NOT NULL,
+  logo TEXT,
+  endereco VARCHAR(255),
+  CONSTRAINT card_empresas_id_empresa_fkey
+    FOREIGN KEY (id_empresa)
+    REFERENCES empresas (id_empresa)
+    ON DELETE CASCADE
+);
+
+-- =========================================
+-- TABELA: ARTIGOS_CATEGORIAS
+-- =========================================
+CREATE TABLE artigos_categorias (
+  id_categoria SERIAL PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL
+);
+
+-- =========================================
+--  TABELA: ARTIGOS
+-- =========================================
+CREATE TABLE artigos (
+  id_artigo SERIAL PRIMARY KEY,
+  id_usuario INTEGER NOT NULL,
+  id_categoria INTEGER NOT NULL,
+  titulo VARCHAR(200) NOT NULL,
+  resumo TEXT,
+  conteudo TEXT NOT NULL,
+  imagem TEXT,
+  data_publicacao TIMESTAMP DEFAULT now(),
+  CONSTRAINT artigos_id_usuario_fkey
+    FOREIGN KEY (id_usuario)
+    REFERENCES usuarios (id_usuario)
+    ON DELETE CASCADE,
+  CONSTRAINT artigos_id_categoria_fkey
+    FOREIGN KEY (id_categoria)
+    REFERENCES artigos_categorias (id_categoria)
+    ON DELETE RESTRICT
+);
+
+-- =========================================
+-- LIMPAR E RESETAR IDS
+-- =========================================
+TRUNCATE TABLE 
+  vaga_candidaturas,
+  vagas,
+  curriculos,
+  card_empresas,
+  artigos,
+  artigos_categorias,
+  empresas,
+  usuarios
+RESTART IDENTITY CASCADE;

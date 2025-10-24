@@ -97,7 +97,7 @@ function DashboardCandidato() {
                     <h2>Ações Rápidas</h2>
                     <div className="actions-grid">
                         <div className="action-card" onClick={() => navigate('/perfil-candidato')}>
-                            <div className="action-icon">👤</div>
+                            <div className="action-icon"></div>
                             <h3>Meu Perfil</h3>
                             <p>Atualize suas informações pessoais e profissionais</p>
                             <div className="action-badge">Completo</div>
@@ -205,7 +205,7 @@ function DashboardCandidato() {
             <section className="progress-section">
                 <div className="container">
                     <div className="progress-card">
-                        <h3>🎯 Progresso do Seu Perfil</h3>
+                        <h3> Progresso do Seu Perfil</h3>
                         <div className="progress-bars">
                             <div className="progress-item">
                                 <div className="progress-info">

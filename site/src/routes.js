@@ -9,7 +9,7 @@ import NovoArtigoPage from './Pages/Artigos/NovoArtigo/index.js';
 import EmpresaPage from './Pages/Empresa/index.js';
 import VagasPage from './Pages/Vagas/index.js';
 import MinhasVagas from './Pages/Vagas/Minhas Vagas/index.js';
-import LandingPage1 from './Pages/LandingPage1/index.js';
+import TelacInicial from './Pages/TelaInicial/index.js';
 import DashboardEmpresaPage from './Pages/Dashboard Empresa/index.js';
 import MeuCurriculo from './Pages/PerfilProfissional/Curriculo/index.js';
 import MaisInformacoesPage from './Pages/Vagas/maisinformações/index.js';
@@ -29,7 +29,7 @@ export default function Index() {
         <BrowserRouter>
             <Routes>
                 {/* Rotas públicas */}
-                <Route path="/inicial" element={<LandingPage1 />} />
+                <Route path="/inicio" element={<TelacInicial />} />
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/cadastro" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
