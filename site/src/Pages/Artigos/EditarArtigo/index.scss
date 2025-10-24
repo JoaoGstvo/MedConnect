@@ -1,247 +1,227 @@
+// criar-artigo-page.scss
+@import './styles/mixins';
+
 .criar-artigo-page {
-    min-height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $gray-50;
+
+  .loading-container {
+    @include flex-column-center;
+    flex: 1;
+    padding: $spacing-20;
+    text-align: center;
+
+    .loading-spinner {
+      @include loading-spinner(3rem, $primary-500);
+      margin-bottom: $spacing-6;
+    }
+
+    p {
+      font-size: $font-size-lg;
+      color: $gray-600;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  .hero-section {
+    background: $gradient-primary;
+    color: white;
+    padding: $spacing-16 $spacing-6 $spacing-12;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    h1 {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-4;
+      text-shadow: $shadow-lg;
+      position: relative;
+      z-index: 1;
+
+      @include mobile-only {
+        font-size: $font-size-3xl;
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+      opacity: 0.95;
+      line-height: $line-height-relaxed;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+
+      @include mobile-only {
+        font-size: $font-size-base;
+      }
+    }
+  }
+
+  .page-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: $spacing-8 $spacing-4;
+    
+    @include tablet-up {
+      padding: $spacing-12 $spacing-4;
+    }
+  }
 
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 100px 20px;
-        text-align: center;
+  .form-container {
+    width: 100%;
+    max-width: 800px;
+    padding: $spacing-8;
+    background: white;
+    border-radius: $radius-3xl;
+    box-shadow: $shadow-2xl;
+    @include slide-up;
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 16px;
-            color: #666;
-        }
+    @include mobile-only {
+      padding: $spacing-6;
+      border-radius: $radius-2xl;
     }
 
-    .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 60px 20px 40px;
-        text-align: center;
-        position: relative;
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: $spacing-8;
+      color: $gray-900;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
     }
 
-    .form-container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 40px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    .form-group {
+      margin-bottom: $spacing-6;
 
-        h2 {
-            text-align: center;
-            margin-bottom: 32px;
-            color: #333;
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
+      label {
+        display: block;
+        margin-bottom: $spacing-2;
+        font-weight: $font-weight-semibold;
+        color: $gray-800;
+        font-size: $font-size-sm;
+        @include focus-visible;
+      }
 
-        .form-group {
-            margin-bottom: 24px;
-
-            label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: 600;
-                color: #333;
-                font-size: 14px;
-            }
-
-            input, select, textarea {
-                width: 100%;
-                padding: 12px 16px;
-                border: 2px solid #e0e0e0;
-                border-radius: 8px;
-                font-size: 16px;
-                transition: all 0.3s ease;
-                background: white;
-                
-                &:focus {
-                    outline: none;
-                    border-color: #007bff;
-                    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-                }
-            }
-
-            textarea.conteudo {
-                min-height: 300px;
-                resize: vertical;
-                line-height: 1.6;
-                font-family: inherit;
-            }
-
-            .contador-caracteres {
-                text-align: right;
-                font-size: 12px;
-                color: #666;
-                margin-top: 4px;
-            }
-        }
-
-        .mensagem-feedback {
-            padding: 16px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-
-            &.success {
-                background: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-
-            &.error {
-                background: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-        }
-
-        .acoes-form {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #e0e0e0;
-
-            .btn-voltar {
-                padding: 12px 24px;
-                background: #6c757d;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover:not(:disabled) {
-                    background: #545b62;
-                    transform: translateY(-1px);
-                }
-                
-                &:disabled {
-                    opacity: 0.6;
-                    cursor: not-allowed;
-                }
-            }
-
-            .btn-publicar {
-                padding: 12px 32px;
-                background: #28a745;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover:not(:disabled) {
-                    background: #218838;
-                    transform: translateY(-1px);
-                    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
-                }
-                
-                &:disabled {
-                    opacity: 0.6;
-                    cursor: not-allowed;
-                }
-
-                &.loading {
-                    background: #6c757d;
-                    position: relative;
-                    
-                    &::after {
-                        content: '';
-                        width: 16px;
-                        height: 16px;
-                        border: 2px solid transparent;
-                        border-top: 2px solid white;
-                        border-radius: 50%;
-                        animation: spin 1s linear infinite;
-                        margin-left: 8px;
-                        display: inline-block;
-                        vertical-align: middle;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@media (max-width: 768px) {
-    .criar-artigo-page {
-        .hero-section {
-            padding: 40px 20px 30px;
-            
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 12px;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-        }
+      input, select, textarea {
+        @include input-base;
         
-        .form-container {
-            margin: 20px 16px;
-            padding: 24px;
-            border-radius: 12px;
-            
-            h2 {
-                font-size: 1.5rem;
-                margin-bottom: 24px;
-            }
-            
-            .acoes-form {
-                flex-direction: column;
-                gap: 12px;
-                
-                .btn-voltar, .btn-publicar {
-                    width: 100%;
-                    justify-content: center;
-                }
-            }
+        &:focus {
+          box-shadow: 0 0 0 $input-focus-ring-width rgba($primary-500, 0.15);
         }
+      }
+
+      textarea.conteudo {
+        min-height: 300px;
+        resize: vertical;
+        line-height: $line-height-relaxed;
+        font-family: $font-family-primary;
+        
+        @include custom-scrollbar;
+      }
+
+      .contador-caracteres {
+        text-align: right;
+        font-size: $font-size-xs;
+        color: $gray-500;
+        margin-top: $spacing-1;
+        font-weight: $font-weight-medium;
+      }
     }
+
+    .mensagem-feedback {
+      padding: $spacing-4;
+      border-radius: $radius-lg;
+      margin: $spacing-6 0;
+      text-align: center;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-sm;
+      border: 2px solid transparent;
+      @include slide-up;
+
+      &.success {
+        background: $success-50;
+        color: $success-700;
+        border-color: $success-200;
+      }
+
+      &.error {
+        background: $error-50;
+        color: $error-700;
+        border-color: $error-200;
+      }
+    }
+
+    .acoes-form {
+      @include flex-between;
+      margin-top: $spacing-8;
+      padding-top: $spacing-6;
+      border-top: 2px solid $gray-100;
+
+      @include mobile-only {
+        flex-direction: column;
+        gap: $spacing-4;
+      }
+
+      .btn-voltar {
+        @include btn-secondary;
+        padding: $spacing-3 $spacing-6;
+
+        @include mobile-only {
+          width: 100%;
+          order: 2;
+        }
+      }
+
+      .btn-publicar {
+        @include btn-primary;
+        padding: $spacing-3 $spacing-8;
+
+        @include mobile-only {
+          width: 100%;
+          order: 1;
+        }
+
+        &.loading {
+          background: $gray-500;
+          position: relative;
+          color: transparent;
+          
+          &::after {
+            content: '';
+            @include loading-spinner(1.25rem, white);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animações específicas da página
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
 }

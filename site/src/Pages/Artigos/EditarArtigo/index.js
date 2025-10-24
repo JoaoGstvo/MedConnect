@@ -1,4 +1,3 @@
-import './index.scss';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useState, useEffect } from "react";
@@ -56,7 +55,6 @@ function EditarArtigoPage() {
         }
         
         const artigo = await response.json();
-        console.log('Artigo carregado:', artigo);
         
         // Verificar se o usuário é o autor do artigo
         if (user && artigo.id_usuario !== user.id_usuario) {
@@ -109,9 +107,21 @@ function EditarArtigoPage() {
 
     setLoading(true);
 
-    // Validação mínima
+    // Validação
     if (!form.titulo.trim() || !form.conteudo.trim() || !form.id_categoria) {
       showMensagem('error', 'Preencha todos os campos obrigatórios.');
+      setLoading(false);
+      return;
+    }
+
+    if (form.titulo.length > 120) {
+      showMensagem('error', 'O título deve ter no máximo 120 caracteres.');
+      setLoading(false);
+      return;
+    }
+
+    if (form.resumo.length > 200) {
+      showMensagem('error', 'O resumo deve ter no máximo 200 caracteres.');
       setLoading(false);
       return;
     }
@@ -120,19 +130,22 @@ function EditarArtigoPage() {
       const response = await fetch(`http://localhost:5000/api/artigos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify({
+          ...form,
+          id_usuario: user.id_usuario
+        })
       });
 
       const data = await response.json();
       if (response.ok) {
-        showMensagem('success', '🎉 Artigo atualizado com sucesso!');
+        showMensagem('success', 'Artigo atualizado com sucesso!');
         setTimeout(() => navigate('/artigos'), 1500);
       } else {
-        showMensagem('error', data.error || "❌ Erro ao atualizar artigo");
+        showMensagem('error', data.error || "Erro ao atualizar artigo");
       }
     } catch (err) {
       console.error(err);
-      showMensagem('error', "❌ Erro de conexão com o servidor");
+      showMensagem('error', "Erro de conexão com o servidor");
     } finally {
       setLoading(false);
     }
@@ -157,104 +170,116 @@ function EditarArtigoPage() {
 
       <section className="hero-section">
         <h1>Editar Artigo</h1>
-        <p>Atualize seu artigo e mantenha o conteúdo sempre relevante.</p>
+        <p>Atualize seu artigo e mantenha o conteúdo sempre relevante para a comunidade.</p>
       </section>
 
-      <section className="form-container">
-        <h2>Editar Artigo</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Título do Artigo *</label>
-            <input 
-              type="text" 
-              name="titulo" 
-              value={form.titulo} 
-              onChange={handleChange}
-              placeholder="Digite um título atrativo..." 
-              required 
-              maxLength={120}
-            />
-            <div className="contador-caracteres">
-              {form.titulo.length}/120 caracteres
+      <div className="page-content">
+        <section className="form-container">
+          <h2>Editar Artigo</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="titulo">Título do Artigo *</label>
+              <input 
+                id="titulo"
+                type="text" 
+                name="titulo" 
+                value={form.titulo} 
+                onChange={handleChange}
+                placeholder="Digite um título atrativo..." 
+                required 
+                maxLength={120}
+              />
+              <div className="contador-caracteres">
+                {form.titulo.length}/120 caracteres
+              </div>
             </div>
-          </div>
 
-          <div className="form-group">
-            <label>Categoria *</label>
-            <select name="id_categoria" value={form.id_categoria} onChange={handleChange} required>
-              <option value="">Selecione uma categoria</option>
-              {categorias.map(cat => (
-                <option key={cat.id_categoria} value={cat.id_categoria}>
-                  {cat.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Resumo</label>
-            <textarea 
-              name="resumo" 
-              value={form.resumo} 
-              onChange={handleChange} 
-              placeholder="Breve descrição do artigo..."
-              maxLength={200} 
-              rows="3"
-            />
-            <div className="contador-caracteres">
-              {form.resumo.length}/200 caracteres
+            <div className="form-group">
+              <label htmlFor="categoria">Categoria *</label>
+              <select 
+                id="categoria"
+                name="id_categoria" 
+                value={form.id_categoria} 
+                onChange={handleChange} 
+                required
+              >
+                <option value="">Selecione uma categoria</option>
+                {categorias.map(cat => (
+                  <option key={cat.id_categoria} value={cat.id_categoria}>
+                    {cat.nome}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          <div className="form-group">
-            <label>Conteúdo *</label>
-            <textarea 
-              name="conteudo" 
-              value={form.conteudo} 
-              onChange={handleChange} 
-              placeholder="Escreva o conteúdo do seu artigo..."
-              required 
-              rows="12"
-              className="conteudo"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>URL da Imagem (Opcional)</label>
-            <input 
-              type="text" 
-              name="imagem" 
-              value={form.imagem} 
-              onChange={handleChange} 
-              placeholder="https://exemplo.com/imagem.jpg" 
-            />
-          </div>
-
-          {mensagem.text && (
-            <div className={`mensagem-feedback ${mensagem.type}`}>
-              {mensagem.text}
+            <div className="form-group">
+              <label htmlFor="resumo">Resumo</label>
+              <textarea 
+                id="resumo"
+                name="resumo" 
+                value={form.resumo} 
+                onChange={handleChange} 
+                placeholder="Breve descrição do artigo..."
+                maxLength={200} 
+                rows="3"
+              />
+              <div className="contador-caracteres">
+                {form.resumo.length}/200 caracteres
+              </div>
             </div>
-          )}
 
-          <div className="acoes-form">
-            <button 
-              type="button" 
-              className="btn-voltar"
-              onClick={() => navigate("/artigos")}
-              disabled={loading}
-            >
-              ← Cancelar
-            </button>
-            <button 
-              type="submit" 
-              className={`btn-publicar ${loading ? 'loading' : ''}`}
-              disabled={loading}
-            >
-              {loading ? ' Atualizando...' : ' Atualizar Artigo'}
-            </button>
-          </div>
-        </form>
-      </section>
+            <div className="form-group">
+              <label htmlFor="conteudo">Conteúdo *</label>
+              <textarea 
+                id="conteudo"
+                name="conteudo" 
+                value={form.conteudo} 
+                onChange={handleChange} 
+                placeholder="Escreva o conteúdo do seu artigo..."
+                required 
+                rows="12"
+                className="conteudo"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="imagem">URL da Imagem (Opcional)</label>
+              <input 
+                id="imagem"
+                type="url" 
+                name="imagem" 
+                value={form.imagem} 
+                onChange={handleChange} 
+                placeholder="https://exemplo.com/imagem.jpg" 
+              />
+            </div>
+
+            {mensagem.text && (
+              <div className={`mensagem-feedback ${mensagem.type}`}>
+                {mensagem.text}
+              </div>
+            )}
+
+            <div className="acoes-form">
+              <button 
+                type="button" 
+                className="btn-voltar"
+                onClick={() => navigate("/artigos")}
+                disabled={loading}
+              >
+                ← Cancelar
+              </button>
+              <button 
+                type="submit" 
+                className={`btn-publicar ${loading ? 'loading' : ''}`}
+                disabled={loading}
+              >
+                {loading ? 'Atualizando...' : 'Atualizar Artigo'}
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
 
       <Footer />
     </main>
