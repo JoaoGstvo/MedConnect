@@ -32,7 +32,7 @@ export const useAuth = () => {
           logo_url: empresa.logo_url
         };
         
-        console.log('🚀 Empresa final:', empresaComTipo);
+        console.log(' Empresa final:', empresaComTipo);
         setUser(empresaComTipo);
         return empresaComTipo;
       } catch (error) {
@@ -78,7 +78,7 @@ export const useAuth = () => {
         ? 'http://localhost:5000/api/empresas/login'
         : 'http://localhost:5000/api/profissionais/login';
 
-      console.log(`🔐 useAuth: Login ${accountType} em:`, endpoint);
+      console.log(` useAuth: Login ${accountType} em:`, endpoint);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -86,7 +86,7 @@ export const useAuth = () => {
         body: JSON.stringify({ email, senha })
       });
 
-      console.log('📡 useAuth: Status da resposta:', response.status);
+      console.log(' useAuth: Status da resposta:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -118,7 +118,7 @@ export const useAuth = () => {
           telefone: result.empresa.telefone
         };
         
-        console.log('🏢 useAuth: Dados da empresa estruturados:', userData);
+        console.log(' useAuth: Dados da empresa estruturados:', userData);
         localStorage.setItem('empresaLogada', JSON.stringify(userData));
         localStorage.removeItem('user');
         
@@ -142,7 +142,7 @@ export const useAuth = () => {
       return { success: true, data: userData };
 
     } catch (error) {
-      console.error('💥 useAuth: Erro no login:', error);
+      console.error(' useAuth: Erro no login:', error);
       return { success: false, error: 'Erro de conexão' };
     } finally {
       setLoading(false);
@@ -150,7 +150,7 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    console.log('🚪 useAuth: Fazendo logout');
+    console.log(' useAuth: Fazendo logout');
     
     localStorage.removeItem('user');
     localStorage.removeItem('empresaLogada');
