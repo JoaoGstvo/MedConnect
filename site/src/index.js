@@ -1,4 +1,3 @@
-// App.js ou Index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { AuthProvider } from './Components/Hooks/AuthProvider';

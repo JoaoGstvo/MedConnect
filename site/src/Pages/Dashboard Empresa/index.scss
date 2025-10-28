@@ -234,7 +234,7 @@
     border-left: 4px solid #3b82f6;
 
     &.toast-success {
-      border-left-color: #10b981;
+      border-left-color: #3b82f6;
     }
 
     &.toast-error {
@@ -1016,7 +1016,6 @@
   }
 }
 
-// Melhorar a aparência dos campos obrigatórios
 .modal-vaga {
   label {
     display: flex;
@@ -1029,13 +1028,11 @@
       font-weight: bold;
     }
     
-    // Remover o asterisco para labels que não são obrigatórias
     &:not([for*="*"])::after {
       content: none;
     }
   }
   
-  // Para labels que realmente não são obrigatórias, adicione uma classe
   .optional-label::after {
     content: none !important;
   }

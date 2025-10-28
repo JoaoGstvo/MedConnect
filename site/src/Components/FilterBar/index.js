@@ -7,7 +7,7 @@ function FilterBar() {
             <button className="btn">Mais Filtros</button>
             <div className="search-box">
                 <input type="text" placeholder="Busque uma vaga por nome" />
-                <button className="search-btn">🔍</button>
+                <button className="search-btn"></button>
             </div>
         </div>
     );

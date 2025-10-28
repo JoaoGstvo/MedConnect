@@ -84,7 +84,7 @@ function DashboardCandidato() {
                                 className="btn-primary"
                                 onClick={() => navigate('/vagas')}
                             >
-                                🔍 Buscar Vagas
+                                 Buscar Vagas
                             </button>
                         </div>
                     </div>

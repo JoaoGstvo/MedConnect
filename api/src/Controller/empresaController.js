@@ -18,7 +18,6 @@ export async function loginEmpresaController(req, res) {
       return res.status(401).json({ error: 'Senha incorreta' });
     }
 
-    // Retorna dados completos da empresa
     const empresaData = {
       id_empresa: empresa.id_empresa,
       nome: empresa.nome,

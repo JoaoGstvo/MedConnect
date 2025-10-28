@@ -70,7 +70,6 @@ export async function getArtigoByIdController(req, res) {
   }
 }
 
-// CORRIGIR ESTA FUNÇÃO - ADICIONAR PARÂMETRO req
 export async function getArtigosByUsuarioController(req, res) {
   try {
     const { id_usuario } = req.params;

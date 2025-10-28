@@ -1,6 +1,7 @@
-// Components/UserSelectorCompact/index.js - VERSÃO SIMPLIFICADA
+// Components/UserSelectorCompact/index.js - COM DEBUG
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../Hooks/useAuth';
+import { useUserData } from '../Hooks/useUserData';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
 
@@ -8,9 +9,26 @@ function UserSelectorCompact() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useAuth();
+  const { userData } = useUserData();
   const navigate = useNavigate();
 
-  // Fechar dropdown ao clicar fora
+  // DEBUG DETALHADO
+  useEffect(() => {
+    console.log('=== USER SELECTOR DEBUG ===');
+    console.log('📦 user (from useAuth):', user);
+    console.log('📊 userData (from useUserData):', userData);
+    console.log('🏷️  Tipo usuário (user):', user?.tipo_usuario);
+    console.log('🏷️  Tipo usuário (userData):', userData?.tipo_usuario);
+    console.log('📝 Nome (user):', user?.nome);
+    console.log('📝 Nome (userData):', userData?.nome);
+    console.log('🆔 IDs:', {
+      user_id: user?.id_usuario,
+      userData_id: userData?.id_usuario,
+      empresa_id: user?.id_empresa
+    });
+    console.log('=== FIM DEBUG ===');
+  }, [user, userData]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -44,28 +62,77 @@ function UserSelectorCompact() {
       .slice(0, 2);
   };
 
+  // CORREÇÃO: Lógica mais robusta para determinar o tipo
   const getUserDisplayName = () => {
-    return user?.nome || user?.nome_completo || 'Usuário';
+    const source = userData || user;
+    
+    console.log('getUserDisplayName - source:', source);
+    
+    if (source?.tipo_usuario === 'empresa') {
+      return source?.nome || 'Empresa';
+    }
+    return source?.nome_completo || source?.nome || 'Usuário';
   };
 
+  const getUserImageUrl = () => {
+    const source = userData || user;
+    
+    if (source?.tipo_usuario === 'empresa') {
+      return source?.logo_url;
+    }
+    return source?.foto_url;
+  };
+
+  // CORREÇÃO CRÍTICA: Determinar o tipo corretamente
   const getUserType = () => {
-    return user?.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional';
+    const source = userData || user;
+    
+    console.log('getUserType - source tipo:', source?.tipo_usuario);
+    console.log('getUserType - source completo:', source);
+    
+    // Verifica múltiplas formas de identificar o tipo
+    if (source?.tipo_usuario === 'empresa' || source?.id_empresa) {
+      return 'Empresa';
+    }
+    if (source?.tipo_usuario === 'profissional' || source?.id_usuario) {
+      return 'Profissional';
+    }
+    
+    return 'Usuário';
+  };
+
+  const getEmail = () => {
+    const source = userData || user;
+    return source?.email || '';
   };
 
   const getMenuItems = () => {
-    if (user?.tipo_usuario === 'empresa') {
-      // Para empresas: APENAS Dashboard Empresa
+    const source = userData || user;
+    const userType = getUserType();
+    
+    console.log('getMenuItems - userType:', userType);
+    
+    if (userType === 'Empresa') {
       return [
         { path: '/dashboardempresa', label: 'Dashboard Empresa' }
       ];
     } else {
-      // Para profissionais
       return [
         { path: '/meucurriculo', label: 'Meu Currículo' },
         { path: '/minhasvagas', label: 'Minhas Candidaturas' },
       ];
     }
   };
+
+  if (!user) {
+    return null;
+  }
+
+  const displayName = getUserDisplayName();
+  const userType = getUserType();
+  const email = getEmail();
+
+  console.log(' Renderizando com:', { displayName, userType, email });
 
   return (
     <div className="user-selector-compact" ref={dropdownRef}>
@@ -76,16 +143,16 @@ function UserSelectorCompact() {
         aria-expanded={isOpen}
       >
         <div className="user-avatar">
-          {user?.foto_url ? (
-            <img src={user.foto_url} alt={getUserDisplayName()} />
+          {getUserImageUrl() ? (
+            <img src={getUserImageUrl()} alt={displayName} />
           ) : (
             <span className="avatar-initials">
-              {getInitials(getUserDisplayName())}
+              {getInitials(displayName)}
             </span>
           )}
         </div>
         <span className="user-name">
-          {getUserDisplayName()}
+          {displayName}
         </span>
         <span className={`dropdown-arrow ${isOpen ? 'open' : ''}`} aria-hidden="true">
           ▼
@@ -97,18 +164,18 @@ function UserSelectorCompact() {
           <div className="dropdown-header">
             <div className="user-info">
               <div className="user-avatar large">
-                {user?.foto_url ? (
-                  <img src={user.foto_url} alt={getUserDisplayName()} />
+                {getUserImageUrl() ? (
+                  <img src={getUserImageUrl()} alt={displayName} />
                 ) : (
                   <span className="avatar-initials">
-                    {getInitials(getUserDisplayName())}
+                    {getInitials(displayName)}
                   </span>
                 )}
               </div>
               <div className="user-details">
-                <strong>{getUserDisplayName()}</strong>
-                <span>{user?.email}</span>
-                <small>{getUserType()}</small>
+                <strong>{displayName}</strong>
+                <span>{email}</span>
+                <small>{userType}</small>
               </div>
             </div>
           </div>

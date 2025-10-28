@@ -411,13 +411,13 @@ function ArtigosPage() {
                                             className="btn-editar"
                                             onClick={() => handleEditarArtigo(artigoSelecionado.id)}
                                         >
-                                            ✏️ Editar Artigo
+                                             Editar Artigo
                                         </button>
                                         <button 
                                             className="btn-excluir"
                                             onClick={() => handleExcluirArtigo(artigoSelecionado.id)}
                                         >
-                                            🗑️ Excluir Artigo
+                                             Excluir Artigo
                                         </button>
                                     </>
                                 )}

@@ -13,11 +13,9 @@ export async function registerInscricaoController(req, res) {
 
         let dadosCurriculo = null;
 
-        // Buscar dados do profissional (usuário) para criar currículo automático
         const buscarDadosProfissional = async (id_usuario) => {
             try {
                 console.log('Buscando dados do profissional:', id_usuario);
-                // Tenta buscar da tabela profissionais
                 const query = 'SELECT * FROM profissionais WHERE id_profissional = $1';
                 const result = await pool.query(query, [id_usuario]);
                 
@@ -45,7 +43,6 @@ export async function registerInscricaoController(req, res) {
                     
                     if (profissional) {
                         console.log('Dados do profissional encontrados:', profissional);
-                        // Cria um currículo básico com dados do profissional
                         const curriculoBasico = {
                             nome_completo: profissional.nome || 'Usuário Demo',
                             email: profissional.email || 'demo@email.com',
