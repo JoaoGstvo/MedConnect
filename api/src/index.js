@@ -15,4 +15,4 @@ server.use(express.urlencoded({ extended: true }));;
 server.use("/api", router);
 
 const PORT = process.env.PORT;
-server.listen(PORT, () => console.log(`A Braba Ta On Na Porta ${PORT} 🔥`));
+server.listen(PORT, () => console.log(`Servidor Rodando na porta ${PORT} `));

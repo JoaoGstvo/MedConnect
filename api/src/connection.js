@@ -2,7 +2,7 @@ import pg from 'pg';
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_DEV_URL,
+  connectionString: process.env.DATABASE_MAIN_URL,
   ssl: {
     rejectUnauthorized: false
   }

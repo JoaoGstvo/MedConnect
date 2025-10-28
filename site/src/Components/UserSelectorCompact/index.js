@@ -12,16 +12,15 @@ function UserSelectorCompact() {
   const { userData } = useUserData();
   const navigate = useNavigate();
 
-  // DEBUG DETALHADO
   useEffect(() => {
     console.log('=== USER SELECTOR DEBUG ===');
-    console.log('📦 user (from useAuth):', user);
-    console.log('📊 userData (from useUserData):', userData);
-    console.log('🏷️  Tipo usuário (user):', user?.tipo_usuario);
-    console.log('🏷️  Tipo usuário (userData):', userData?.tipo_usuario);
-    console.log('📝 Nome (user):', user?.nome);
-    console.log('📝 Nome (userData):', userData?.nome);
-    console.log('🆔 IDs:', {
+    console.log(' user (from useAuth):', user);
+    console.log(' userData (from useUserData):', userData);
+    console.log('  Tipo usuário (user):', user?.tipo_usuario);
+    console.log('  Tipo usuário (userData):', userData?.tipo_usuario);
+    console.log(' Nome (user):', user?.nome);
+    console.log(' Nome (userData):', userData?.nome);
+    console.log(' IDs:', {
       user_id: user?.id_usuario,
       userData_id: userData?.id_usuario,
       empresa_id: user?.id_empresa
@@ -120,6 +119,7 @@ function UserSelectorCompact() {
       return [
         { path: '/meucurriculo', label: 'Meu Currículo' },
         { path: '/minhasvagas', label: 'Minhas Candidaturas' },
+        { path: '/artigos', label: 'Meu Artigos' }
       ];
     }
   };
