@@ -19,7 +19,6 @@ function NovoArtigoPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Buscar categorias do backend
   useEffect(() => {
     async function fetchCategorias() {
       try {
@@ -60,7 +59,6 @@ function NovoArtigoPage() {
 
     setLoading(true);
 
-    // Validação mínima
     if (!form.titulo.trim() || !form.conteudo.trim() || !form.id_categoria) {
       showMensagem('error', 'Preencha todos os campos obrigatórios.');
       setLoading(false);
@@ -70,7 +68,8 @@ function NovoArtigoPage() {
     try {
       const artigoData = {
         ...form,
-        id_usuario: user.id_usuario
+        id_usuario: user.id_usuario,
+        tipo_usuario: user.tipo_usuario // Adiciona o tipo de usuário
       };
 
       const response = await fetch("http://localhost:5000/api/artigos", {
@@ -81,13 +80,13 @@ function NovoArtigoPage() {
 
       const data = await response.json();
       if (response.ok) {
-      navigate('/artigopublicado');
+        navigate('/artigos');
       } else {
-        showMensagem('error', data.error || data.msg || "❌ Erro ao publicar artigo");
+        showMensagem('error', data.error || "Erro ao publicar artigo");
       }
     } catch (err) {
       console.error(err);
-      showMensagem('error', "❌ Erro de conexão com o servidor");
+      showMensagem('error', "Erro de conexão com o servidor");
     } finally {
       setLoading(false);
     }
@@ -182,7 +181,7 @@ function NovoArtigoPage() {
             <button 
               type="button" 
               className="btn-voltar"
-              onClick={() => navigate("/artigopublicado")}
+              onClick={() => navigate("/artigos")}
               disabled={loading}
             >
               ← Voltar para Artigos
@@ -192,7 +191,7 @@ function NovoArtigoPage() {
               className={`btn-publicar ${loading ? 'loading' : ''}`}
               disabled={loading}
             >
-              {loading ? ' Publicando...' : ' Publicar Artigo'}
+              {loading ? 'Publicando...' : 'Publicar Artigo'}
             </button>
           </div>
         </form>

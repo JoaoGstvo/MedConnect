@@ -3,8 +3,7 @@ import {
   getUsers,
   getUserById,
   updateUser,
-  getUserByEmail,
-  loginProfissional
+  getUserByEmail
 } from "../Repository/profissionalRepository.js";
 
 export const registerProfissionalController = async (req, res) => {
@@ -15,7 +14,6 @@ export const registerProfissionalController = async (req, res) => {
       return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
     }
 
-    // Verificar se usuário já existe
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ error: 'Email já cadastrado' });
@@ -68,25 +66,24 @@ export const updateProfissionalController = async (req, res) => {
   }
 };
 
-// CONTROLLER DE LOGIN - ADICIONE ESTA FUNÇÃO
 export const loginProfissionalController = async (req, res) => {
   try {
     const { email, senha } = req.body;
-    
-    console.log('Tentativa de login profissional:', email);
     
     if (!email || !senha) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Usar a função de login que verifica com bcrypt
-    const user = await loginProfissional(email, senha);
+    const user = await getUserByEmail(email);
     
     if (!user) {
-      return res.status(401).json({ error: 'Email ou senha incorretos' });
+      return res.status(401).json({ error: 'Usuário não encontrado' });
     }
 
-    // Retornar dados do usuário
+    if (user.senha !== senha) {
+      return res.status(401).json({ error: 'Senha incorreta' });
+    }
+
     const userData = {
       id_usuario: user.id_usuario,
       nome: user.nome,
@@ -95,7 +92,6 @@ export const loginProfissionalController = async (req, res) => {
       data_cadastro: user.data_cadastro
     };
 
-    console.log('Login bem-sucedido:', userData);
     res.json(userData);
   } catch (error) {
     console.error('Erro no login:', error);

@@ -5,7 +5,6 @@ import CardArtigo from "../../Components/CardArtigo";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../Components/Hooks/useAuth';
-import {toast} from 'react-toastify';
 
 function ArtigosPage() {
     const [artigos, setArtigos] = useState([]);
@@ -20,7 +19,6 @@ function ArtigosPage() {
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    // Buscar categorias
     useEffect(() => {
         async function carregarCategorias() {
             try {
@@ -34,17 +32,16 @@ function ArtigosPage() {
         carregarCategorias();
     }, []);
 
-    // Buscar artigos
     useEffect(() => {
         async function carregarArtigos() {
             try {
                 setLoading(true);
                 const response = await fetch("http://localhost:5000/api/artigos");
-                
+
                 if (!response.ok) {
                     throw new Error('Erro ao carregar artigos');
                 }
-                
+
                 const data = await response.json();
                 setArtigos(data);
                 setArtigosFiltrados(data);
@@ -57,14 +54,13 @@ function ArtigosPage() {
         carregarArtigos();
     }, []);
 
-    // Filtro por busca, categoria e aba
     useEffect(() => {
         let resultado = [...artigos];
-        
+
         if (abaAtiva === 'meus' && user) {
             resultado = resultado.filter(artigo => artigo.id_usuario === user.id_usuario);
         }
-        
+
         if (searchTerm) {
             resultado = resultado.filter(artigo =>
                 artigo.titulo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -74,7 +70,7 @@ function ArtigosPage() {
         }
 
         if (filtroAtivo !== 'todos') {
-            resultado = resultado.filter(artigo => 
+            resultado = resultado.filter(artigo =>
                 artigo.categoria === filtroAtivo
             );
         }
@@ -83,21 +79,18 @@ function ArtigosPage() {
         setArtigosFiltrados(resultado);
     }, [artigos, searchTerm, filtroAtivo, abaAtiva, user]);
 
-    // Função para visualizar artigo
     const handleVisualizarArtigo = (artigo) => {
         setArtigoSelecionado(artigo);
         setShowModal(true);
-        document.body.style.overflow = 'hidden'; // Impede scroll da página principal
+        document.body.style.overflow = 'hidden';
     };
 
-    // Função para fechar modal
     const handleFecharModal = () => {
         setShowModal(false);
         setArtigoSelecionado(null);
-        document.body.style.overflow = 'auto'; // Restaura scroll
+        document.body.style.overflow = 'auto';
     };
 
-    // Função para navegar entre artigos
     const handleArtigoAnterior = () => {
         const indexAtual = artigosFiltrados.findIndex(a => a.id === artigoSelecionado.id);
         const indexAnterior = indexAtual > 0 ? indexAtual - 1 : artigosFiltrados.length - 1;
@@ -110,7 +103,6 @@ function ArtigosPage() {
         setArtigoSelecionado(artigosFiltrados[indexProximo]);
     };
 
-    // Fechar modal com ESC
     useEffect(() => {
         const handleEscKey = (e) => {
             if (e.keyCode === 27 && showModal) {
@@ -124,12 +116,10 @@ function ArtigosPage() {
         };
     }, [showModal]);
 
-    // Função para editar artigo
     const handleEditarArtigo = (artigoId) => {
         navigate(`/editar-artigo/${artigoId}`);
     };
 
-    // Função para excluir artigo
     const handleExcluirArtigo = async (artigoId) => {
         if (!window.confirm('Tem certeza que deseja excluir este artigo?')) return;
 
@@ -143,18 +133,27 @@ function ArtigosPage() {
                 if (artigoSelecionado?.id === artigoId) {
                     handleFecharModal();
                 }
-                toast.success('Artigo excluído com sucesso!');
+                alert('Artigo excluído com sucesso!');
             } else {
-                toast.error('Erro ao excluir artigo');
+                alert('Erro ao excluir artigo');
             }
         } catch (error) {
             console.error('Erro ao excluir artigo:', error);
-            toast.error('Erro ao excluir artigo');
+            alert('Erro ao excluir artigo');
         }
     };
 
-    // Contar meus artigos
     const meusArtigosCount = user ? artigos.filter(a => a.id_usuario === user.id_usuario).length : 0;
+
+    const getDisplayName = () => {
+        if (!user) return 'Usuário';
+        return user.tipo_usuario === 'empresa' ? user.nome : user.nome_completo || user.nome;
+    };
+
+    const getUserDescription = () => {
+        if (!user) return 'Profissional de Saúde';
+        return user.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional de Saúde';
+    };
 
     return (
         <main className="artigos-page linkedin-style">
@@ -177,15 +176,14 @@ function ArtigosPage() {
 
             <div className="container main-container">
                 <div className="layout">
-                    {/* Sidebar Esquerda */}
                     <aside className="sidebar-left">
                         <div className="profile-card">
                             <div className="profile-content">
                                 <div className="avatar">
-                                    {user?.nome ? user.nome.charAt(0).toUpperCase() : 'U'}
+                                    {getDisplayName().charAt(0).toUpperCase()}
                                 </div>
-                                <h3>{user?.nome || 'Usuário'}</h3>
-                                <p>Profissional de Saúde</p>
+                                <h3>{getDisplayName()}</h3>
+                                <p>{getUserDescription()}</p>
                                 <div className="profile-stats">
                                     <div className="stat">
                                         <span className="stat-number">
@@ -211,26 +209,31 @@ function ArtigosPage() {
                                 <a href="/vagas" className="menu-item">
                                     Vagas
                                 </a>
-                                <a href="/meucurriculo" className="menu-item">
-                                    Meu Currículo
-                                </a>
+                                {user?.tipo_usuario === 'profissional' && (
+                                    <a href="/meucurriculo" className="menu-item">
+                                        Meu Currículo
+                                    </a>
+                                )}
+                                {user?.tipo_usuario === 'empresa' && (
+                                    <a href="/dashboardempresa" className="menu-item">
+                                        Dashboard Empresa
+                                    </a>
+                                )}
                             </nav>
                         </div>
                     </aside>
 
-                    {/* Conteúdo Principal */}
                     <main className="main-content">
-                        {/* Abas e Filtros */}
                         <div className="tools-bar">
                             <div className="abas-container">
-                                <button 
+                                <button
                                     className={`aba ${abaAtiva === 'todos' ? 'active' : ''}`}
                                     onClick={() => setAbaAtiva('todos')}
                                 >
                                     Todos os Artigos
                                 </button>
                                 {user && (
-                                    <button 
+                                    <button
                                         className={`aba ${abaAtiva === 'meus' ? 'active' : ''}`}
                                         onClick={() => setAbaAtiva('meus')}
                                     >
@@ -268,7 +271,6 @@ function ArtigosPage() {
                             </div>
                         </div>
 
-                        {/* Estatísticas */}
                         <div className="stats-bar">
                             <span className="stats-text">
                                 {artigosFiltrados.length} {abaAtiva === 'meus' ? 'dos meus' : ''} artigos
@@ -287,7 +289,6 @@ function ArtigosPage() {
                             )}
                         </div>
 
-                        {/* Feed de Artigos */}
                         <div className="articles-feed">
                             {loading ? (
                                 <div className="loading-state">
@@ -300,7 +301,7 @@ function ArtigosPage() {
                                     <p>
                                         {searchTerm || filtroAtivo !== 'todos'
                                             ? `Não encontramos resultados para os filtros aplicados`
-                                            : abaAtiva === 'meus' 
+                                            : abaAtiva === 'meus'
                                                 ? 'Você ainda não publicou nenhum artigo'
                                                 : 'Ainda não há artigos publicados'
                                         }
@@ -326,7 +327,8 @@ function ArtigosPage() {
                                         visualizacoes={artigo.visualizacoes || Math.floor(Math.random() * 1000)}
                                         comentarios={artigo.comentarios || Math.floor(Math.random() * 50)}
                                         reacoes={artigo.reacoes || Math.floor(Math.random() * 200)}
-                                        isMeuArtigo={user && artigo.id_usuario === user.id_usuario}
+                                        id_usuario={artigo.id_usuario} // Adicionar
+                                        tipo_autor={artigo.tipo_autor} // Adicionar
                                         onVisualizar={() => handleVisualizarArtigo(artigo)}
                                         onEditar={handleEditarArtigo}
                                         onExcluir={handleExcluirArtigo}
@@ -336,7 +338,6 @@ function ArtigosPage() {
                         </div>
                     </main>
 
-                    {/* Sidebar Direita */}
                     <aside className="sidebar-right">
                         <div className="trending-card">
                             <div className="card-header">
@@ -360,7 +361,6 @@ function ArtigosPage() {
                 </div>
             </div>
 
-            {/* Modal de Visualização do Artigo */}
             {showModal && artigoSelecionado && (
                 <div className="modal-overlay" onClick={handleFecharModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -380,9 +380,9 @@ function ArtigosPage() {
                                     <img src={artigoSelecionado.imagem} alt={artigoSelecionado.titulo} />
                                 </div>
                             )}
-                            
+
                             <h1 className="modal-titulo">{artigoSelecionado.titulo}</h1>
-                            
+
                             <div className="modal-autor">
                                 <span>Por {artigoSelecionado.autor}</span>
                             </div>
@@ -406,24 +406,25 @@ function ArtigosPage() {
 
                         <div className="modal-footer">
                             <div className="modal-acoes">
-                                {user && artigoSelecionado.id_usuario === user.id_usuario && (
-                                    <>
-                                        <button 
-                                            className="btn-editar"
-                                            onClick={() => handleEditarArtigo(artigoSelecionado.id)}
-                                        >
-                                             Editar Artigo
-                                        </button>
-                                        <button 
-                                            className="btn-excluir"
-                                            onClick={() => handleExcluirArtigo(artigoSelecionado.id)}
-                                        >
-                                             Excluir Artigo
-                                        </button>
-                                    </>
-                                )}
+                                {user && artigoSelecionado.id_usuario === user.id_usuario &&
+                                    artigoSelecionado.tipo_autor === user.tipo_usuario && (
+                                        <>
+                                            <button
+                                                className="btn-editar"
+                                                onClick={() => handleEditarArtigo(artigoSelecionado.id)}
+                                            >
+                                                Editar Artigo
+                                            </button>
+                                            <button
+                                                className="btn-excluir"
+                                                onClick={() => handleExcluirArtigo(artigoSelecionado.id)}
+                                            >
+                                                Excluir Artigo
+                                            </button>
+                                        </>
+                                    )}
                             </div>
-                            
+
                             <div className="modal-navegacao">
                                 <button className="btn-navegacao" onClick={handleArtigoAnterior}>
                                     ← Anterior

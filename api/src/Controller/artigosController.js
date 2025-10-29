@@ -2,7 +2,7 @@ import * as artigosRepository from '../Repository/artigosRepository.js';
 
 export async function createArtigoController(req, res) {
   try {
-    const { id_usuario, id_categoria, titulo, resumo, conteudo, imagem } = req.body;
+    const { id_usuario, id_categoria, titulo, resumo, conteudo, imagem, tipo_usuario = 'profissional' } = req.body;
     
     if (!id_usuario || !id_categoria || !titulo || !conteudo) {
       return res.status(400).json({ 
@@ -16,7 +16,8 @@ export async function createArtigoController(req, res) {
       titulo, 
       resumo, 
       conteudo, 
-      imagem
+      imagem,
+      tipo_usuario
     );
     
     res.status(201).json({
@@ -27,7 +28,8 @@ export async function createArtigoController(req, res) {
         resumo: artigo.resumo,
         conteudo: artigo.conteudo,
         imagem: artigo.imagem,
-        data_publicacao: artigo.data_publicacao
+        data_publicacao: artigo.data_publicacao,
+        tipo_autor: artigo.tipo_autor
       }
     });
   } catch (error) {
@@ -73,12 +75,13 @@ export async function getArtigoByIdController(req, res) {
 export async function getArtigosByUsuarioController(req, res) {
   try {
     const { id_usuario } = req.params;
+    const { tipo_usuario = 'profissional' } = req.query;
     
     if (!id_usuario || isNaN(id_usuario)) {
       return res.status(400).json({ error: 'ID do usuário inválido' });
     }
     
-    const artigos = await artigosRepository.getArtigosByUsuario(parseInt(id_usuario));
+    const artigos = await artigosRepository.getArtigosByUsuario(parseInt(id_usuario), tipo_usuario);
     res.json(artigos);
   } catch (error) {
     console.error('Erro no getArtigosByUsuarioController:', error);

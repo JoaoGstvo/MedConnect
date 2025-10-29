@@ -9,14 +9,7 @@ export const useUserData = (autoRefresh = true) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log('useUserData: Buscando dados do usuário...', {
-        isAuthenticated,
-        userId: user?.id_usuario,
-        userType: user?.tipo_usuario
-      });
-
       if (!isAuthenticated || !user?.id_usuario) {
-        console.log('useUserData: Usuário não autenticado ou sem ID');
         setUserData(null);
         setLoading(false);
         return;
@@ -29,19 +22,30 @@ export const useUserData = (autoRefresh = true) => {
         const userType = user.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
         const userId = user.id_usuario;
         
-        console.log(`useUserData: Buscando ${userType} com ID ${userId}`);
-        
         const response = await fetch(`http://localhost:5000/api/${userType}/${userId}`);
         
         if (response.ok) {
           const data = await response.json();
-          console.log('useUserData: Dados recebidos:', data);
-          setUserData(data);
+          
+          const structuredData = user.tipo_usuario === 'empresa' 
+            ? {
+                ...data,
+                tipo_usuario: 'empresa',
+                id_usuario: data.id_empresa,
+                nome_completo: data.nome
+              }
+            : {
+                ...data,
+                tipo_usuario: 'profissional',
+                nome_completo: data.nome_completo || data.nome
+              };
+          
+          setUserData(structuredData);
         } else {
           throw new Error(`Erro ${response.status} ao carregar dados do usuário`);
         }
       } catch (err) {
-        console.error('useUserData: Erro ao buscar dados:', err);
+        console.error('Erro ao buscar dados:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -68,8 +72,6 @@ export const useUserData = (autoRefresh = true) => {
       const userType = user.tipo_usuario === 'empresa' ? 'empresas' : 'profissionais';
       const userId = user.id_usuario;
       
-      console.log(`useUserData: Atualizando ${userType} com ID ${userId}`, updates);
-      
       const response = await fetch(`http://localhost:5000/api/${userType}/${userId}`, {
         method: 'PUT',
         headers: {
@@ -80,18 +82,31 @@ export const useUserData = (autoRefresh = true) => {
 
       if (response.ok) {
         const updatedData = await response.json();
-        console.log('useUserData: Dados atualizados:', updatedData);
-        setUserData(updatedData);
+        
+        const structuredData = user.tipo_usuario === 'empresa' 
+          ? {
+              ...updatedData,
+              tipo_usuario: 'empresa',
+              id_usuario: updatedData.id_empresa,
+              nome_completo: updatedData.nome
+            }
+          : {
+              ...updatedData,
+              tipo_usuario: 'profissional',
+              nome_completo: updatedData.nome_completo || updatedData.nome
+            };
+        
+        setUserData(structuredData);
         
         await refreshUserData();
         
-        return updatedData;
+        return structuredData;
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Erro ao atualizar dados');
       }
     } catch (err) {
-      console.error('useUserData: Erro na atualização:', err);
+      console.error('Erro na atualização:', err);
       setError(err.message);
       throw err;
     } finally {

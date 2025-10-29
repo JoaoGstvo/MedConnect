@@ -1,4 +1,3 @@
-// Components/CardVaga/index.js - VERSÃO CORRIGIDA
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Hooks/useAuth';
 import { useState, useEffect } from 'react';
@@ -7,9 +6,14 @@ import './index.scss';
 
 function CardVaga({ vaga }) {
     const navigate = useNavigate();
-    const { isAuthenticated, isEmpresa, user } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const [jaInscrito, setJaInscrito] = useState(false);
     const [statusInscricao, setStatusInscricao] = useState(null);
+
+    // Função para verificar se é empresa
+    const isEmpresa = () => {
+        return user?.tipo_usuario === 'empresa';
+    };
 
     // Verificar se usuário já está inscrito na vaga e pegar status
     useEffect(() => {
@@ -43,7 +47,7 @@ function CardVaga({ vaga }) {
         };
 
         verificarInscricao();
-    }, [user, vaga.id_vaga, isEmpresa]);
+    }, [user, vaga.id_vaga]);
 
     const handleCandidatar = () => {
         // BLOQUEAR se for empresa
@@ -74,7 +78,7 @@ function CardVaga({ vaga }) {
                              (jaInscrito && statusInscricao !== 'cancelado');
 
     const getButtonText = () => {
-        if (jaInscrito && statusInscricao !== 'cancelado') return ' Inscrito';
+        if (jaInscrito && statusInscricao !== 'cancelado') return 'Inscrito';
         if (statusInscricao === 'cancelado') return 'Candidatar-se Novamente';
         if (isEmpresa()) return 'Apenas Profissionais';
         if (vaga.status !== 'aberta') return 'Vaga Fechada';
@@ -83,10 +87,18 @@ function CardVaga({ vaga }) {
 
     const getStatusBadge = () => {
         if (statusInscricao === 'cancelado') {
-            return statusInscricao === 'cancelado';
+            return <span className="status-badge cancelado">Cancelada</span>;
         }
-
+        if (jaInscrito) {
+            return <span className="status-badge inscrito">Inscrito</span>;
+        }
         return null;
+    };
+
+    const formatarSalario = (salario) => {
+        if (!salario || salario === 'A combinar') return 'Salário a combinar';
+        if (typeof salario === 'string' && salario.includes('R$')) return salario;
+        return `R$ ${salario}`;
     };
 
     return (
@@ -116,7 +128,7 @@ function CardVaga({ vaga }) {
             
             <div className="job-content">
                 <div className="salary-section">
-                    <span className="salary-range">R$ {vaga.salario || 'Salário a combinar'}</span>
+                    <span className="salary-range">{formatarSalario(vaga.salario)}</span>
                 </div>
                 <div className="job-description">
                     <p>{vaga.descricao?.substring(0, 150)}...</p>
@@ -125,7 +137,9 @@ function CardVaga({ vaga }) {
             
             <div className="job-footer">
                 <div className="job-status">
-                    {vaga.status === 'aberta' ? ' Aberta' : ' Fechada'}
+                    <span className={`status ${vaga.status === 'aberta' ? 'aberta' : 'fechada'}`}>
+                        {vaga.status === 'aberta' ? 'Aberta' : 'Fechada'}
+                    </span>
                     {getStatusBadge()}
                 </div>
                 

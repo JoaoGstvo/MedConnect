@@ -8,11 +8,14 @@ export async function loginEmpresaController(req, res) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Usar a função de login que verifica com bcrypt
-    const empresa = await empresaRepository.loginEmpresa(email, senha);
+    const empresa = await empresaRepository.getEmpresaByEmail(email);
 
     if (!empresa) {
-      return res.status(401).json({ error: 'Email ou senha incorretos' });
+      return res.status(401).json({ error: 'Empresa não encontrada' });
+    }
+
+    if (empresa.senha !== senha) {
+      return res.status(401).json({ error: 'Senha incorreta' });
     }
 
     const empresaData = {
@@ -26,22 +29,15 @@ export async function loginEmpresaController(req, res) {
       telefone: empresa.telefone,
       cidade: empresa.cidade,
       estado: empresa.estado,
-      data_criacao: empresa.data_criacao,
-      tipo_usuario: 'empresa'
+      data_criacao: empresa.data_criacao
     };
 
-    res.json({
-      success: true,
-      empresa: empresaData,
-      message: 'Login realizado com sucesso'
-    });
+    res.json(empresaData);
   } catch (error) {
     console.error('Erro no login da empresa:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 }
-
-// ... manter as outras funções do controller ...
 
 export async function getEmpresaByIdController(req, res) {
   try {

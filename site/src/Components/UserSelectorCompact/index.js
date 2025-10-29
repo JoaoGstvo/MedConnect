@@ -1,7 +1,5 @@
-// Components/UserSelectorCompact/index.js - COM DEBUG
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../Hooks/useAuth';
-import { useUserData } from '../Hooks/useUserData';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
 
@@ -9,24 +7,7 @@ function UserSelectorCompact() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useAuth();
-  const { userData } = useUserData();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log('=== USER SELECTOR DEBUG ===');
-    console.log(' user (from useAuth):', user);
-    console.log(' userData (from useUserData):', userData);
-    console.log('  Tipo usuário (user):', user?.tipo_usuario);
-    console.log('  Tipo usuário (userData):', userData?.tipo_usuario);
-    console.log(' Nome (user):', user?.nome);
-    console.log(' Nome (userData):', userData?.nome);
-    console.log(' IDs:', {
-      user_id: user?.id_usuario,
-      userData_id: userData?.id_usuario,
-      empresa_id: user?.id_empresa
-    });
-    console.log('=== FIM DEBUG ===');
-  }, [user, userData]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,7 +21,6 @@ function UserSelectorCompact() {
   }, []);
 
   const handleLogout = () => {
-    console.log('Fazendo logout...');
     logout();
     setIsOpen(false);
     navigate('/');
@@ -61,57 +41,29 @@ function UserSelectorCompact() {
       .slice(0, 2);
   };
 
-  // CORREÇÃO: Lógica mais robusta para determinar o tipo
   const getUserDisplayName = () => {
-    const source = userData || user;
-    
-    console.log('getUserDisplayName - source:', source);
-    
-    if (source?.tipo_usuario === 'empresa') {
-      return source?.nome || 'Empresa';
-    }
-    return source?.nome_completo || source?.nome || 'Usuário';
+    if (!user) return 'Usuário';
+    return user.tipo_usuario === 'empresa' ? user.nome : user.nome_completo || user.nome;
   };
 
   const getUserImageUrl = () => {
-    const source = userData || user;
-    
-    if (source?.tipo_usuario === 'empresa') {
-      return source?.logo_url;
-    }
-    return source?.foto_url;
+    if (!user) return null;
+    return user.tipo_usuario === 'empresa' ? user.logo_url : user.foto_url;
   };
 
-  // CORREÇÃO CRÍTICA: Determinar o tipo corretamente
   const getUserType = () => {
-    const source = userData || user;
-    
-    console.log('getUserType - source tipo:', source?.tipo_usuario);
-    console.log('getUserType - source completo:', source);
-    
-    // Verifica múltiplas formas de identificar o tipo
-    if (source?.tipo_usuario === 'empresa' || source?.id_empresa) {
-      return 'Empresa';
-    }
-    if (source?.tipo_usuario === 'profissional' || source?.id_usuario) {
-      return 'Profissional';
-    }
-    
-    return 'Usuário';
+    if (!user) return 'Usuário';
+    return user.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional';
   };
 
   const getEmail = () => {
-    const source = userData || user;
-    return source?.email || '';
+    return user?.email || '';
   };
 
   const getMenuItems = () => {
-    const source = userData || user;
-    const userType = getUserType();
+    if (!user) return [];
     
-    console.log('getMenuItems - userType:', userType);
-    
-    if (userType === 'Empresa') {
+    if (user.tipo_usuario === 'empresa') {
       return [
         { path: '/dashboardempresa', label: 'Dashboard Empresa' }
       ];
@@ -119,7 +71,7 @@ function UserSelectorCompact() {
       return [
         { path: '/meucurriculo', label: 'Meu Currículo' },
         { path: '/minhasvagas', label: 'Minhas Candidaturas' },
-        { path: '/artigos', label: 'Meu Artigos' }
+        { path: '/artigos', label: 'Meus Artigos' }
       ];
     }
   };
@@ -131,8 +83,6 @@ function UserSelectorCompact() {
   const displayName = getUserDisplayName();
   const userType = getUserType();
   const email = getEmail();
-
-  console.log(' Renderizando com:', { displayName, userType, email });
 
   return (
     <div className="user-selector-compact" ref={dropdownRef}>

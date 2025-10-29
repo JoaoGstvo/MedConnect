@@ -1,4 +1,5 @@
 import './index.scss';
+import { useAuth } from '../Hooks/useAuth';
 
 function CardArtigo({ 
   id, 
@@ -11,12 +12,33 @@ function CardArtigo({
   visualizacoes, 
   comentarios, 
   reacoes,
-  isMeuArtigo = false,
+  id_usuario, // Adicionar id do usuário autor
+  tipo_autor, // Adicionar tipo do autor
   onVisualizar,
   onEditar,
   onExcluir
 }) {
-  
+  const { user } = useAuth();
+
+  // Função para verificar se o artigo pertence ao usuário logado
+  const isMeuArtigo = () => {
+    if (!user) return false;
+    
+    // Se for empresa, verifica se o id_usuario do artigo é igual ao id_empresa do usuário
+    // E se o tipo_autor é 'empresa'
+    if (user.tipo_usuario === 'empresa') {
+      return user.id_usuario === id_usuario && tipo_autor === 'empresa';
+    }
+    
+    // Se for profissional, verifica se o id_usuario do artigo é igual ao id_usuario do usuário
+    // E se o tipo_autor é 'profissional'
+    if (user.tipo_usuario === 'profissional') {
+      return user.id_usuario === id_usuario && tipo_autor === 'profissional';
+    }
+    
+    return false;
+  };
+
   const formatarData = (data) => {
     return new Date(data).toLocaleDateString('pt-BR');
   };
@@ -28,12 +50,16 @@ function CardArtigo({
 
   const handleEditar = (e) => {
     e.stopPropagation();
-    if (onEditar) onEditar(id);
+    if (isMeuArtigo() && onEditar) {
+      onEditar(id);
+    }
   };
 
   const handleExcluir = (e) => {
     e.stopPropagation();
-    if (onExcluir) onExcluir(id);
+    if (isMeuArtigo() && onExcluir) {
+      onExcluir(id);
+    }
   };
 
   return (
@@ -59,16 +85,19 @@ function CardArtigo({
         <div className="card-rodape">
           <div className="autor-info">
             <span className="autor">Por {autor}</span>
+            {tipo_autor === 'empresa' && (
+              <span className="badge-empresa">Empresa</span>
+            )}
           </div>
         </div>
 
-        {isMeuArtigo && (
+        {isMeuArtigo() && (
           <div className="acoes-artigo">
             <button className="btn-editar" onClick={handleEditar}>
-               Editar
+              Editar
             </button>
             <button className="btn-excluir" onClick={handleExcluir}>
-                 Excluir
+              Excluir
             </button>
           </div>
         )}
