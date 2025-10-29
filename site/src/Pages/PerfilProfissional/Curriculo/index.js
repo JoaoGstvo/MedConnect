@@ -4,6 +4,7 @@ import Footer from "../../../Components/Footer/index.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../../Components/Hooks/useAuth.js';
+import { toast } from 'react-toastify';
 
 function MeuCurriculo() {
     const [curriculoData, setCurriculoData] = useState({
@@ -195,12 +196,7 @@ function MeuCurriculo() {
                 console.log('Currículo salvo com sucesso:', resultado);
 
                 setCurriculoExistente(resultado);                
-                mostrarNotificacao(
-                    curriculoExistente 
-                        ? ' Currículo atualizado com sucesso!' 
-                        : ' Currículo criado com sucesso!'
-                );
-                
+                toast.success('Currículo salvo com sucesso!');
                 await carregarCurriculo();
             } else {
                 const errorText = await response.text();
@@ -209,8 +205,7 @@ function MeuCurriculo() {
             }
         } catch (error) {
             console.error('Erro ao salvar currículo:', error);
-            // Mostrar notificação de erro
-            mostrarNotificacao(`❌ Erro ao salvar currículo: ${error.message}`, 'error');
+            toast.error(`Erro ao salvar currículo: ${error.message}`, 'error');
         } finally {
             setSalvando(false);
         }

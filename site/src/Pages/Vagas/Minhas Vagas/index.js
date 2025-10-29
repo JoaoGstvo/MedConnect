@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useAuth } from '../../../Components/Hooks/useAuth';
+import { toast } from 'react-toastify';
 
 function MinhasVagas() {
     const [inscricoes, setInscricoes] = useState([]);
@@ -107,14 +108,14 @@ function MinhasVagas() {
                             : insc
                     )
                 );
-                alert(' Inscrição cancelada com sucesso!');
+                toast.success('Inscrição cancelada com sucesso!');
             } else {
                 const error = await response.json();
                 throw new Error(error.error || 'Erro ao cancelar inscrição');
             }
         } catch (error) {
             console.error('Erro ao cancelar inscrição:', error);
-            alert(`❌ Erro: ${error.message}`);
+            toast.error(`❌ Erro: ${error.message}`);
         } finally {
             setCancelando(null);
         }

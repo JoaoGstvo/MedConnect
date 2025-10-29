@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Hooks/useAuth';
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import './index.scss';
 
 function CardVaga({ vaga }) {
@@ -47,18 +48,18 @@ function CardVaga({ vaga }) {
     const handleCandidatar = () => {
         // BLOQUEAR se for empresa
         if (isEmpresa()) {
-            alert('Empresas não podem se candidatar a vagas.');
+            toast.error('Empresas não podem se candidatar a vagas.');
             return;
         }
 
         // NÃO BLOQUEAR se o status for cancelado - permite reinscrição
         if (jaInscrito && statusInscricao !== 'cancelado') {
-            alert('Você já está inscrito nesta vaga!');
+            toast.info('Você já está inscrito nesta vaga!');
             return;
         }
 
         if (!isAuthenticated) {
-            alert('Você precisa estar logado para se candidatar a vagas.');
+            toast.warning('Você precisa estar logado para se candidatar a vagas.');
             navigate('/login');
             return;
         }

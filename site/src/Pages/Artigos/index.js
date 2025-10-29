@@ -5,6 +5,7 @@ import CardArtigo from "../../Components/CardArtigo";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../Components/Hooks/useAuth';
+import {toast} from 'react-toastify';
 
 function ArtigosPage() {
     const [artigos, setArtigos] = useState([]);
@@ -142,13 +143,13 @@ function ArtigosPage() {
                 if (artigoSelecionado?.id === artigoId) {
                     handleFecharModal();
                 }
-                alert('Artigo excluído com sucesso!');
+                toast.success('Artigo excluído com sucesso!');
             } else {
-                alert('Erro ao excluir artigo');
+                toast.error('Erro ao excluir artigo');
             }
         } catch (error) {
             console.error('Erro ao excluir artigo:', error);
-            alert('Erro ao excluir artigo');
+            toast.error('Erro ao excluir artigo');
         }
     };
 
