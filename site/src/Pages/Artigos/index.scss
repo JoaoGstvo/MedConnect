@@ -702,8 +702,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 
   @media (max-width: 768px) {
-    max-height: 90vh;
-    /* Reduzido de 95vh */
+    max-height: 80vh;
     margin: 10px;
     max-width: 95%;
   }

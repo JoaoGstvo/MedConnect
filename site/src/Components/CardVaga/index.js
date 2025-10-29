@@ -1,13 +1,19 @@
-// Components/CardVaga/index.js - VERSÃO FINAL
+// Components/CardVaga/index.js - VERSÃO FINAL COM BLOQUEIO PARA EMPRESAS
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Hooks/useAuth';
 import './index.scss';
 
 function CardVaga({ vaga }) {
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isEmpresa } = useAuth();
 
     const handleCandidatar = () => {
+        // BLOQUEAR se for empresa
+        if (isEmpresa()) {
+            alert('Empresas não podem se candidatar a vagas.');
+            return;
+        }
+
         if (!isAuthenticated) {
             alert('Você precisa estar logado para se candidatar a vagas.');
             navigate('/login');
@@ -15,6 +21,9 @@ function CardVaga({ vaga }) {
         }
         navigate(`/inscricaovaga/${vaga.id_vaga}`);
     };
+
+    // ADICIONAR: Verificar se deve bloquear o botão
+    const shouldBlockButton = isEmpresa() || vaga.status !== 'aberta';
 
     return (
         <div className="job-card">
@@ -55,10 +64,14 @@ function CardVaga({ vaga }) {
                 <div className="job-action">
                     <button 
                         onClick={handleCandidatar}
-                        disabled={vaga.status !== 'aberta'}
+                        disabled={shouldBlockButton}
                         className="apply-button"
+                        title={isEmpresa() ? "Empresas não podem se candidatar" : ""}
                     >
-                        {vaga.status === 'aberta' ? 'Candidatar-se' : 'Vaga Fechada'}
+                        {shouldBlockButton 
+                            ? (isEmpresa() ? "Apenas Profissionais" : "Vaga Fechada")
+                            : 'Candidatar-se'
+                        }
                     </button>
                     
                     <button 

@@ -1,4 +1,4 @@
-// Pages/Vagas/inscrição/index.js - VERSÃO FINAL
+// Pages/Vagas/inscrição/index.js - VERSÃO FINAL CORRIGIDA
 import './index.scss';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -15,14 +15,24 @@ function InscricaoPage() {
     const [enviando, setEnviando] = useState(false);
     const [etapa, setEtapa] = useState(1);
     const [usarCurriculoSalvo, setUsarCurriculoSalvo] = useState(true);
+    const { isEmpresa, user, isAuthenticated } = useAuth();
     const [curriculoPDF, setCurriculoPDF] = useState(null);
-    
-    const { user, isAuthenticated } = useAuth();
+
+    // BLOQUEAR acesso direto à página de inscrição para empresas
+    useEffect(() => {
+        if (isEmpresa()) {
+            alert('Empresas não podem se candidatar a vagas.');
+            navigate('/vagas');
+            return;
+        }
+    }, [isEmpresa, navigate]);
 
     useEffect(() => {
+        // Se for empresa, não busca dados
+        if (isEmpresa()) return;
+
         const fetchData = async () => {
             try {
-                // Buscar dados da vaga
                 const responseVaga = await fetch(`http://localhost:5000/api/vagas/${id}`);
                 if (responseVaga.ok) {
                     const dataVaga = await responseVaga.json();
@@ -47,7 +57,7 @@ function InscricaoPage() {
         };
 
         fetchData();
-    }, [id, user]);
+    }, [id, user, isEmpresa]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -61,6 +71,12 @@ function InscricaoPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        // Proteção extra
+        if (isEmpresa()) {
+            alert('Empresas não podem se candidatar a vagas.');
+            return;
+        }
+
         if (!isAuthenticated || !user) {
             alert('Você precisa estar logado para se inscrever em vagas.');
             navigate('/login');
@@ -107,6 +123,27 @@ function InscricaoPage() {
     const voltarEtapa = () => {
         setEtapa(1);
     };
+
+    // Se for empresa, mostra mensagem de bloqueio
+    if (isEmpresa()) {
+        return (
+            <main className='inscricaopage'>
+                <Header />
+                <div className="error-page">
+                    <div className="error-icon">🚫</div>
+                    <h2>Acesso Restrito</h2>
+                    <p>Empresas não podem se candidatar a vagas.</p>
+                    <button 
+                        className='btn-primary' 
+                        onClick={() => navigate('/vagas')}
+                    >
+                        Voltar para Vagas
+                    </button>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
 
     if (loading) {
         return (

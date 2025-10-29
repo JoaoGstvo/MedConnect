@@ -21,12 +21,10 @@ export const useAuth = () => {
         const empresa = JSON.parse(empresaData);
         console.log('✅ useAuth: CARREGANDO EMPRESA:', empresa.nome);
         
-        // CORREÇÃO: Estrutura correta para empresa
         const empresaComTipo = {
           ...empresa,
-          tipo_usuario: 'empresa', // GARANTINDO que é empresa
+          tipo_usuario: 'empresa', 
           id_usuario: empresa.id_empresa || empresa.id_usuario,
-          // Garantir que todas as propriedades necessárias existam
           nome: empresa.nome,
           email: empresa.email,
           logo_url: empresa.logo_url
@@ -45,13 +43,13 @@ export const useAuth = () => {
         
         const userComTipo = {
           ...user,
-          tipo_usuario: 'profissional', // GARANTINDO que é profissional
+          tipo_usuario: 'profissional', 
           id_usuario: user.id_usuario,
           nome_completo: user.nome_completo || user.nome,
           foto_url: user.foto_url
         };
         
-        console.log('👤 Profissional final:', userComTipo);
+        console.log(' Profissional final:', userComTipo);
         setUser(userComTipo);
         return userComTipo;
       } catch (error) {
@@ -97,23 +95,18 @@ export const useAuth = () => {
       const result = await response.json();
       console.log('✅ useAuth: Login bem-sucedido! Resposta:', result);
 
-      // CORREÇÃO CRÍTICA: Estrutura diferente para empresa vs profissional
       let userData;
       
       if (accountType === 'empresa') {
-        // Estrutura específica para empresa
         userData = {
-          // Dados principais da empresa
           ...result.empresa,
-          // PROPRIEDADES CRÍTICAS - GARANTIR que existam
           tipo_usuario: 'empresa',
-          id_usuario: result.empresa.id_empresa, // ID padronizado
-          id_empresa: result.empresa.id_empresa, // ID específico
+          id_usuario: result.empresa.id_empresa, 
+          id_empresa: result.empresa.id_empresa, 
           nome: result.empresa.nome,
           email: result.empresa.email,
           logo_url: result.empresa.logo_url,
           cnpj: result.empresa.cnpj,
-          // Outras propriedades que podem ser úteis
           descricao: result.empresa.descricao,
           telefone: result.empresa.telefone
         };
@@ -123,7 +116,6 @@ export const useAuth = () => {
         localStorage.removeItem('user');
         
       } else {
-        // Estrutura para profissional
         userData = {
           ...result.user || result,
           tipo_usuario: 'profissional',
@@ -161,12 +153,22 @@ export const useAuth = () => {
     console.log('✅ useAuth: Logout concluído');
   };
 
+  const isEmpresa = () => {
+    return user?.tipo_usuario === 'empresa';
+  };
+
+  const isProfissional = () => {
+    return user?.tipo_usuario === 'profissional';
+  };
+
   return {
     user,
     isAuthenticated: !!user,
     isLoading: loading,
     login,
     logout,
-    refreshUserData
+    refreshUserData,
+    isEmpresa, 
+    isProfissional 
   };
 };

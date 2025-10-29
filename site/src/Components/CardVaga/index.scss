@@ -1,4 +1,3 @@
-// Components/CardVaga/index.scss
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
 
@@ -33,7 +32,6 @@
     }
   }
 }
-
 
 .job-card {
   @include card-base;
@@ -180,9 +178,18 @@
         text-decoration: none;
 
         &:disabled {
-          background: $gray-400;
+          background: $gray-300;
+          color: $gray-500;
           cursor: not-allowed;
           transform: none;
+          box-shadow: none;
+          border: 1px solid $gray-400;
+          
+          &:hover {
+            background: $gray-300;
+            transform: none;
+            box-shadow: none;
+          }
         }
       }
 
@@ -195,7 +202,6 @@
   }
 }
 
-// Responsividade
 @include mobile-only {
   .job-card {
     padding: $spacing-4;

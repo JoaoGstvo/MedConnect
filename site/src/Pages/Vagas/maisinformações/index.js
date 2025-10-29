@@ -1,12 +1,15 @@
+// Pages/Vagas/maisinformações/index.js - ATUALIZADO
 import './index.scss';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
+import { useAuth } from '../../../Components/Hooks/useAuth';
 
 function MaisInformacoesPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { isEmpresa } = useAuth();
     const [vaga, setVaga] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -30,8 +33,16 @@ function MaisInformacoesPage() {
         fetchVaga();
     }, [id]);
 
+    // ADICIONAR: Verificar se deve bloquear o botão
+    const shouldBlockButton = isEmpresa() || vaga?.status !== 'aberta';
+
     const handleCandidatar = () => {
-        // ✅ CORREÇÃO: Navegação correta para a página de inscrição
+        // BLOQUEAR se for empresa
+        if (isEmpresa()) {
+            alert('Empresas não podem se candidatar a vagas.');
+            return;
+        }
+
         navigate(`/inscricaovaga/${id}`);
     };
 
@@ -71,9 +82,13 @@ function MaisInformacoesPage() {
                     <button 
                         className='btn-apply' 
                         onClick={handleCandidatar}
-                        disabled={vaga.status !== 'aberta'}
+                        disabled={shouldBlockButton}
+                        title={isEmpresa() ? "Empresas não podem se candidatar" : ""}
                     >
-                        {vaga.status === 'aberta' ? 'Candidatar-se' : 'Vaga Fechada'}
+                        {shouldBlockButton 
+                            ? (isEmpresa() ? "Apenas Profissionais" : "Vaga Fechada")
+                            : 'Candidatar-se'
+                        }
                     </button>
                     <button className='btn-back' onClick={handleVoltar}>
                         Voltar para Vagas
