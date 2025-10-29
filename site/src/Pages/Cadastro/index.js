@@ -77,28 +77,18 @@ function Signup() {
 
     if (senha !== confirmaSenha) {
       toast.error("As senhas não conferem!", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
       });
       return;
     }
 
     if (!nome || !email || !senha) {
       toast.error("Preencha todos os campos obrigatórios!", {
-        position: "top-right",
-        autoClose: 4000
       });
       return;
     }
 
     if (senha.length < 6) {
       toast.error("A senha deve ter pelo menos 6 caracteres", {
-        position: "top-right",
-        autoClose: 4000
       });
       return;
     }
@@ -123,13 +113,7 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        toast.success("🎉 Cadastro realizado com sucesso! Redirecionando para login...", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "colored"
+        toast.success("Cadastro realizado com sucesso! Redirecionando para login...", {
         });
 
         setProfissionalData({
