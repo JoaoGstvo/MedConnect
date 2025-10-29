@@ -79,19 +79,14 @@ export const loginProfissionalController = async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Buscar usuário pelo email
-    const user = await getUserByEmail(email);
+    // Usar a função de login que verifica com bcrypt
+    const user = await loginProfissional(email, senha);
     
     if (!user) {
-      return res.status(401).json({ error: 'Usuário não encontrado' });
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
-    // Verificar senha (em produção, usar bcrypt)
-    if (user.senha !== senha) {
-      return res.status(401).json({ error: 'Senha incorreta' });
-    }
-
-    // Retornar dados do usuário (sem a senha)
+    // Retornar dados do usuário
     const userData = {
       id_usuario: user.id_usuario,
       nome: user.nome,

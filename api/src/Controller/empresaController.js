@@ -8,14 +8,11 @@ export async function loginEmpresaController(req, res) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    const empresa = await empresaRepository.getEmpresaByEmail(email);
+    // Usar a função de login que verifica com bcrypt
+    const empresa = await empresaRepository.loginEmpresa(email, senha);
 
     if (!empresa) {
-      return res.status(401).json({ error: 'Empresa não encontrada' });
-    }
-
-    if (empresa.senha !== senha) {
-      return res.status(401).json({ error: 'Senha incorreta' });
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
     const empresaData = {
@@ -43,6 +40,8 @@ export async function loginEmpresaController(req, res) {
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 }
+
+// ... manter as outras funções do controller ...
 
 export async function getEmpresaByIdController(req, res) {
   try {

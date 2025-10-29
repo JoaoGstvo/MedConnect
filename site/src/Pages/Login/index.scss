@@ -1,4 +1,3 @@
-// Pages/Login/index.scss
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
 
@@ -13,18 +12,10 @@
   position: relative;
   overflow: hidden;
 
-  // Efeito de background
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-    z-index: 1;
+  @include mobile-only {
+    padding: $spacing-4;
+    align-items: flex-start;
+    padding-top: $spacing-8;
   }
 
   .form-container {
@@ -40,18 +31,23 @@
       margin: $spacing-4;
     }
 
+
     .header {
       text-align: center;
       margin-bottom: $spacing-6;
 
       .logo {
-        
         height: 64px;
         margin-bottom: $spacing-4;
         transition: transform $transition-base;
 
         &:hover {
           transform: scale(1.05);
+        }
+
+        @include mobile-only {
+          height: 56px;
+          margin-bottom: $spacing-3;
         }
       }
 
@@ -61,6 +57,10 @@
         font-size: $font-size-3xl;
         font-weight: $font-weight-bold;
         letter-spacing: -0.5px;
+
+        @include mobile-only {
+          font-size: $font-size-2xl;
+        }
       }
 
       .welcome-text {
@@ -68,6 +68,10 @@
         font-size: $font-size-base;
         margin: 0;
         line-height: $line-height-normal;
+
+        @include mobile-only {
+          font-size: $font-size-sm;
+        }
       }
     }
 
@@ -75,6 +79,10 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, $gray-300, transparent);
       margin: $spacing-6 0;
+
+      @include mobile-only {
+        margin: $spacing-4 0;
+      }
     }
 
     .form-content {
@@ -84,6 +92,10 @@
         font-size: $font-size-xl;
         font-weight: $font-weight-semibold;
         text-align: center;
+
+        @include mobile-only {
+          font-size: $font-size-lg;
+        }
       }
 
       .form-description {
@@ -92,16 +104,23 @@
         margin-bottom: $spacing-6;
         font-size: $font-size-sm;
         line-height: $line-height-normal;
+
+        @include mobile-only {
+          font-size: $font-size-xs;
+          margin-bottom: $spacing-4;
+        }
       }
 
       .account-type-options {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: $spacing-3;
-        margin-bottom: $spacing-8; // Aumentado para compensar remoção do demo
+        margin-bottom: $spacing-8;
 
         @include mobile-only {
           grid-template-columns: 1fr;
+          gap: $spacing-2;
+          margin-bottom: $spacing-6;
         }
 
         .account-type-card {
@@ -112,6 +131,11 @@
           transition: all $transition-base;
           border: 2px solid $gray-200;
           background: $gray-50;
+          position: relative;
+
+          @include mobile-only {
+            padding: $spacing-3;
+          }
 
           &:hover {
             border-color: $primary-400;
@@ -138,6 +162,14 @@
               display: flex;
               align-items: center;
               justify-content: center;
+
+              @include mobile-only {
+                top: $spacing-1;
+                right: $spacing-1;
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+              }
             }
           }
 
@@ -145,6 +177,11 @@
             font-size: 2rem;
             margin-bottom: $spacing-2;
             display: block;
+
+            @include mobile-only {
+              font-size: 1.75rem;
+              margin-bottom: $spacing-1;
+            }
           }
 
           h3 {
@@ -152,6 +189,10 @@
             margin-bottom: $spacing-1;
             font-size: $font-size-sm;
             font-weight: $font-weight-semibold;
+
+            @include mobile-only {
+              font-size: $font-size-xs;
+            }
           }
 
           p {
@@ -159,6 +200,10 @@
             font-size: $font-size-xs;
             margin: 0;
             line-height: $line-height-tight;
+
+            @include mobile-only {
+              font-size: 11px;
+            }
           }
         }
       }
@@ -167,12 +212,55 @@
         .input-field {
           margin-bottom: $spacing-4;
 
+          &.password-field {
+            .password-input-container {
+              position: relative;
+              display: flex;
+              align-items: center;
+
+              input {
+                padding-right: 50px;
+                width: 100%;
+              }
+
+              .password-toggle {
+                position: absolute;
+                right: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1.2rem;
+                padding: 4px;
+                border-radius: 4px;
+                transition: background-color $transition-fast;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+
+                &:hover {
+                  background-color: $gray-100;
+                }
+
+                &:disabled {
+                  cursor: not-allowed;
+                  opacity: 0.5;
+                }
+              }
+            }
+          }
+
           label {
             display: block;
             margin-bottom: $spacing-2;
             color: $gray-700;
             font-weight: $font-weight-medium;
             font-size: $font-size-sm;
+
+            @include mobile-only {
+              font-size: $font-size-xs;
+            }
           }
 
           input {
@@ -181,12 +269,19 @@
             border: 2px solid $gray-300;
             background: white;
             font-size: $font-size-base;
+            width: 100%;
+
+            @include mobile-only {
+              padding: $spacing-2 $spacing-3;
+              font-size: $font-size-sm;
+            }
 
             &::placeholder {
               color: $gray-500;
             }
 
             &:focus {
+              outline: none;
               border-color: $primary-500;
               box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
             }
@@ -207,6 +302,7 @@
             flex-direction: column;
             gap: $spacing-3;
             align-items: flex-start;
+            margin-bottom: $spacing-4;
           }
 
           .remember-me {
@@ -216,6 +312,10 @@
             cursor: pointer;
             color: $gray-700;
             font-size: $font-size-sm;
+
+            @include mobile-only {
+              font-size: $font-size-xs;
+            }
 
             input {
               margin: 0;
@@ -229,6 +329,10 @@
             font-size: $font-size-sm;
             font-weight: $font-weight-medium;
             transition: color $transition-fast;
+
+            @include mobile-only {
+              font-size: $font-size-xs;
+            }
 
             &:hover {
               color: $primary-700;
@@ -246,9 +350,18 @@
           position: relative;
           overflow: hidden;
 
+          @include mobile-only {
+            padding: $spacing-3;
+            font-size: $font-size-sm;
+          }
+
           &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: $shadow-lg;
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(0);
           }
 
           &:disabled {
@@ -270,32 +383,16 @@
           }
         }
 
-        .message {
-          padding: $spacing-3 $spacing-4;
-          border-radius: $radius-lg;
-          margin: $spacing-4 0;
-          text-align: center;
-          font-weight: $font-weight-medium;
-          font-size: $font-size-sm;
-
-          &.error {
-            background: rgba($error-500, 0.1);
-            color: $error-600;
-            border: 1px solid rgba($error-500, 0.2);
-          }
-
-          &.success {
-            background: rgba($success-500, 0.1);
-            color: $success-600;
-            border: 1px solid rgba($success-500, 0.2);
-          }
-        }
-
         .signup-redirect {
           text-align: center;
           margin-top: $spacing-6;
           color: $gray-600;
           font-size: $font-size-sm;
+
+          @include mobile-only {
+            margin-top: $spacing-4;
+            font-size: $font-size-xs;
+          }
 
           a {
             color: $primary-600;
@@ -314,23 +411,17 @@
   }
 }
 
+// Breakpoints adicionais
+@mixin small-mobile {
+  @media (max-width: 360px) {
+    @content;
+  }
+}
+
 // Animações
 @keyframes spin {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-// Responsividade
-@include mobile-only {
-  .login-page {
-    padding: $spacing-4;
-    align-items: flex-start;
-    padding-top: $spacing-8;
-
-    .form-container {
-      padding: $spacing-5;
-    }
-  }
 }
 
 // Acessibilidade

@@ -1,3 +1,4 @@
+// Pages/Signup/index.js - VERSÃO ATUALIZADA
 import './index.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,9 +7,10 @@ import { toast } from 'react-toastify';
 function Signup() {
   const [accountType, setAccountType] = useState('profissional');
   const [loading, setLoading] = useState(false);
-  const [mensagem, setMensagem] = useState({ type: '', text: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Estados para profissional - adaptados ao backend
+  // Estados para profissional
   const [profissionalData, setProfissionalData] = useState({
     nome: "",
     email: "",
@@ -17,7 +19,7 @@ function Signup() {
     tipo_usuario: "candidato"
   });
 
-  // Estados para empresa - adaptados ao backend
+  // Estados para empresa
   const [empresaData, setEmpresaData] = useState({
     nome: "",
     cnpj: "",
@@ -26,6 +28,9 @@ function Signup() {
     confirmaSenha: "",
     endereco: "",
     descricao: "",
+    telefone: "",
+    cidade: "",
+    estado: "",
     logo: ""
   });
 
@@ -47,9 +52,12 @@ function Signup() {
     }));
   };
 
-  const showMensagem = (type, text) => {
-    setMensagem({ type, text });
-    setTimeout(() => setMensagem({ type: '', text: '' }), 5000);
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -68,12 +76,30 @@ function Signup() {
     const { nome, email, senha, confirmaSenha } = profissionalData;
 
     if (senha !== confirmaSenha) {
-      showMensagem('error', "As senhas não conferem!");
+      toast.error("As senhas não conferem!", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       return;
     }
 
     if (!nome || !email || !senha) {
-      showMensagem('error', "Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!", {
+        position: "top-right",
+        autoClose: 4000
+      });
+      return;
+    }
+
+    if (senha.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres", {
+        position: "top-right",
+        autoClose: 4000
+      });
       return;
     }
 
@@ -97,9 +123,13 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        toast.success("Cadastro realizado com sucesso! Redirecionando para login...", {
-          autoClose: 2000,
-          hideProgressBar: true
+        toast.success("🎉 Cadastro realizado com sucesso! Redirecionando para login...", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "colored"
         });
 
         setProfissionalData({
@@ -108,11 +138,17 @@ function Signup() {
 
         setTimeout(() => navigate('/login'), 2000);
       } else {
-        showMensagem('error', data.error || "Erro ao cadastrar");
+        toast.error(data.error || "Erro ao cadastrar", {
+          position: "top-right",
+          autoClose: 4000
+        });
       }
     } catch (err) {
       console.error("Erro no servidor:", err);
-      showMensagem('error', "Erro de conexão com o servidor");
+      toast.error("Erro de conexão com o servidor", {
+        position: "top-right",
+        autoClose: 4000
+      });
     }
   };
 
@@ -120,12 +156,26 @@ function Signup() {
     const { nome, cnpj, email, senha, confirmaSenha, endereco, descricao, telefone, cidade, estado } = empresaData;
 
     if (senha !== confirmaSenha) {
-      showMensagem('error', "As senhas não conferem!");
+      toast.error("As senhas não conferem!", {
+        position: "top-right",
+        autoClose: 4000
+      });
       return;
     }
 
     if (!nome || !cnpj || !email || !senha) {
-      showMensagem('error', "Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!", {
+        position: "top-right",
+        autoClose: 4000
+      });
+      return;
+    }
+
+    if (senha.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres", {
+        position: "top-right",
+        autoClose: 4000
+      });
       return;
     }
 
@@ -154,9 +204,14 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        toast.success("Empresa cadastrada com sucesso! Redirecionando para login...", {
-          autoClose: 2000,
-          hideProgressBar: true
+        toast.success("🏢 Empresa cadastrada com sucesso! Redirecionando para login...", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored"
         });
 
         setEmpresaData({
@@ -166,11 +221,17 @@ function Signup() {
 
         setTimeout(() => navigate('/login'), 2000);
       } else {
-        showMensagem('error', data.error || "Erro ao cadastrar empresa");
+        toast.error(data.error || "Erro ao cadastrar empresa", {
+          position: "top-right",
+          autoClose: 4000
+        });
       }
     } catch (err) {
       console.error("Erro no servidor:", err);
-      showMensagem('error', "Erro de conexão com o servidor");
+      toast.error("Erro de conexão com o servidor", {
+        position: "top-right",
+        autoClose: 4000
+      });
     }
   };
 
@@ -207,12 +268,6 @@ function Signup() {
             </div>
           </div>
 
-          {mensagem.text && (
-            <div className={`mensagem-feedback ${mensagem.type}`}>
-              {mensagem.text}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="form-grid">
             {accountType === 'profissional' && (
               <>
@@ -245,31 +300,49 @@ function Signup() {
                 </div>
 
                 <div className='form-group'>
-                  <label className='input-field'>
+                  <label className='input-field password-field'>
                     <span>Senha *</span>
-                    <input
-                      type="password"
-                      name="senha"
-                      value={profissionalData.senha}
-                      onChange={handleProfissionalChange}
-                      placeholder="Crie uma senha segura"
-                      required
-                      minLength={6}
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="senha"
+                        value={profissionalData.senha}
+                        onChange={handleProfissionalChange}
+                        placeholder="Crie uma senha segura"
+                        required
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => togglePasswordVisibility('password')}
+                      >
+                        {showPassword ? '👀' : '👁'}
+                      </button>
+                    </div>
                   </label>
                 </div>
 
                 <div className='form-group'>
-                  <label className='input-field'>
+                  <label className='input-field password-field'>
                     <span>Confirmar Senha *</span>
-                    <input
-                      type="password"
-                      name="confirmaSenha"
-                      value={profissionalData.confirmaSenha}
-                      onChange={handleProfissionalChange}
-                      placeholder="Digite a senha novamente"
-                      required
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmaSenha"
+                        value={profissionalData.confirmaSenha}
+                        onChange={handleProfissionalChange}
+                        placeholder="Digite a senha novamente"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => togglePasswordVisibility('confirm')}
+                      >
+                        {showConfirmPassword ? '👀' : '👁'}
+                      </button>
+                    </div>
                   </label>
                 </div>
 
@@ -356,31 +429,49 @@ function Signup() {
                 </div>
 
                 <div className='form-group'>
-                  <label className='input-field'>
+                  <label className='input-field password-field'>
                     <span>Senha *</span>
-                    <input
-                      type="password"
-                      name="senha"
-                      value={empresaData.senha}
-                      onChange={handleEmpresaChange}
-                      placeholder="Crie uma senha segura"
-                      required
-                      minLength={6}
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="senha"
+                        value={empresaData.senha}
+                        onChange={handleEmpresaChange}
+                        placeholder="Crie uma senha segura"
+                        required
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => togglePasswordVisibility('password')}
+                      >
+                        {showPassword ? '👀' : '👁︎'}
+                      </button>
+                    </div>
                   </label>
                 </div>
 
                 <div className='form-group'>
-                  <label className='input-field'>
+                  <label className='input-field password-field'>
                     <span>Confirmar Senha *</span>
-                    <input
-                      type="password"
-                      name="confirmaSenha"
-                      value={empresaData.confirmaSenha}
-                      onChange={handleEmpresaChange}
-                      placeholder="Digite a senha novamente"
-                      required
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmaSenha"
+                        value={empresaData.confirmaSenha}
+                        onChange={handleEmpresaChange}
+                        placeholder="Digite a senha novamente"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => togglePasswordVisibility('confirm')}
+                      >
+                        {showConfirmPassword ? '👀' : '👁︎'}
+                      </button>
+                    </div>
                   </label>
                 </div>
 

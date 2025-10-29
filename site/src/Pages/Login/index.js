@@ -1,4 +1,4 @@
-// Pages/Login/index.js - VERSÃO CORRIGIDA
+// Pages/Login/index.js - VERSÃO ATUALIZADA
 import './index.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,6 +12,7 @@ function Login() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,12 +21,22 @@ function Login() {
     e.preventDefault();
 
     if (!email || !senha) {
-      setMsg('Por favor, preencha todos os campos');
+      toast.error('Por favor, preencha todos os campos', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setMsg('Por favor, insira um email válido');
+      toast.error('Por favor, insira um email válido', {
+        position: "top-right",
+        autoClose: 3000
+      });
       return;
     }
 
@@ -34,21 +45,23 @@ function Login() {
 
     try {
       console.log(' Iniciando processo de login...');
-      console.log(' Email:', email);
-      console.log(' Tipo de conta:', accountType);
-
+      
       const result = await login(email, senha, accountType);
 
       if (result.success) {
         console.log('✅ Login bem-sucedido!');
-        toast.success('Login realizado com sucesso!', {
-          autoClose: 2000,
-          hideProgressBar: true
+        toast.success(`Login realizado com sucesso! Bem-vindo(a) de volta!`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored"
         });
 
         // Redirecionar após sucesso
         setTimeout(() => {
-          // Redirecionar baseado no tipo de usuário
           if (accountType === 'empresa') {
             navigate('/dashboardempresa');
           } else {
@@ -57,18 +70,17 @@ function Login() {
         }, 1500);
       } else {
         console.error('❌ Erro no login:', result.error);
-        setMsg(result.error);
         toast.error(result.error || 'Credenciais inválidas', {
+          position: "top-right",
           autoClose: 4000,
-          hideProgressBar: true
+          hideProgressBar: false
         });
       }
     } catch (err) {
       console.error('💥 Erro crítico no login:', err);
-      setMsg('Erro de conexão com o servidor');
-      toast.error('Erro de conexão', {
-        autoClose: 4000,
-        hideProgressBar: true
+      toast.error('Erro de conexão com o servidor', {
+        position: "top-right",
+        autoClose: 4000
       });
     } finally {
       setLoading(false);
@@ -78,10 +90,13 @@ function Login() {
   const handleAccountTypeChange = (type) => {
     console.log(' Alterando tipo de conta para:', type);
     setAccountType(type);
-    // Limpar campos ao mudar o tipo de conta
     setEmail('');
     setSenha('');
     setMsg('');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -141,18 +156,28 @@ function Login() {
               />
             </div>
 
-            <div className='input-field'>
+            <div className='input-field password-field'>
               <label htmlFor="senha">Senha</label>
-              <input
-                id="senha"
-                type="password"
-                placeholder='Sua senha'
-                value={senha}
-                onChange={e => setSenha(e.target.value)}
-                disabled={loading}
-                required
-                autoComplete="current-password"
-              />
+              <div className="password-input-container">
+                <input
+                  id="senha"
+                  type={showPassword ? "text" : "password"}
+                  placeholder='Sua senha'
+                  value={senha}
+                  onChange={e => setSenha(e.target.value)}
+                  disabled={loading}
+                  required
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={togglePasswordVisibility}
+                  disabled={loading}
+                >
+                  {showPassword ? ' 👀 ' : ' 👁︎ '}
+                </button>
+              </div>
             </div>
 
             <div className='form-options'>
@@ -182,12 +207,6 @@ function Login() {
                 `Entrar como ${accountType === 'profissional' ? 'Profissional' : 'Empresa'}`
               )}
             </button>
-
-            {msg && (
-              <div className={`message ${msg.includes('Erro') ? 'error' : 'success'}`}>
-                {msg}
-              </div>
-            )}
 
             <div className="signup-redirect">
               Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a>
