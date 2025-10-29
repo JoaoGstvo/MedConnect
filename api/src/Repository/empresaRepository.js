@@ -3,6 +3,13 @@ import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 12;
 
+// Função para detectar se a senha está criptografada
+const isPasswordHashed = (password) => {
+  return typeof password === 'string' && 
+         password.startsWith('$2b$') && 
+         password.length === 60;
+};
+
 export async function createEmpresa(nome, cnpj, email, senha, endereco, logo_url, descricao, telefone, cidade, estado) {
   try {
     const senhaHash = await bcrypt.hash(senha, SALT_ROUNDS);
@@ -49,8 +56,8 @@ export async function updateEmpresa(id, updates) {
     const allowedFields = ['nome', 'cnpj', 'email', 'senha', 'endereco', 'logo_url', 'descricao', 'telefone', 'cidade', 'estado'];
     const fields = Object.keys(updates).filter(field => allowedFields.includes(field));
     
-    // Se estiver atualizando a senha, fazer hash
-    if (updates.senha) {
+    // Se estiver atualizando a senha e não estiver criptografada, fazer hash
+    if (updates.senha && !isPasswordHashed(updates.senha)) {
       updates.senha = await bcrypt.hash(updates.senha, SALT_ROUNDS);
     }
     
@@ -82,8 +89,16 @@ export async function loginEmpresa(email, senha) {
 
     const empresa = result.rows[0];
     
-    // Verificar senha com bcrypt
-    const senhaValida = await bcrypt.compare(senha, empresa.senha);
+    // VERIFICAÇÃO HÍBRIDA: Aceita senha criptografada ou texto simples
+    let senhaValida = false;
+    
+    if (isPasswordHashed(empresa.senha)) {
+      // Senha está criptografada - usar bcrypt
+      senhaValida = await bcrypt.compare(senha, empresa.senha);
+    } else {
+      // Senha está em texto simples - comparação direta
+      senhaValida = empresa.senha === senha;
+    }
     
     if (!senhaValida) {
       return null;
@@ -94,6 +109,19 @@ export async function loginEmpresa(email, senha) {
     return empresaSemSenha;
   } catch (error) {
     console.error('Erro no loginEmpresa:', error);
+    throw error;
+  }
+}
+
+// Função para migrar senhas para bcrypt (opcional)
+export async function migrateEmpresaPasswordToBcrypt(empresaId, senhaAtual) {
+  try {
+    const senhaHash = await bcrypt.hash(senhaAtual, SALT_ROUNDS);
+    const query = `UPDATE empresas SET senha = $1 WHERE id_empresa = $2`;
+    await pool.query(query, [senhaHash, empresaId]);
+    return true;
+  } catch (error) {
+    console.error('Erro ao migrar senha da empresa:', error);
     throw error;
   }
 }

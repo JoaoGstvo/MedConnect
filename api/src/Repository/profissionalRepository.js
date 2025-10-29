@@ -3,6 +3,14 @@ import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 12;
 
+// Função para detectar se a senha está criptografada
+const isPasswordHashed = (password) => {
+  // Bcrypt hashes começam com $2b$ e têm 60 caracteres
+  return typeof password === 'string' && 
+         password.startsWith('$2b$') && 
+         password.length === 60;
+};
+
 export async function createUser(nome, email, senha, tipo_usuario = 'candidato') {
   try {
     const senhaHash = await bcrypt.hash(senha, SALT_ROUNDS);
@@ -45,7 +53,7 @@ export async function updateUser(id, updates) {
     const fields = Object.keys(updates).filter(field => allowedFields.includes(field));
     
     // Se estiver atualizando a senha, fazer hash
-    if (updates.senha) {
+    if (updates.senha && !isPasswordHashed(updates.senha)) {
       updates.senha = await bcrypt.hash(updates.senha, SALT_ROUNDS);
     }
     
@@ -72,8 +80,16 @@ export async function loginProfissional(email, senha) {
 
     const user = result.rows[0];
     
-    // Verificar senha com bcrypt
-    const senhaValida = await bcrypt.compare(senha, user.senha);
+    // VERIFICAÇÃO HÍBRIDA: Aceita senha criptografada ou texto simples
+    let senhaValida = false;
+    
+    if (isPasswordHashed(user.senha)) {
+      // Senha está criptografada - usar bcrypt
+      senhaValida = await bcrypt.compare(senha, user.senha);
+    } else {
+      // Senha está em texto simples - comparação direta
+      senhaValida = user.senha === senha;
+    }
     
     if (!senhaValida) {
       return null;
@@ -84,6 +100,19 @@ export async function loginProfissional(email, senha) {
     return userSemSenha;
   } catch (error) {
     console.error('Erro no loginProfissional:', error);
+    throw error;
+  }
+}
+
+// Função para migrar senhas para bcrypt (opcional)
+export async function migratePasswordToBcrypt(userId, senhaAtual) {
+  try {
+    const senhaHash = await bcrypt.hash(senhaAtual, SALT_ROUNDS);
+    const query = `UPDATE usuarios SET senha = $1 WHERE id_usuario = $2`;
+    await pool.query(query, [senhaHash, userId]);
+    return true;
+  } catch (error) {
+    console.error('Erro ao migrar senha:', error);
     throw error;
   }
 }
