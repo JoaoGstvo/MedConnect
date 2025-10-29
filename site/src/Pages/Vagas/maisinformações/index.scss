@@ -60,7 +60,7 @@
 
                     strong {
                         color: $gray-800;
-                        min-width: 120px;
+                        min-width: 140px;
                         display: inline-block;
                         font-weight: $font-weight-semibold;
                     }
@@ -77,6 +77,131 @@
 
                     &.fechada {
                         @include status-badge($error-100, $error-800);
+                    }
+                }
+
+                // SEÇÃO DE STATUS DA INSCRIÇÃO
+                .status-inscricao-section {
+                    background: $primary-50;
+                    padding: $spacing-6;
+                    border-radius: $radius-xl;
+                    border-left: 4px solid $primary-500;
+                    margin-top: $spacing-8;
+
+                    .status-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: $spacing-4;
+
+                        strong {
+                            color: $gray-800;
+                            font-size: $font-size-lg;
+                        }
+                    }
+
+                    .status-badge {
+                        padding: $spacing-2 $spacing-4;
+                        border-radius: $radius-full;
+                        font-size: $font-size-sm;
+                        font-weight: $font-weight-semibold;
+                        text-transform: uppercase;
+
+                        &.pending {
+                            background: $warning-100;
+                            color: $warning-800;
+                            border: 1px solid $warning-300;
+                        }
+
+                        &.analyzing {
+                            background: $primary-100;
+                            color: $primary-800;
+                            border: 1px solid $primary-300;
+                        }
+
+                        &.approved {
+                            background: $success-100;
+                            color: $success-800;
+                            border: 1px solid $success-300;
+                        }
+
+                        &.rejected {
+                            background: $error-100;
+                            color: $error-800;
+                            border: 1px solid $error-300;
+                        }
+
+                        &.cancelled {
+                            background: $gray-200;
+                            color: $gray-700;
+                            border: 1px solid $gray-400;
+                        }
+                    }
+
+                    .progress-section {
+                        margin-top: $spacing-4;
+
+                        .progress-bar {
+                            width: 100%;
+                            height: 6px;
+                            background: $gray-200;
+                            border-radius: $radius-full;
+                            overflow: hidden;
+                            margin-bottom: $spacing-3;
+
+                            .progress-fill {
+                                height: 100%;
+                                border-radius: $radius-full;
+                                transition: width 0.3s ease;
+
+                                &.step-1 {
+                                    background: $warning-500;
+                                    width: 33% !important;
+                                }
+
+                                &.step-2 {
+                                    background: $primary-500;
+                                    width: 66% !important;
+                                }
+
+                                &.step-3 {
+                                    background: $gray-500; // Cinza para finalizado/cancelado
+                                    width: 100% !important;
+                                }
+                            }
+                        }
+
+                        .progress-labels {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: $font-size-xs;
+                            color: $gray-500;
+                            font-weight: $font-weight-medium;
+
+                            span {
+                                &.active {
+                                    color: $gray-800;
+                                    font-weight: $font-weight-semibold;
+                                }
+                            }
+                        }
+                    }
+
+                    // Mensagem para candidatura cancelada
+                    .cancelado-message {
+                        background: $warning-50;
+                        border: 1px solid $warning-200;
+                        border-radius: $radius-lg;
+                        padding: $spacing-3;
+                        margin-top: $spacing-4;
+                        text-align: center;
+
+                        p {
+                            color: $warning-700;
+                            font-size: $font-size-sm;
+                            font-weight: $font-weight-medium;
+                            margin: 0;
+                        }
                     }
                 }
             }
@@ -119,10 +244,18 @@
                 }
 
                 &:disabled {
-                    background: $gray-400;
+                    background: $gray-300;
+                    color: $gray-500;
                     cursor: not-allowed;
                     transform: none;
                     box-shadow: none;
+                    border: 1px solid $gray-400;
+                    
+                    &:hover {
+                        background: $gray-300;
+                        transform: none;
+                        box-shadow: none;
+                    }
                 }
             }
 
@@ -153,7 +286,6 @@
     }
 }
 
-// Responsividade
 @include mobile-only {
     .maisinfopage {
         .principal-container {
@@ -183,12 +315,21 @@
                 .vaga-info p {
                     font-size: $font-size-base;
                 }
+
+                .status-inscricao-section {
+                    padding: $spacing-4;
+
+                    .status-header {
+                        flex-direction: column;
+                        gap: $spacing-2;
+                        align-items: flex-start;
+                    }
+                }
             }
         }
     }
 }
 
-// Estados de erro e loading adicionais
 .error-page {
     .error-icon {
         font-size: $font-size-5xl;
@@ -202,7 +343,6 @@
     }
 }
 
-// Acessibilidade
 @media (prefers-reduced-motion: reduce) {
     .maisinfopage {
         .actions {
