@@ -27,7 +27,6 @@ export async function getUsers() {
   return result.rows;
 }
 
-// ADICIONE ESTA FUNÇÃO QUE ESTÁ FALTANDO
 export async function getUserById(id) {
   const query = `SELECT id_usuario, nome, email, tipo_usuario, data_cadastro FROM usuarios WHERE id_usuario = $1`;
   const result = await pool.query(query, [id]);

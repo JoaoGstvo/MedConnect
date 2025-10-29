@@ -3,7 +3,8 @@ import {
   getUsers,
   getUserById,
   updateUser,
-  getUserByEmail
+  getUserByEmail,
+  loginProfissional // IMPORTE A FUNÇÃO CORRETA
 } from "../Repository/profissionalRepository.js";
 
 export const registerProfissionalController = async (req, res) => {
@@ -74,14 +75,11 @@ export const loginProfissionalController = async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    const user = await getUserByEmail(email);
+    // USE A FUNÇÃO loginProfissional QUE FAZ A VERIFICAÇÃO COM BCRYPT
+    const user = await loginProfissional(email, senha);
     
     if (!user) {
-      return res.status(401).json({ error: 'Usuário não encontrado' });
-    }
-
-    if (user.senha !== senha) {
-      return res.status(401).json({ error: 'Senha incorreta' });
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
     const userData = {

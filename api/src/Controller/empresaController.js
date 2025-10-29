@@ -8,14 +8,11 @@ export async function loginEmpresaController(req, res) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    const empresa = await empresaRepository.getEmpresaByEmail(email);
+    // USE A FUNÇÃO loginEmpresa QUE FAZ A VERIFICAÇÃO COM BCRYPT
+    const empresa = await empresaRepository.loginEmpresa(email, senha);
 
     if (!empresa) {
-      return res.status(401).json({ error: 'Empresa não encontrada' });
-    }
-
-    if (empresa.senha !== senha) {
-      return res.status(401).json({ error: 'Senha incorreta' });
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
     const empresaData = {
