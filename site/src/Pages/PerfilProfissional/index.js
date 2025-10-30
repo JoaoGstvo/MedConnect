@@ -1,10 +1,10 @@
-// pages/ProfissionalProfile/index.js
 import './index.scss';
 import Header from "../../Components/Header/index.js";
 import Footer from "../../Components/Footer/index.js";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentUser } from '../../Hooks/useCurrentUser'; // CAMINHO CORRETO
+import { useCurrentUser } from '../../Hooks/useCurrentUser';
+import { toast } from 'react-toastify';
 
 function ProfissionalProfile() {
     const [formData, setFormData] = useState({
@@ -67,7 +67,7 @@ function ProfissionalProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!currentUser) {
-            alert('Você precisa estar logado para atualizar o perfil');
+            toast.warning('Você precisa estar logado para atualizar o perfil');
             navigate('/login');
             return;
         }
@@ -82,15 +82,15 @@ function ProfissionalProfile() {
             });
 
             if (response.ok) {
-                alert('Perfil atualizado com sucesso!');
+                toast.success('Perfil atualizado com sucesso!');
                 // Recarregar dados atualizados
                 await carregarDadosUsuario();
             } else {
-                alert('Erro ao atualizar perfil');
+                toast.error('Erro ao atualizar perfil');
             }
         } catch (error) {
             console.error('Erro ao atualizar perfil:', error);
-            alert('Erro ao atualizar perfil');
+            toast.error('Erro ao atualizar perfil');
         }
     };
 

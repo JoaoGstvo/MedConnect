@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useAuth } from '../../../Components/Hooks/useAuth';
+import { toast } from 'react-toastify';
 
 function InscricaoPage() {
     const { id } = useParams();
@@ -34,7 +35,7 @@ function InscricaoPage() {
     // BLOQUEAR acesso direto à página de inscrição para empresas (um useEffect leve)
     useEffect(() => {
         if (isEmpresaFlag) {
-            alert('Empresas não podem se candidatar a vagas.');
+            toast.warning('Empresas não podem se candidatar a vagas.');
             navigate('/vagas');
         }
     }, [isEmpresaFlag, navigate]);
@@ -117,18 +118,18 @@ function InscricaoPage() {
 
         // Proteção extra
         if (isEmpresaFlag) {
-            alert('Empresas não podem se candidatar a vagas.');
+            toast.warning('Empresas não podem se candidatar a vagas.');
             return;
         }
 
         if (!isAuthenticated || !user) {
-            alert('Você precisa estar logado para se inscrever em vagas.');
+            toast.warning('Você precisa estar logado para se inscrever em vagas.');
             navigate('/login');
             return;
         }
 
         if (inscricaoExistente && inscricaoExistente.status !== 'cancelado') {
-            alert('Você já possui uma candidatura ativa para esta vaga!');
+            toast.info('Você já possui uma candidatura ativa para esta vaga!');
             navigate(`/vaga/${id}`);
             return;
         }
@@ -181,7 +182,7 @@ function InscricaoPage() {
 
     const avancarEtapa = () => {
         if (inscricaoExistente && inscricaoExistente.status !== 'cancelado') {
-            alert('Você já possui uma candidatura ativa para esta vaga!');
+            toast.info('Você já possui uma candidatura ativa para esta vaga!');
             navigate(`/vaga/${id}`);
             return;
         }

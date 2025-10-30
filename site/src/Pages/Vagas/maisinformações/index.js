@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Header from "../../../Components/Header";
 import Footer from "../../../Components/Footer";
 import { useAuth } from '../../../Components/Hooks/useAuth';
-
+import { toast } from 'react-toastify';
 function MaisInformacoesPage() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -91,18 +91,18 @@ function MaisInformacoesPage() {
     const handleCandidatar = () => {
         // BLOQUEAR se for empresa
         if (isEmpresa()) {
-            alert('Empresas não podem se candidatar a vagas.');
+            toast.warning('Empresas não podem se candidatar a vagas.');
             return;
         }
 
         // NÃO BLOQUEAR se o status for cancelado - permite reinscrição
         if (jaInscrito && statusInscricao !== 'cancelado') {
-            alert('Você já está inscrito nesta vaga!');
+            toast.warning('Você já está inscrito nesta vaga!');
             return;
         }
 
         if (!isAuthenticated) {
-            alert('Você precisa estar logado para se candidatar a vagas.');
+            toast.warning('Você precisa estar logado para se candidatar a vagas.');
             navigate('/login');
             return;
         }

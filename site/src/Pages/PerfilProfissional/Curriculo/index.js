@@ -154,7 +154,7 @@ function MeuCurriculo() {
 
     const handleSalvarCurriculo = async () => {
         if (!currentUser || currentUser.tipo_usuario === 'empresa') {
-            alert('Apenas candidatos podem salvar currículos');
+            toast.warning('Apenas candidatos podem salvar currículos');
             navigate('/login');
             return;
         }

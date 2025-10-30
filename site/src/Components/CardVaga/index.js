@@ -56,6 +56,12 @@ function CardVaga({ vaga }) {
             return;
         }
 
+        // Verificar se a vaga está cancelada
+        if (vaga.status === 'cancelada') {
+            toast.error('Esta vaga foi cancelada pela empresa.');
+            return;
+        }
+
         // NÃO BLOQUEAR se o status for cancelado - permite reinscrição
         if (jaInscrito && statusInscricao !== 'cancelado') {
             toast.info('Você já está inscrito nesta vaga!');
@@ -75,9 +81,11 @@ function CardVaga({ vaga }) {
     // NÃO bloqueia se o status for cancelado
     const shouldBlockButton = isEmpresa() || 
                              vaga.status !== 'aberta' || 
+                             vaga.status === 'cancelada' ||
                              (jaInscrito && statusInscricao !== 'cancelado');
 
     const getButtonText = () => {
+        if (vaga.status === 'cancelada') return 'Vaga Cancelada';
         if (jaInscrito && statusInscricao !== 'cancelado') return 'Inscrito';
         if (statusInscricao === 'cancelado') return 'Candidatar-se Novamente';
         if (isEmpresa()) return 'Apenas Profissionais';
@@ -86,13 +94,37 @@ function CardVaga({ vaga }) {
     };
 
     const getStatusBadge = () => {
-        if (statusInscricao === 'cancelado') {
-            return <span className="status-badge cancelado">Cancelada</span>;
-        }
-        if (jaInscrito) {
-            return <span className="status-badge inscrito">Inscrito</span>;
-        }
         return null;
+    };
+
+    const getVagaStatusClass = () => {
+        switch (vaga.status) {
+            case 'aberta':
+                return 'aberta';
+            case 'fechada':
+                return 'fechada';
+            case 'cancelada':
+                return 'cancelada';
+            case 'pausada':
+                return 'pausada';
+            default:
+                return 'aberta';
+        }
+    };
+
+    const getVagaStatusText = () => {
+        switch (vaga.status) {
+            case 'aberta':
+                return 'Aberta';
+            case 'fechada':
+                return 'Fechada';
+            case 'cancelada':
+                return 'Cancelada';
+            case 'pausada':
+                return 'Pausada';
+            default:
+                return 'Aberta';
+        }
     };
 
     const formatarSalario = (salario) => {
@@ -137,8 +169,8 @@ function CardVaga({ vaga }) {
             
             <div className="job-footer">
                 <div className="job-status">
-                    <span className={`status ${vaga.status === 'aberta' ? 'aberta' : 'fechada'}`}>
-                        {vaga.status === 'aberta' ? 'Aberta' : 'Fechada'}
+                    <span className={`status ${getVagaStatusClass()}`}>
+                        {getVagaStatusText()}
                     </span>
                     {getStatusBadge()}
                 </div>
@@ -147,8 +179,9 @@ function CardVaga({ vaga }) {
                     <button 
                         onClick={handleCandidatar}
                         disabled={shouldBlockButton}
-                        className={`apply-button ${jaInscrito && statusInscricao !== 'cancelado' ? 'inscrito' : ''}`}
+                        className={`apply-button ${jaInscrito && statusInscricao !== 'cancelado' ? 'inscrito' : ''} ${vaga.status === 'cancelada' ? 'cancelada' : ''}`}
                         title={
+                            vaga.status === 'cancelada' ? "Vaga cancelada pela empresa" :
                             isEmpresa() ? "Empresas não podem se candidatar" : 
                             (jaInscrito && statusInscricao !== 'cancelado') ? "Você já está inscrito" : 
                             ""

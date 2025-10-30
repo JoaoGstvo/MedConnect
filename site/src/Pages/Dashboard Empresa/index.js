@@ -1,49 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Header from '../../Components/Header/index.js';
 import './index.scss';
-
-const Toast = ({ message, type = 'info', onClose, duration = 5000 }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, duration);
-    return () => clearTimeout(timer);
-  }, [onClose, duration]);
-
-  const getTitle = () => {
-    switch (type) {
-      case 'success': return 'Sucesso!';
-      case 'error': return 'Erro!';
-      case 'warning': return 'Atenção!';
-      default: return 'Informação';
-    }
-  };
-
-  return (
-    <div className={`toast toast-${type}`}>
-      <div className="toast-content">
-        <div className="toast-title">{getTitle()}</div>
-        <div className="toast-message">{message}</div>
-      </div>
-      <button className="toast-close" onClick={onClose}>×</button>
-    </div>
-  );
-};
-
-const ToastContainer = ({ toasts, removeToast }) => {
-  return (
-    <div className="toast-container">
-      {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => removeToast(toast.id)}
-          duration={toast.duration}
-        />
-      ))}
-    </div>
-  );
-};
 
 const DashboardEmpresa = () => {
   const [empresa, setEmpresa] = useState(null);
@@ -86,21 +45,7 @@ const DashboardEmpresa = () => {
     status: 'aberta'
   });
 
-  const [toasts, setToasts] = useState([]);
-
   const navigate = useNavigate();
-
-  const addToast = (message, type = 'info', duration = 5000) => {
-    const id = Date.now() + Math.random();
-    setToasts(prev => [...prev, { id, message, type, duration }]);
-  };
-
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
-
-  const showSuccess = (message) => addToast(message, 'success', 4000);
-  const showError = (message) => addToast(message, 'error', 6000);
 
   useEffect(() => {
     verificarAutenticacao();
@@ -190,10 +135,10 @@ const DashboardEmpresa = () => {
 
       const vagasData = await response.json();
       setVagas(vagasData);
-      showSuccess(`${vagasData.length} vagas carregadas com sucesso`);
+      toast.success(`${vagasData.length} vagas carregadas com sucesso`);
     } catch (error) {
       console.error('Erro ao carregar vagas:', error);
-      showError('Erro ao carregar vagas: ' + error.message);
+      toast.error('Erro ao carregar vagas: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -223,7 +168,7 @@ const DashboardEmpresa = () => {
       }
     } catch (error) {
       console.error('Erro ao carregar candidaturas:', error);
-      showError('Erro ao carregar candidaturas: ' + error.message);
+      toast.error('Erro ao carregar candidaturas: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -258,7 +203,7 @@ const DashboardEmpresa = () => {
       setCurriculoCandidato(curriculoData);
     } catch (error) {
       console.error('Erro ao carregar currículo:', error);
-      showError('Erro ao carregar currículo: ' + error.message);
+      toast.error('Erro ao carregar currículo: ' + error.message);
       setCurriculoCandidato({
         nome_completo: 'Erro ao carregar currículo',
         email: '',
@@ -324,10 +269,10 @@ const DashboardEmpresa = () => {
       setShowFormVaga(false);
       setEditingVaga(null);
       resetFormVaga();
-      showSuccess(`Vaga "${vagaCriada.titulo}" criada com sucesso!`);
+      toast.success(`Vaga "${vagaCriada.titulo}" criada com sucesso!`);
     } catch (error) {
       console.error('Erro ao criar vaga:', error);
-      showError('Erro ao criar vaga: ' + error.message);
+      toast.error('Erro ao criar vaga: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -365,10 +310,10 @@ const DashboardEmpresa = () => {
       setShowFormVaga(false);
       setEditingVaga(null);
       resetFormVaga();
-      showSuccess(`Vaga "${vagaAtualizada.titulo}" atualizada com sucesso!`);
+      toast.success(`Vaga "${vagaAtualizada.titulo}" atualizada com sucesso!`);
     } catch (error) {
       console.error('Erro ao editar vaga:', error);
-      showError('Erro ao editar vaga: ' + error.message);
+      toast.error('Erro ao editar vaga: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -392,10 +337,10 @@ const DashboardEmpresa = () => {
       }
 
       setVagas(vagas.filter(v => v.id_vaga !== idVaga));
-      showSuccess(`Vaga "${vagaParaExcluir?.titulo}" excluída com sucesso!`);
+      toast.success(`Vaga "${vagaParaExcluir?.titulo}" excluída com sucesso!`);
     } catch (error) {
       console.error('Erro ao excluir vaga:', error);
-      showError('Erro ao excluir vaga: ' + error.message);
+      toast.error('Erro ao excluir vaga: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -420,10 +365,10 @@ const DashboardEmpresa = () => {
       setCandidaturas(candidaturas.map(c =>
         c.id_candidatura === idCandidatura ? candidaturaAtualizada : c
       ));
-      showSuccess(`Status da candidatura de ${candidatura?.candidato_nome} atualizado para ${novoStatus}`);
+      toast.success(`Status da candidatura de ${candidatura?.candidato_nome} atualizado para ${novoStatus}`);
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
-      showError('Erro ao atualizar status: ' + error.message);
+      toast.error('Erro ao atualizar status: ' + error.message);
     }
   };
 
@@ -499,10 +444,10 @@ const DashboardEmpresa = () => {
 
       localStorage.setItem('empresaLogada', JSON.stringify(empresaCompleta));
       setEditandoPerfil(false);
-      showSuccess('Perfil da empresa atualizado com sucesso!');
+      toast.success('Perfil da empresa atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
-      showError('Erro ao atualizar perfil: ' + error.message);
+      toast.error('Erro ao atualizar perfil: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -521,7 +466,6 @@ const DashboardEmpresa = () => {
   return (
     <div className="dashboard-empresa">
       <Header />
-      <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       <header className="dashboard-header">
         <div className="header-content">
@@ -636,20 +580,6 @@ const DashboardEmpresa = () => {
                                   maxLength={100}
                                   className="full-width-input"
                                 />
-                              </div>
-
-                              <div className="form-group full-width">
-                                <label>Status da Vaga</label>
-                                <select
-                                  value={novaVaga.status}
-                                  onChange={(e) => setNovaVaga({ ...novaVaga, status: e.target.value })}
-                                  disabled={loading}
-                                  className="full-width-input"
-                                >
-                                  <option value="aberta">Aberta</option>
-                                  <option value="pausada">Pausada</option>
-                                  <option value="fechada">Fechada</option>
-                                </select>
                               </div>
                             </div>
                           </div>

@@ -146,14 +146,27 @@ function ArtigosPage() {
 
     const meusArtigosCount = user ? artigos.filter(a => a.id_usuario === user.id_usuario).length : 0;
 
+    // CORREÇÃO: Adicionar verificações de segurança
     const getDisplayName = () => {
         if (!user) return 'Usuário';
-        return user.tipo_usuario === 'empresa' ? user.nome : user.nome_completo || user.nome;
+        
+        if (user.tipo_usuario === 'empresa') {
+            return user.nome || 'Empresa';
+        }
+        
+        return user.nome_completo || user.nome || 'Profissional';
     };
 
     const getUserDescription = () => {
         if (!user) return 'Profissional de Saúde';
         return user.tipo_usuario === 'empresa' ? 'Empresa' : 'Profissional de Saúde';
+    };
+
+    // CORREÇÃO: Função segura para obter a inicial
+    const getUserInitial = () => {
+        const displayName = getDisplayName();
+        if (!displayName || typeof displayName !== 'string') return 'U';
+        return displayName.charAt(0).toUpperCase();
     };
 
     return (
@@ -180,8 +193,9 @@ function ArtigosPage() {
                     <aside className="sidebar-left">
                         <div className="profile-card">
                             <div className="profile-content">
+                                {/* CORREÇÃO: Usar a função segura getUserInitial */}
                                 <div className="avatar">
-                                    {getDisplayName().charAt(0).toUpperCase()}
+                                    {getUserInitial()}
                                 </div>
                                 <h3>{getDisplayName()}</h3>
                                 <p>{getUserDescription()}</p>
@@ -328,8 +342,8 @@ function ArtigosPage() {
                                         visualizacoes={artigo.visualizacoes || Math.floor(Math.random() * 1000)}
                                         comentarios={artigo.comentarios || Math.floor(Math.random() * 50)}
                                         reacoes={artigo.reacoes || Math.floor(Math.random() * 200)}
-                                        id_usuario={artigo.id_usuario} // Adicionar
-                                        tipo_autor={artigo.tipo_autor} // Adicionar
+                                        id_usuario={artigo.id_usuario}
+                                        tipo_autor={artigo.tipo_autor}
                                         onVisualizar={() => handleVisualizarArtigo(artigo)}
                                         onEditar={handleEditarArtigo}
                                         onExcluir={handleExcluirArtigo}

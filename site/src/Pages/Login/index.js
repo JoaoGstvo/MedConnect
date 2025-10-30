@@ -179,20 +179,6 @@ function Login() {
                 </button>
               </div>
             </div>
-
-            <div className='form-options'>
-              <label className="remember-me">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={e => setRememberMe(e.target.checked)}
-                  disabled={loading}
-                />
-                <span>Lembrar de mim</span>
-              </label>
-              <a href="/senha" className='forgot-password'>Esqueceu a senha?</a>
-            </div>
-
             <button
               type="submit"
               className={`login-button ${loading ? 'loading' : ''}`}
