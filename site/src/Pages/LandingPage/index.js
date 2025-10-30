@@ -122,14 +122,6 @@ function LandingPage() {
           >
             Ver Vagas
           </button>
-          {!currentUser && (
-            <button 
-              className="btn-secondary" 
-              onClick={() => handleNavigation('/cadastro')}
-            >
-              Criar Conta
-            </button>
-          )}
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './Components/Hooks/ProtectedRoute';
-
+import ScrollToTop from './Components/ScrollTop/ScrollToTop.js';
 import Login from './Pages/Login/index.js';
 import LandingPage from './Pages/LandingPage/index.js'
 import Signup from './Pages/Cadastro/index.js';
@@ -27,6 +27,7 @@ import EditarArtigoPage from './Pages/Artigos/EditarArtigo/index.js';
 export default function Index() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <Routes>
                 {/* Rotas públicas */}
                 <Route path="/inicio" element={<TelacInicial />} />

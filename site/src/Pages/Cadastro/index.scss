@@ -59,9 +59,12 @@
       }
 
       .logo {
-        height: 48px;
+        height: 88px;
         margin: 0 auto 16px;
-        filter: brightness(0) invert(0.3);
+        transition: transform 0.3s ease;
+         &:hover {
+          transform: scale(1.05);
+        }
 
         @media (max-width: 768px) {
           height: 42px;

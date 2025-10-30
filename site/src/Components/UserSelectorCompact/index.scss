@@ -1,316 +1,353 @@
-  @import './styles/variables.scss';
-  @import './styles/mixins.scss';
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
 
-  
-  .user-selector-compact {
-    position: relative;
+.user-selector-compact {
+  position: relative;
 
-    .user-toggle {
-      @include flex-center;
-      gap: $spacing-2;
-      padding: $spacing-2 $spacing-3;
-      background: rgba($primary-500, 0.1);
-      border: 1px solid rgba($primary-500, 0.2);
+  .user-toggle {
+    @include flex-center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-3;
+    background: rgba($primary-500, 0.1);
+    border: 1px solid rgba($primary-500, 0.2);
+    border-radius: $radius-full;
+    color: $primary-700;
+    cursor: pointer;
+    transition: all $transition-base;
+    backdrop-filter: blur(10px);
+    font-family: $font-family-primary;
+
+    &:hover {
+      background: rgba($primary-500, 0.15);
+      border-color: rgba($primary-500, 0.3);
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      @include focus-visible;
+      background: rgba($primary-500, 0.2);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
       border-radius: $radius-full;
-      color: $primary-700;
-      cursor: pointer;
-      transition: all $transition-base;
-      backdrop-filter: blur(10px);
-      font-family: $font-family-primary;
+      background: $gradient-primary;
+      @include flex-center;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-xs;
+      color: white;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative; // Adicionado para melhor controle
 
-      &:hover {
-        background: rgba($primary-500, 0.15);
-        border-color: rgba($primary-500, 0.3);
-        transform: translateY(-1px);
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block; // Remove espaço extra abaixo da imagem
       }
 
-      &:focus {
-        @include focus-visible;
-        background: rgba($primary-500, 0.2);
-      }
-
-      .user-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: $radius-full;
-        background: $gradient-primary;
+      .avatar-initials {
         @include flex-center;
-        font-weight: $font-weight-semibold;
-        font-size: $font-size-xs;
-        color: white;
-        flex-shrink: 0;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        position: absolute; // Garante que fique centralizado
+        top: 0;
+        left: 0;
+      }
 
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+      &.large {
+        width: 48px;
+        height: 48px;
+        font-size: $font-size-base;
+      }
+    }
 
-        .avatar-initials {
-          @include flex-center;
-          width: 100%;
-          height: 100%;
-        }
+    .user-name {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      max-width: 120px;
+      @include text-truncate;
+      color: $gray-700;
 
-        &.large {
+      @include mobile-only {
+        display: none;
+      }
+    }
+
+    .dropdown-arrow {
+      font-size: 10px;
+      color: $gray-500;
+      transition: transform $transition-base;
+
+      &.open {
+        transform: rotate(180deg);
+        color: $primary-600;
+      }
+    }
+  }
+
+  .user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: $spacing-2;
+    width: 280px;
+    background: white;
+    border-radius: $radius-2xl;
+    box-shadow: $shadow-2xl;
+    border: 1px solid $gray-200;
+    z-index: $z-dropdown;
+    @include fade-in($transition-fast);
+    overflow: hidden; // Previne vazamento de conteúdo
+
+    .dropdown-header {
+      padding: $spacing-4;
+      border-bottom: 1px solid $gray-100;
+
+      .user-info {
+        @include flex-center;
+        gap: $spacing-3;
+        align-items: flex-start; // Alinha melhor o conteúdo
+
+        .user-avatar.large {
+          // Garantindo que a imagem grande tenha os mesmos estilos
           width: 48px;
           height: 48px;
+          border-radius: $radius-full;
+          background: $gradient-primary;
+          @include flex-center;
+          font-weight: $font-weight-semibold;
           font-size: $font-size-base;
+          color: white;
+          flex-shrink: 0;
+          overflow: hidden;
+          position: relative;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          .avatar-initials {
+            @include flex-center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+
+        .user-details {
+          @include flex-column;
+          flex: 1;
+          min-width: 0; // Permite que o texto quebre corretamente
+
+          strong {
+            color: $gray-900;
+            font-size: $font-size-sm;
+            font-weight: $font-weight-semibold;
+            margin-bottom: $spacing-1;
+            line-height: $line-height-tight;
+            @include text-truncate; // Previne overflow
+          }
+
+          span {
+            color: $gray-600;
+            font-size: $font-size-xs;
+            margin-bottom: $spacing-1;
+            line-height: $line-height-tight;
+            @include text-truncate; // Previne overflow
+          }
+
+          small {
+            color: $primary-600;
+            font-size: $font-size-xs;
+            font-weight: $font-weight-semibold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba($primary-500, 0.1);
+            padding: $spacing-1 $spacing-2;
+            border-radius: $radius-full;
+            align-self: flex-start;
+            white-space: nowrap; // Mantém em uma linha
+          }
         }
       }
+    }
 
-      .user-name {
+    .dropdown-divider {
+      height: 1px;
+      background: $gray-100;
+      margin: 0;
+    }
+
+    .dropdown-menu {
+      padding: $spacing-2 0;
+
+      .menu-item {
+        @include flex-center;
+        width: 100%;
+        padding: $spacing-3 $spacing-4;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
         font-size: $font-size-sm;
-        font-weight: $font-weight-medium;
-        max-width: 120px;
-        @include text-truncate;
         color: $gray-700;
+        transition: all $transition-fast;
+        font-family: $font-family-primary;
+        gap: $spacing-3;
 
-        @include mobile-only {
-          display: none;
+        &:hover {
+          background: $primary-50;
+          color: $primary-700;
+        }
+
+        &:focus {
+          @include focus-visible;
+          background: $primary-50;
+        }
+
+        &:active {
+          background: $primary-100;
         }
       }
+    }
 
-      .dropdown-arrow {
-        font-size: 10px;
-        color: $gray-500;
-        transition: transform $transition-base;
+    .dropdown-footer {
+      padding: $spacing-3 $spacing-4;
+      border-top: 1px solid $gray-100;
 
-        &.open {
-          transform: rotate(180deg);
-          color: $primary-600;
+      .logout-btn {
+        @include flex-center;
+        width: 100%;
+        padding: $spacing-2 $spacing-4;
+        background: rgba($error-500, 0.05);
+        border: 1px solid rgba($error-500, 0.2);
+        border-radius: $radius-lg;
+        color: $error-600;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        cursor: pointer;
+        transition: all $transition-base;
+        font-family: $font-family-primary;
+        gap: $spacing-2;
+
+        &:hover {
+          background: rgba($error-500, 0.1);
+          border-color: rgba($error-500, 0.3);
+          transform: translateY(-1px);
+          box-shadow: $shadow-sm;
         }
+
+        &:focus {
+          @include focus-visible;
+          background: rgba($error-500, 0.1);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+}
+
+// Animações
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-$spacing-2);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsividade
+@include mobile-only {
+  .user-selector-compact {
+    .user-dropdown {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: 0;
+      border-radius: $radius-3xl $radius-3xl 0 0;
+      animation: slideUp $transition-base;
+      max-height: 80vh;
+      overflow-y: auto;
+      @include custom-scrollbar;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+// Estados de foco e acessibilidade
+.user-selector-compact {
+  .user-toggle:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// Acessibilidade
+@media (prefers-reduced-motion: reduce) {
+  .user-selector-compact {
+    .user-toggle,
+    .user-dropdown,
+    .menu-item,
+    .logout-btn {
+      transition: none;
+      animation: none;
+    }
+  }
+}
+
+// Suporte para alto contraste
+@media (prefers-contrast: high) {
+  .user-selector-compact {
+    .user-toggle {
+      border-width: 2px;
+      background: white;
+
+      &:hover {
+        background: $gray-100;
       }
     }
 
     .user-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: $spacing-2;
-      width: 280px;
-      background: white;
-      border-radius: $radius-2xl;
-      box-shadow: $shadow-2xl;
-      border: 1px solid $gray-200;
-      z-index: $z-dropdown;
-      @include fade-in($transition-fast);
+      border: 2px solid $gray-800;
 
-      .dropdown-header {
-        padding: $spacing-4;
-        border-bottom: 1px solid $gray-100;
-
-        .user-info {
-          @include flex-center;
-          gap: $spacing-3;
-
-          .user-details {
-            @include flex-column;
-            flex: 1;
-
-            strong {
-              color: $gray-900;
-              font-size: $font-size-sm;
-              font-weight: $font-weight-semibold;
-              margin-bottom: $spacing-1;
-              line-height: $line-height-tight;
-            }
-
-            span {
-              color: $gray-600;
-              font-size: $font-size-xs;
-              margin-bottom: $spacing-1;
-              line-height: $line-height-tight;
-            }
-
-            small {
-              color: $primary-600;
-              font-size: $font-size-xs;
-              font-weight: $font-weight-semibold;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-              background: rgba($primary-500, 0.1);
-              padding: $spacing-1 $spacing-2;
-              border-radius: $radius-full;
-              align-self: flex-start;
-            }
-          }
-        }
-      }
-
-      .dropdown-divider {
-        height: 1px;
-        background: $gray-100;
-        margin: 0;
-      }
-
-      .dropdown-menu {
-        padding: $spacing-2 0;
-
-        .menu-item {
-          @include flex-center;
-          width: 100%;
-          padding: $spacing-3 $spacing-4;
-          border: none;
-          background: none;
-          text-align: left;
-          cursor: pointer;
-          font-size: $font-size-sm;
-          color: $gray-700;
-          transition: all $transition-fast;
-          font-family: $font-family-primary;
-          gap: $spacing-3;
-
-          &:hover {
-            background: $primary-50;
-            color: $primary-700;
-          }
-
-          &:focus {
-            @include focus-visible;
-            background: $primary-50;
-          }
-
-          &:active {
-            background: $primary-100;
-          }
-        }
-      }
-
-      .dropdown-footer {
-        padding: $spacing-3 $spacing-4;
-        border-top: 1px solid $gray-100;
-
-        .logout-btn {
-          @include flex-center;
-          width: 100%;
-          padding: $spacing-2 $spacing-4;
-          background: rgba($error-500, 0.05);
-          border: 1px solid rgba($error-500, 0.2);
-          border-radius: $radius-lg;
-          color: $error-600;
-          font-size: $font-size-sm;
-          font-weight: $font-weight-semibold;
-          cursor: pointer;
-          transition: all $transition-base;
-          font-family: $font-family-primary;
-          gap: $spacing-2;
-
-          &:hover {
-            background: rgba($error-500, 0.1);
-            border-color: rgba($error-500, 0.3);
-            transform: translateY(-1px);
-            box-shadow: $shadow-sm;
-          }
-
-          &:focus {
-            @include focus-visible;
-            background: rgba($error-500, 0.1);
-          }
-
-          &:active {
-            transform: translateY(0);
-          }
-        }
-      }
-    }
-  }
-
-  // ... (mantenha o resto do CSS igual)
-
-  @keyframes dropdownFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-$spacing-2);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  // Responsividade
-  @include mobile-only {
-    .user-selector-compact {
-      .user-dropdown {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        margin: 0;
-        border-radius: $radius-3xl $radius-3xl 0 0;
-        animation: slideUp $transition-base;
-        max-height: 80vh;
-        overflow-y: auto;
-        @include custom-scrollbar;
-      }
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      transform: translateY(100%);
-    }
-
-    to {
-      transform: translateY(0);
-    }
-  }
-
-  // Estados de foco e acessibilidade
-  .user-selector-compact {
-    .user-toggle:focus-visible {
-      @include focus-visible;
-    }
-  }
-
-  // Acessibilidade
-  @media (prefers-reduced-motion: reduce) {
-    .user-selector-compact {
-
-      .user-toggle,
-      .user-dropdown,
-      .menu-item,
-      .logout-btn {
-        transition: none;
-        animation: none;
-      }
-    }
-  }
-
-  // Suporte para alto contraste
-  @media (prefers-contrast: high) {
-    .user-selector-compact {
-      .user-toggle {
-        border-width: 2px;
-        background: white;
-
+      .menu-item {
         &:hover {
           background: $gray-100;
+          border: 1px solid $gray-800;
         }
       }
 
-      .user-dropdown {
-        border: 2px solid $gray-800;
+      .logout-btn {
+        border-width: 2px;
 
-        .menu-item {
-          &:hover {
-            background: $gray-100;
-            border: 1px solid $gray-800;
-          }
-        }
-
-        .logout-btn {
+        &:hover {
           border-width: 2px;
-
-          &:hover {
-            border-width: 2px;
-          }
         }
       }
     }
   }
+}

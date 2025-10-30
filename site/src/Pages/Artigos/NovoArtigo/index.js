@@ -80,7 +80,7 @@ function NovoArtigoPage() {
 
       const data = await response.json();
       if (response.ok) {
-        navigate('/artigos');
+        navigate('/artigopublicado');
       } else {
         showMensagem('error', data.error || "Erro ao publicar artigo");
       }
