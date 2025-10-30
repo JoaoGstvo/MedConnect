@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Components/Hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeClosed} from 'lucide-react';
 
 function Login() {
   const [accountType, setAccountType] = useState('profissional');
@@ -49,7 +50,7 @@ function Login() {
       const result = await login(email, senha, accountType);
 
       if (result.success) {
-        console.log('✅ Login bem-sucedido!');
+        console.log('Login bem-sucedido!');
         toast.success(`Login realizado com sucesso! Bem-vindo(a) de volta!`, {
           position: "top-right",
           autoClose: 3000,
@@ -77,7 +78,7 @@ function Login() {
         });
       }
     } catch (err) {
-      console.error('💥 Erro crítico no login:', err);
+      console.error(' Erro crítico no login:', err);
       toast.error('Erro de conexão com o servidor', {
         position: "top-right",
         autoClose: 4000
@@ -175,7 +176,7 @@ function Login() {
                   onClick={togglePasswordVisibility}
                   disabled={loading}
                 >
-                  {showPassword ? ' 👀 ' : ' 👁︎ '}
+                  {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>

@@ -41,24 +41,6 @@ function ArtigoPublicadoPage() {
                             </div>
                             <span>Artigo disponível publicamente</span>
                         </div>
-                        <div className="detail-item">
-                            <div className="detail-icon">
-                                <svg viewBox="0 0 20 20">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/>
-                                    <path d="M13.2 8.8l-3.6 3.6-1.6-1.6"/>
-                                </svg>
-                            </div>
-                            <span>Compartilhe com outros profissionais</span>
-                        </div>
-                        <div className="detail-item">
-                            <div className="detail-icon">
-                                <svg viewBox="0 0 20 20">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/>
-                                    <path d="M13.2 8.8l-3.6 3.6-1.6-1.6"/>
-                                </svg>
-                            </div>
-                            <span>Receba feedback da comunidade</span>
-                        </div>
                     </div>
                 </div>
             </section>

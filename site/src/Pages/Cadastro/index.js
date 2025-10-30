@@ -3,6 +3,7 @@ import './index.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Eye, EyeClosed } from 'lucide-react'
 
 function Signup() {
   const [accountType, setAccountType] = useState('profissional');
@@ -301,7 +302,7 @@ function Signup() {
                         className="password-toggle"
                         onClick={() => togglePasswordVisibility('password')}
                       >
-                        {showPassword ? '👀' : '👁'}
+                        {showPassword ? <EyeClosed size={18}/> : <Eye size={18}/>}
                       </button>
                     </div>
                   </label>
@@ -324,7 +325,7 @@ function Signup() {
                         className="password-toggle"
                         onClick={() => togglePasswordVisibility('confirm')}
                       >
-                        {showConfirmPassword ? '👀' : '👁'}
+                        {showConfirmPassword ? <EyeClosed size={18}/> : <Eye size={18}/>}
                       </button>
                     </div>
                   </label>
@@ -430,7 +431,7 @@ function Signup() {
                         className="password-toggle"
                         onClick={() => togglePasswordVisibility('password')}
                       >
-                        {showPassword ? '👀' : '👁︎'}
+                        {showPassword ? <EyeClosed size={18}/> : <Eye size={18}/>}
                       </button>
                     </div>
                   </label>
@@ -453,7 +454,7 @@ function Signup() {
                         className="password-toggle"
                         onClick={() => togglePasswordVisibility('confirm')}
                       >
-                        {showConfirmPassword ? '👀' : '👁︎'}
+                        {showConfirmPassword ? <EyeClosed size={18}/> : <Eye size={18}/>}
                       </button>
                     </div>
                   </label>

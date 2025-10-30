@@ -339,9 +339,6 @@ function ArtigosPage() {
                                         categoria={artigo.categoria}
                                         dataPublicacao={artigo.data_publicacao}
                                         autor={artigo.autor}
-                                        visualizacoes={artigo.visualizacoes || Math.floor(Math.random() * 1000)}
-                                        comentarios={artigo.comentarios || Math.floor(Math.random() * 50)}
-                                        reacoes={artigo.reacoes || Math.floor(Math.random() * 200)}
                                         id_usuario={artigo.id_usuario}
                                         tipo_autor={artigo.tipo_autor}
                                         onVisualizar={() => handleVisualizarArtigo(artigo)}
@@ -410,12 +407,6 @@ function ArtigosPage() {
 
                             <div className="modal-conteudo">
                                 <p>{artigoSelecionado.conteudo}</p>
-                            </div>
-
-                            <div className="modal-interacoes">
-                                <span className="interacao"> {artigoSelecionado.reacoes || 0}</span>
-                                <span className="interacao"> {artigoSelecionado.comentarios || 0}</span>
-                                <span className="interacao"> {artigoSelecionado.visualizacoes || 0}</span>
                             </div>
                         </div>
 
