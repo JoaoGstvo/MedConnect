@@ -962,6 +962,15 @@ const DashboardEmpresa = () => {
                   <form onSubmit={salvarPerfil} className="perfil-form">
                     <div className="form-row">
                       <div className="form-group">
+                        <label>URL do Logo</label>
+                        <input
+                          type="text"
+                          value={dadosPerfil.logo_url}
+                          onChange={(e) => setDadosPerfil({ ...dadosPerfil, logo_url: e.target.value })}
+                          placeholder="Cole a URL do logo da empresa"
+                        /> 
+                      </div>
+                      <div className="form-group">
                         <label>Nome da Empresa *</label>
                         <input
                           type="text"
