@@ -65,9 +65,9 @@ function Login() {
           if (accountType === 'empresa') {
             navigate('/dashboardempresa');
           } else {
-            navigate('/vagas');
+            navigate('/');
           }
-        }, 1500);
+        }, 500);
       } else {
         console.error('❌ Erro no login:', result.error);
         toast.error(result.error || 'Credenciais inválidas', {

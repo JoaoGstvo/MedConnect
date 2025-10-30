@@ -25,8 +25,8 @@ function Footer() {
                 <div className="link-column">
                     <h2 className="title">Suporte</h2>
                     <ul className="link-list">
-                        <li><a href="/">suporte@plataformasaude.com</a></li>
-                        <li><a href="/faqsite">Fale Conosco</a></li>
+                        <li><a href="/">suporte@medconnect.com</a></li>
+                        <li><a href="/">Fale Conosco</a></li>
                     </ul>
                 </div>
             </section>

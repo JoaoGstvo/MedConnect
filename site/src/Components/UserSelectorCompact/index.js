@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../Hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
+import { toast } from 'react-toastify';
 
 function UserSelectorCompact() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +63,7 @@ function UserSelectorCompact() {
 
   const getMenuItems = () => {
     if (!user) return [];
-    
+
     if (user.tipo_usuario === 'empresa') {
       return [
         { path: '/dashboardempresa', label: 'Dashboard Empresa' }
@@ -86,7 +87,7 @@ function UserSelectorCompact() {
 
   return (
     <div className="user-selector-compact" ref={dropdownRef}>
-      <button 
+      <button
         className="user-toggle"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Menu do usuário"
@@ -134,7 +135,7 @@ function UserSelectorCompact() {
 
           <div className="dropdown-menu">
             {getMenuItems().map((item, index) => (
-              <button 
+              <button
                 key={index}
                 onClick={() => handleNavigation(item.path)}
                 role="menuitem"
@@ -148,8 +149,14 @@ function UserSelectorCompact() {
           <div className="dropdown-divider" role="separator"></div>
 
           <div className="dropdown-footer">
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                logout(handleLogout);
+                toast.success('Logout realizado com sucesso!');
+                toast.info('Você será redirecionado para a pagina inicial.');
+                setTimeout(() => navigate('/inicio'), 1000); 
+              }}
               className="logout-btn"
               role="menuitem"
             >

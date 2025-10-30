@@ -166,7 +166,7 @@ function EmpresaPage() {
 
           {error && !loading && (
             <div className="error-state">
-              <p>❌ {error}</p>
+              <p>{error}</p>
               <button 
                 onClick={() => window.location.reload()}
                 className="btn-retry"

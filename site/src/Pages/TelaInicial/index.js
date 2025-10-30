@@ -53,7 +53,7 @@ function LandingPage1() {
             </section>
 
             <footer>
-                <p>&copy; 2024 Saúde Connect. Todos os direitos reservados.</p>
+                <p>&copy; 2025 MedConnect. Todos os direitos reservados.</p>
             </footer>
         </main>
     );

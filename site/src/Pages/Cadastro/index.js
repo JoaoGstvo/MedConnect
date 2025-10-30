@@ -120,7 +120,7 @@ function Signup() {
           nome: "", email: "", senha: "", confirmaSenha: "", tipo_usuario: "candidato"
         });
 
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate('/login'), 500);
       } else {
         toast.error(data.error || "Erro ao cadastrar", {
           position: "top-right",
@@ -188,7 +188,7 @@ function Signup() {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
-        toast.success("🏢 Empresa cadastrada com sucesso! Redirecionando para login...", {
+        toast.success("Empresa cadastrada com sucesso! Redirecionando para login...", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
